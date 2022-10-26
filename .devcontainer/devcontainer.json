@@ -1,5 +1,5 @@
 {
-	"name": "nuxtjs",
+	"name": "snoozehub-frontend",
 	"image": "node",
 	"forwardPorts": [
 		3000
