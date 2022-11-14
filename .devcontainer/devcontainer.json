@@ -1,6 +1,6 @@
 {
 	"name": "snoozehub-frontend",
-	"image": "node",
+	"image": "node:lts",
 	"forwardPorts": [
 		3000
 	],
