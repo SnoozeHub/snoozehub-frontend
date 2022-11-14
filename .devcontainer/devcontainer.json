@@ -4,7 +4,7 @@
 	"forwardPorts": [
 		3000
 	],
-	"postCreateCommand": "npm install",
+	"postCreateCommand": "npm install -g pnpm && pnpm install",
 	"customizations": {
 		"vscode": {
 			"extensions": [
