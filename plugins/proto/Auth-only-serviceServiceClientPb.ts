@@ -208,49 +208,6 @@ export class AuthOnlyServiceClient {
     this.methodInfoGetProfilePic);
   }
 
-  methodInfoDeleteAccount = new grpcWeb.MethodDescriptor(
-    '/AuthOnlyService/DeleteAccount',
-    grpcWeb.MethodType.UNARY,
-    common$messages_pb.Empty,
-    common$messages_pb.Empty,
-    (request: common$messages_pb.Empty) => {
-      return request.serializeBinary();
-    },
-    common$messages_pb.Empty.deserializeBinary
-  );
-
-  deleteAccount(
-    request: common$messages_pb.Empty,
-    metadata: grpcWeb.Metadata | null): Promise<common$messages_pb.Empty>;
-
-  deleteAccount(
-    request: common$messages_pb.Empty,
-    metadata: grpcWeb.Metadata | null,
-    callback: (err: grpcWeb.RpcError,
-               response: common$messages_pb.Empty) => void): grpcWeb.ClientReadableStream<common$messages_pb.Empty>;
-
-  deleteAccount(
-    request: common$messages_pb.Empty,
-    metadata: grpcWeb.Metadata | null,
-    callback?: (err: grpcWeb.RpcError,
-               response: common$messages_pb.Empty) => void) {
-    if (callback !== undefined) {
-      return this.client_.rpcCall(
-        this.hostname_ +
-          '/AuthOnlyService/DeleteAccount',
-        request,
-        metadata || {},
-        this.methodInfoDeleteAccount,
-        callback);
-    }
-    return this.client_.unaryCall(
-    this.hostname_ +
-      '/AuthOnlyService/DeleteAccount',
-    request,
-    metadata || {},
-    this.methodInfoDeleteAccount);
-  }
-
   methodInfoSetProfilePic = new grpcWeb.MethodDescriptor(
     '/AuthOnlyService/SetProfilePic',
     grpcWeb.MethodType.UNARY,
@@ -292,6 +249,49 @@ export class AuthOnlyServiceClient {
     request,
     metadata || {},
     this.methodInfoSetProfilePic);
+  }
+
+  methodInfoDeleteAccount = new grpcWeb.MethodDescriptor(
+    '/AuthOnlyService/DeleteAccount',
+    grpcWeb.MethodType.UNARY,
+    common$messages_pb.Empty,
+    common$messages_pb.Empty,
+    (request: common$messages_pb.Empty) => {
+      return request.serializeBinary();
+    },
+    common$messages_pb.Empty.deserializeBinary
+  );
+
+  deleteAccount(
+    request: common$messages_pb.Empty,
+    metadata: grpcWeb.Metadata | null): Promise<common$messages_pb.Empty>;
+
+  deleteAccount(
+    request: common$messages_pb.Empty,
+    metadata: grpcWeb.Metadata | null,
+    callback: (err: grpcWeb.RpcError,
+               response: common$messages_pb.Empty) => void): grpcWeb.ClientReadableStream<common$messages_pb.Empty>;
+
+  deleteAccount(
+    request: common$messages_pb.Empty,
+    metadata: grpcWeb.Metadata | null,
+    callback?: (err: grpcWeb.RpcError,
+               response: common$messages_pb.Empty) => void) {
+    if (callback !== undefined) {
+      return this.client_.rpcCall(
+        this.hostname_ +
+          '/AuthOnlyService/DeleteAccount',
+        request,
+        metadata || {},
+        this.methodInfoDeleteAccount,
+        callback);
+    }
+    return this.client_.unaryCall(
+    this.hostname_ +
+      '/AuthOnlyService/DeleteAccount',
+    request,
+    metadata || {},
+    this.methodInfoDeleteAccount);
   }
 
   methodInfoUpdateAccountInfo = new grpcWeb.MethodDescriptor(
