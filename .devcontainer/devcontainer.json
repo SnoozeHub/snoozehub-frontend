@@ -1,0 +1,15 @@
+{
+	"name": "snoozehub-frontend",
+	"image": "node:lts",
+	"forwardPorts": [
+		3000
+	],
+	"postCreateCommand": "npm install -g pnpm && pnpm install",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"Vue.volar"
+			]
+		}
+	}
+}
