@@ -1,6 +1,15 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 import vuetify from 'vite-plugin-vuetify';
 export default defineNuxtConfig({
+    nitro: {
+        serveStatic: true,
+    },
+    imports: {
+        dirs: [
+            "composables",
+            // ... or scan all modules within given directory
+        ]
+    },
     ssr: false,
     // head: {
     //     script: [
@@ -15,9 +24,7 @@ export default defineNuxtConfig({
     build: {
         transpile: ['grpc-web']
     },
-    plugins: [
-        '@/plugins/grpc-gen/Auth-only-serviceServiceClientPb.ts'
-    ],
+
     css: ['vuetify/styles'], // vuetify ships precompiled css, no need to import sass
     vite: {
         // @ts-ignore

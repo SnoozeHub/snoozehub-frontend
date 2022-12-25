@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import { AuthOnlyServiceClient } from '~~/plugins/grpc-gen/Auth-only-serviceServiceClientPb';
 
 const client = new AuthOnlyServiceClient("http://localhost:3000", null, null);
 
@@ -11,4 +10,5 @@ client.getMyBookings(null, null);
 <template>
 
     <div>Hello this is a test!</div>
+
 </template>
