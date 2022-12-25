@@ -4,9 +4,9 @@ services:
   nuxt:
     build:
       context: .
-    image: nuxt_dev
-    container_name: nuxt_dev
-    command: npm run dev
+    image: nuxt_build
+    container_name: nuxt_build
+    command: npm run startProduction
     volumes:
     - .:/app
     - /app/node_modules

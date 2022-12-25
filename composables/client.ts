@@ -16,11 +16,11 @@ export function authenticate() {
     signedNonce: "idk",
     registerNewUser: false,
   };
-  public_service_client.auth(auth_request);
-  // public_service_client.getNonce(null, null);
+  let outcome = public_service_client.auth(auth_request);
+  // public_service_client.getNonce(null, null);)
   // auth_request.setAddress("This is a test");
   // auth_request.setNoncesigned(new Uint8Array([1, 2, 3, 4]).toString());
 
   // public_service_lient.auth(auth_request, null);
-  return auth_request.signedNonce
+  return auth_request.signedNonce;
 }
