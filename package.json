@@ -8,15 +8,23 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "defu": "^6.1.0",
-    "nuxt": "3.0.0-rc.12",
+    "@protobuf-ts/grpcweb-transport": "^2.8.2",
+    "@protobuf-ts/runtime": "^2.8.2",
+    "@protobuf-ts/runtime-rpc": "^2.8.2",
+    "@types/google-protobuf": "^3.15.6",
+    "@types/node": "^18.11.17",
+    "defu": "^6.1.1",
+    "nuxt": "3.0.0",
     "ufo": "^0.8.6",
-    "vite-plugin-vuetify": "^1.0.0",
-    "vuetify": "^3.0.1"
+    "vite-plugin-vuetify": "^1.0.1",
+    "vuetify": "^3.0.6"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.8.0",
+    "google-protobuf": "^3.21.2",
     "grpc-web": "^1.4.2",
-    "vite": "^3.0.0",
-    "vue": "^3.2.0"
+    "vite": "^3.2.5",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
   }
 }
