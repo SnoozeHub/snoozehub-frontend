@@ -14,7 +14,8 @@ export function authenticate() {
   const auth_request: AuthRequest = {
     nonce: "idk",
     signedNonce: "idk",
-    registerNewUser: false,
+    registeredUser: false,
+    publicKey: "boh"
   };
   let outcome = public_service_client.auth(auth_request);
   // public_service_client.getNonce(null, null);)
