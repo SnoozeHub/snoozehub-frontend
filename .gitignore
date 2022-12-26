@@ -164,3 +164,4 @@ test/
 .pnpm-store
 node-jiti
 
+update_grpc
