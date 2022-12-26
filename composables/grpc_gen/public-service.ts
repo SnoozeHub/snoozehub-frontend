@@ -39,11 +39,7 @@ export interface AuthRequest {
      */
     signedNonce: string; // Valid format
     /**
-     * @generated from protobuf field: string publicKey = 3;
-     */
-    publicKey: string; // Valid format
-    /**
-     * @generated from protobuf field: bool registeredUser = 4;
+     * @generated from protobuf field: bool registeredUser = 3;
      */
     registeredUser: boolean;
 }
@@ -166,12 +162,11 @@ class AuthRequest$Type extends MessageType<AuthRequest> {
         super("AuthRequest", [
             { no: 1, name: "nonce", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "signedNonce", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "publicKey", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "registeredUser", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+            { no: 3, name: "registeredUser", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<AuthRequest>): AuthRequest {
-        const message = { nonce: "", signedNonce: "", publicKey: "", registeredUser: false };
+        const message = { nonce: "", signedNonce: "", registeredUser: false };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<AuthRequest>(this, message, value);
@@ -188,10 +183,7 @@ class AuthRequest$Type extends MessageType<AuthRequest> {
                 case /* string signedNonce */ 2:
                     message.signedNonce = reader.string();
                     break;
-                case /* string publicKey */ 3:
-                    message.publicKey = reader.string();
-                    break;
-                case /* bool registeredUser */ 4:
+                case /* bool registeredUser */ 3:
                     message.registeredUser = reader.bool();
                     break;
                 default:
@@ -212,12 +204,9 @@ class AuthRequest$Type extends MessageType<AuthRequest> {
         /* string signedNonce = 2; */
         if (message.signedNonce !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.signedNonce);
-        /* string publicKey = 3; */
-        if (message.publicKey !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.publicKey);
-        /* bool registeredUser = 4; */
+        /* bool registeredUser = 3; */
         if (message.registeredUser !== false)
-            writer.tag(4, WireType.Varint).bool(message.registeredUser);
+            writer.tag(3, WireType.Varint).bool(message.registeredUser);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
