@@ -1,12 +1,16 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@mdi/font': ^7.1.96
+  '@metamask/detect-provider': ^2.0.0
+  '@metamask/eth-sig-util': ^5.0.2
   '@nuxt/kit': ^3.0.0
   '@protobuf-ts/grpcweb-transport': ^2.8.2
   '@protobuf-ts/runtime': ^2.8.2
   '@protobuf-ts/runtime-rpc': ^2.8.2
   '@types/google-protobuf': ^3.15.6
   '@types/node': ^18.11.17
+  buffer: ^6.0.3
   defu: ^6.1.1
   google-protobuf: ^3.21.2
   grpc-web: ^1.4.2
@@ -19,12 +23,15 @@ specifiers:
   vuetify: ^3.0.6
 
 dependencies:
+  '@metamask/detect-provider': 2.0.0
+  '@metamask/eth-sig-util': 5.0.2
   '@nuxt/kit': 3.0.0
   '@protobuf-ts/grpcweb-transport': 2.8.2
   '@protobuf-ts/runtime': 2.8.2
   '@protobuf-ts/runtime-rpc': 2.8.2
   '@types/google-protobuf': 3.15.6
   '@types/node': 18.11.17
+  buffer: 6.0.3
   defu: 6.1.1
   google-protobuf: 3.21.2
   grpc-web: 1.4.2
@@ -35,6 +42,9 @@ dependencies:
   vue: 3.2.45
   vue-router: 4.1.6_vue@3.2.45
   vuetify: 3.0.6_ihnv4ujwy6q3qcyepcitbzrajy
+
+devDependencies:
+  '@mdi/font': 7.1.96
 
 packages:
 
@@ -559,6 +569,21 @@ packages:
     dev: false
     optional: true
 
+  /@ethereumjs/rlp/4.0.0:
+    resolution: {integrity: sha512-LM4jS5n33bJN60fM5EC8VeyhUgga6/DjCPBV2vWjnfVtobqtOiNC4SQ1MRFqyBSmJGGdB533JZWewyvlcdJtkQ==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: false
+
+  /@ethereumjs/util/8.0.3:
+    resolution: {integrity: sha512-0apCbwc8xAaie6W7q6QyogfyRS2BMU816a8KwpnpRw9Qrc6Bws+l7J3LfCLMt2iL6Wi8CYb0B29AeIr2N4vHnw==}
+    engines: {node: '>=14'}
+    dependencies:
+      '@ethereumjs/rlp': 4.0.0
+      async: 3.2.4
+      ethereum-cryptography: 1.1.2
+    dev: false
+
   /@ioredis/commands/1.2.0:
     resolution: {integrity: sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==}
     dev: false
@@ -626,11 +651,40 @@ packages:
       - supports-color
     dev: false
 
+  /@mdi/font/7.1.96:
+    resolution: {integrity: sha512-Imag6npmfkBDi2Ze2jiZVAPTDIKLxhz2Sx82xJ2zctyAU5LYJejLI5ChnDwiD9bMkQfVuzEsI98Q8toHyC+HCg==}
+    dev: true
+
+  /@metamask/detect-provider/2.0.0:
+    resolution: {integrity: sha512-sFpN+TX13E9fdBDh9lvQeZdJn4qYoRb/6QF2oZZK/Pn559IhCFacPMU1rMuqyXoFQF3JSJfii2l98B87QDPeCQ==}
+    engines: {node: '>=14.0.0'}
+    dev: false
+
+  /@metamask/eth-sig-util/5.0.2:
+    resolution: {integrity: sha512-RU6fG/H6/UlBol221uBkq5C7w3TwLK611nEZliO2u+kO0vHKGBXnIPlhI0tzKUigjhUeOd9mhCNbNvhh0LKt9Q==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@ethereumjs/util': 8.0.3
+      bn.js: 4.12.0
+      ethereum-cryptography: 1.1.2
+      ethjs-util: 0.1.6
+      tweetnacl: 1.0.3
+      tweetnacl-util: 0.15.1
+    dev: false
+
   /@netlify/functions/1.3.0:
     resolution: {integrity: sha512-hN/Fgpz8XIOBfsBPLYUMxVKBlCopgeqGB0popayicnmkFLnvKByTTMYgF01wcF9DBtBQdV0H2h1kPFpMl34I8w==}
     engines: {node: '>=8.3.0'}
     dependencies:
       is-promise: 4.0.0
+    dev: false
+
+  /@noble/hashes/1.1.2:
+    resolution: {integrity: sha512-KYRCASVTv6aeUi1tsF8/vpyR7zpfs3FUzy2Jqm+MU+LmUKhQ0y2FpfwqkCcxSg2ua4GALJd8k2R76WxwZGbQpA==}
+    dev: false
+
+  /@noble/secp256k1/1.6.3:
+    resolution: {integrity: sha512-T04e4iTurVy7I8Sw4+c5OSN9/RkPlo1uKxAomtxQNLq8j1uPAqnsqG1bqvY3Jv7c13gyr6dui0zmh/I3+f/JaQ==}
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
@@ -999,6 +1053,25 @@ packages:
       estree-walker: 2.0.2
       picomatch: 2.3.1
       rollup: 2.79.1
+    dev: false
+
+  /@scure/base/1.1.1:
+    resolution: {integrity: sha512-ZxOhsSyxYwLJj3pLZCefNitxsj093tb2vq90mp2txoYeBqbcjDjqFhyM8eUjq/uFm6zJ+mUuqxlS2FkuSY1MTA==}
+    dev: false
+
+  /@scure/bip32/1.1.0:
+    resolution: {integrity: sha512-ftTW3kKX54YXLCxH6BB7oEEoJfoE2pIgw7MINKAs5PsS6nqKPuKk1haTF/EuHmYqG330t5GSrdmtRuHaY1a62Q==}
+    dependencies:
+      '@noble/hashes': 1.1.2
+      '@noble/secp256k1': 1.6.3
+      '@scure/base': 1.1.1
+    dev: false
+
+  /@scure/bip39/1.1.0:
+    resolution: {integrity: sha512-pwrPOS16VeTKg98dYXQyIjJEcWfz7/1YJIwxUEPFfQPtc86Ym/1sVgQ2RLoD43AazMk2l/unK4ITySSpW2+82w==}
+    dependencies:
+      '@noble/hashes': 1.1.2
+      '@scure/base': 1.1.1
     dev: false
 
   /@trysound/sax/0.2.0:
@@ -1407,6 +1480,10 @@ packages:
       buffer: 6.0.3
       inherits: 2.0.4
       readable-stream: 3.6.0
+    dev: false
+
+  /bn.js/4.12.0:
+    resolution: {integrity: sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==}
     dev: false
 
   /boolbase/1.0.0:
@@ -2289,6 +2366,23 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
+  /ethereum-cryptography/1.1.2:
+    resolution: {integrity: sha512-XDSJlg4BD+hq9N2FjvotwUET9Tfxpxc3kWGE2AqUG5vcbeunnbImVk3cj6e/xT3phdW21mE8R5IugU4fspQDcQ==}
+    dependencies:
+      '@noble/hashes': 1.1.2
+      '@noble/secp256k1': 1.6.3
+      '@scure/bip32': 1.1.0
+      '@scure/bip39': 1.1.0
+    dev: false
+
+  /ethjs-util/0.1.6:
+    resolution: {integrity: sha512-CUnVOQq7gSpDHZVVrQW8ExxUETWrnrvXYvYz55wOU8Uj4VCgw56XC2B/fVqQN+f7gmrnRHSLVnFAwsCuNwji8w==}
+    engines: {node: '>=6.5.0', npm: '>=3'}
+    dependencies:
+      is-hex-prefixed: 1.0.0
+      strip-hex-prefix: 1.0.0
+    dev: false
+
   /eventemitter3/4.0.7:
     resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
     dev: false
@@ -2797,6 +2891,11 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       is-extglob: 2.1.1
+    dev: false
+
+  /is-hex-prefixed/1.0.0:
+    resolution: {integrity: sha512-WvtOiug1VFrE9v1Cydwm+FnXd3+w9GaeVUss5W4v/SLy3UW00vP+6iNF2SdnfiBoLy4bTqVdkftNGTUeOFVsbA==}
+    engines: {node: '>=6.5.0', npm: '>=3'}
     dev: false
 
   /is-interactive/2.0.0:
@@ -4366,6 +4465,13 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
+  /strip-hex-prefix/1.0.0:
+    resolution: {integrity: sha512-q8d4ue7JGEiVcypji1bALTos+0pWtyGlivAWyPuTkHzuTCJqrK9sWxYQZUq6Nq3cuyv3bm734IhHvHtGGURU6A==}
+    engines: {node: '>=6.5.0', npm: '>=3'}
+    dependencies:
+      is-hex-prefixed: 1.0.0
+    dev: false
+
   /strip-literal/1.0.0:
     resolution: {integrity: sha512-5o4LsH1lzBzO9UFH63AJ2ad2/S2AVx6NtjOcaz+VTT2h1RiRvbipW72z8M/lxEhcPHDBQwpDrnTF7sXy/7OwCQ==}
     dependencies:
@@ -4502,6 +4608,14 @@ packages:
 
   /tslib/2.4.1:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
+    dev: false
+
+  /tweetnacl-util/0.15.1:
+    resolution: {integrity: sha512-RKJBIj8lySrShN4w6i/BonWp2Z/uxwC3h4y7xsRrpP59ZboCd0GpEVsOnMDYLMmKBpYhb5TgHzZXy7wTfYFBRw==}
+    dev: false
+
+  /tweetnacl/1.0.3:
+    resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
     dev: false
 
   /type-fest/0.21.3:
