@@ -103,7 +103,7 @@ export interface BedMutableInfo {
     /**
      * @generated from protobuf field: string place = 1;
      */
-    place: string; // length=1-100
+    place: string; // length=1-100. Maximum sensitive (aka it search the exact string)
     /**
      * @generated from protobuf field: repeated bytes images = 2;
      */

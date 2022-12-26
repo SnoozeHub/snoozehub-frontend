@@ -37,11 +37,7 @@ export interface AuthRequest {
     /**
      * @generated from protobuf field: string signedNonce = 2;
      */
-    signedNonce: string; // Valid format
-    /**
-     * @generated from protobuf field: bool registeredUser = 3;
-     */
-    registeredUser: boolean;
+    signedNonce: string; // signing algorithm: secp256k1 . Valid format
 }
 /**
  * @generated from protobuf message AuthResponse
@@ -52,9 +48,9 @@ export interface AuthResponse {
      */
     authToken: string; // Not empty
     /**
-     * @generated from protobuf field: bool accountDoesNotExist = 2;
+     * @generated from protobuf field: bool accountExist = 2;
      */
-    accountDoesNotExist: boolean;
+    accountExist: boolean;
 }
 /**
  * BedList returned will include only beds which has at least 1 date available in the range [dateRangeLow, dateRangeHigh]
@@ -161,12 +157,11 @@ class AuthRequest$Type extends MessageType<AuthRequest> {
     constructor() {
         super("AuthRequest", [
             { no: 1, name: "nonce", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "signedNonce", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "registeredUser", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+            { no: 2, name: "signedNonce", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<AuthRequest>): AuthRequest {
-        const message = { nonce: "", signedNonce: "", registeredUser: false };
+        const message = { nonce: "", signedNonce: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<AuthRequest>(this, message, value);
@@ -182,9 +177,6 @@ class AuthRequest$Type extends MessageType<AuthRequest> {
                     break;
                 case /* string signedNonce */ 2:
                     message.signedNonce = reader.string();
-                    break;
-                case /* bool registeredUser */ 3:
-                    message.registeredUser = reader.bool();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -204,9 +196,6 @@ class AuthRequest$Type extends MessageType<AuthRequest> {
         /* string signedNonce = 2; */
         if (message.signedNonce !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.signedNonce);
-        /* bool registeredUser = 3; */
-        if (message.registeredUser !== false)
-            writer.tag(3, WireType.Varint).bool(message.registeredUser);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -222,11 +211,11 @@ class AuthResponse$Type extends MessageType<AuthResponse> {
     constructor() {
         super("AuthResponse", [
             { no: 1, name: "authToken", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "accountDoesNotExist", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+            { no: 2, name: "accountExist", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
         ]);
     }
     create(value?: PartialMessage<AuthResponse>): AuthResponse {
-        const message = { authToken: "", accountDoesNotExist: false };
+        const message = { authToken: "", accountExist: false };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<AuthResponse>(this, message, value);
@@ -240,8 +229,8 @@ class AuthResponse$Type extends MessageType<AuthResponse> {
                 case /* string authToken */ 1:
                     message.authToken = reader.string();
                     break;
-                case /* bool accountDoesNotExist */ 2:
-                    message.accountDoesNotExist = reader.bool();
+                case /* bool accountExist */ 2:
+                    message.accountExist = reader.bool();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -258,9 +247,9 @@ class AuthResponse$Type extends MessageType<AuthResponse> {
         /* string authToken = 1; */
         if (message.authToken !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.authToken);
-        /* bool accountDoesNotExist = 2; */
-        if (message.accountDoesNotExist !== false)
-            writer.tag(2, WireType.Varint).bool(message.accountDoesNotExist);
+        /* bool accountExist = 2; */
+        if (message.accountExist !== false)
+            writer.tag(2, WireType.Varint).bool(message.accountExist);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
