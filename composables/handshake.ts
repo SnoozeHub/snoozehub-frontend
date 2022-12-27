@@ -1,22 +1,18 @@
-import detectEthereumProvider from "@metamask/detect-provider";
 import { Buffer } from "buffer";
 import { PublicServiceClient } from "./grpc_gen/public-service.client";
 import { Empty } from "./grpc_gen/common-messages";
 import { AuthRequest } from "./grpc_gen/public-service";
-import { GrpcWebFetchTransport } from "@protobuf-ts/grpcweb-transport";
 
-const URL = "http://localhost:8080";
+import { useGrpcStore } from "./storeExport";
 
-export async function init_handshake() {
-  const transport = new GrpcWebFetchTransport({
-    baseUrl: URL,
-  });
+export async function useInitHandshake() {
+  const grpcState = useGrpcStore();
+  grpcState.initPublicServiceClient();
 
-  const provider = await detectEthereumProvider();
-  if (!provider) throw new Error("No web3 browser available");
+  const publicServiceClient =
+    grpcState.getPublicServiceClient as PublicServiceClient;
 
-  const public_service_client = new PublicServiceClient(transport);
-  const nonceRequest = await public_service_client.getNonce(Empty);
+  const nonceRequest = await publicServiceClient.getNonce(Empty);
   const nonce = nonceRequest?.response.nonce;
 
   const accounts = await ethereum.request({
@@ -33,6 +29,6 @@ export async function init_handshake() {
     nonce: nonce,
     signedNonce: signedNonce,
   };
-  const authOutcome = await public_service_client.auth(auth_request);
-  return authOutcome?.response.accountExist;
+  const authOutcome = await publicServiceClient.auth(auth_request);
+  return authOutcome?.response;
 }
