@@ -1,19 +1,11 @@
 <script setup lang="ts">
 import detectEthereumProvider from '@metamask/detect-provider';
+import { useSessionStore } from './composables/storeExport';
 const provider = await detectEthereumProvider();
 
-console.log(isWeb3CapableBrowserKey, userIsAuthenticatedKey);
-
-provide(isWeb3CapableBrowserKey, new Boolean(provider));
-const userIsAuthenticated = ref(false);
-
-function updateUserIsAuthenticated(value: boolean) {
-  userIsAuthenticated.value = value;
-}
-provide(userIsAuthenticatedKey, {
-  userIsAuthenticated,
-  updateUserIsAuthenticated,
-});
+const sessionStore = useSessionStore();
+sessionStore.setIsWeb3CapableBrowser(provider != null);
+sessionStore.restorePreviousSession();
 
 </script>
 

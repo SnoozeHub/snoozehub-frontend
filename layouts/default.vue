@@ -1,12 +1,11 @@
 <script setup lang="ts">
-
-import { UserIsAuthenticated } from '~~/composables/injectionKeys';
+import { useSessionStore } from '~~/composables/storeExport';
 
 let showDrawer = ref(false);
-const { userIsAuthenticated, updateUserIsAuthenticated } = inject<UserIsAuthenticated>(userIsAuthenticatedKey) as UserIsAuthenticated;
+const sessionStore = useSessionStore();
 
 function login() {
-    navigateTo('/login-signup');
+    navigateTo('/eth-authentication');
     showDrawer.value = false;
 }
 
@@ -23,7 +22,7 @@ function login() {
                 </div>
             </v-app-bar>
             <v-navigation-drawer v-model="showDrawer" location="right">
-                <v-list v-if="!userIsAuthenticated">
+                <v-list v-if="!sessionStore.userIsAuthenticated">
 
                     <v-list-item prepend-icon="mdi-account-plus-outline" title="Log In / Sign Up"
                         value="Log In / Sign Up" @click="login">
