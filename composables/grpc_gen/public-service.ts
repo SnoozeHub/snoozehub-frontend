@@ -17,6 +17,7 @@ import { MessageType } from "@protobuf-ts/runtime";
 import { Review } from "./common-messages";
 import { BedId } from "./common-messages";
 import { Feature } from "./common-messages";
+import { Coordinates } from "./common-messages";
 import { Date } from "./common-messages";
 /**
  * @generated from protobuf message GetNonceResponse
@@ -68,15 +69,15 @@ export interface GetBedsRequest {
      */
     dateRangeHigh?: Date; // It's valid. dateRangeHigh >= dateRangeLow
     /**
-     * @generated from protobuf field: string place = 3;
+     * @generated from protobuf field: Coordinates coordinates = 3;
      */
-    place: string; // length=1-100. Maximum sensitive (aka it search the exact string)
+    coordinates?: Coordinates; // 
     /**
-     * @generated from protobuf field: repeated Feature featuresMondatory = 4;
+     * @generated from protobuf field: repeated Feature featuresMandatory = 4;
      */
-    featuresMondatory: Feature[]; // Distinct
+    featuresMandatory: Feature[]; // All features are distinct
     /**
-     * Get first N results in order by proximity from fromIndex to fromIndex+N where N=15.
+     * Get first N results in order by proximity (using the coordinates) from fromIndex to fromIndex+N where N=15.
      *
      * @generated from protobuf field: uint32 fromIndex = 5;
      */
@@ -267,13 +268,13 @@ class GetBedsRequest$Type extends MessageType<GetBedsRequest> {
         super("GetBedsRequest", [
             { no: 1, name: "dateRangeLow", kind: "message", T: () => Date },
             { no: 2, name: "dateRangeHigh", kind: "message", T: () => Date },
-            { no: 3, name: "place", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "featuresMondatory", kind: "enum", repeat: 1 /*RepeatType.PACKED*/, T: () => ["Feature", Feature] },
+            { no: 3, name: "coordinates", kind: "message", T: () => Coordinates },
+            { no: 4, name: "featuresMandatory", kind: "enum", repeat: 1 /*RepeatType.PACKED*/, T: () => ["Feature", Feature] },
             { no: 5, name: "fromIndex", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<GetBedsRequest>): GetBedsRequest {
-        const message = { place: "", featuresMondatory: [], fromIndex: 0 };
+        const message = { featuresMandatory: [], fromIndex: 0 };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<GetBedsRequest>(this, message, value);
@@ -290,15 +291,15 @@ class GetBedsRequest$Type extends MessageType<GetBedsRequest> {
                 case /* Date dateRangeHigh */ 2:
                     message.dateRangeHigh = Date.internalBinaryRead(reader, reader.uint32(), options, message.dateRangeHigh);
                     break;
-                case /* string place */ 3:
-                    message.place = reader.string();
+                case /* Coordinates coordinates */ 3:
+                    message.coordinates = Coordinates.internalBinaryRead(reader, reader.uint32(), options, message.coordinates);
                     break;
-                case /* repeated Feature featuresMondatory */ 4:
+                case /* repeated Feature featuresMandatory */ 4:
                     if (wireType === WireType.LengthDelimited)
                         for (let e = reader.int32() + reader.pos; reader.pos < e;)
-                            message.featuresMondatory.push(reader.int32());
+                            message.featuresMandatory.push(reader.int32());
                     else
-                        message.featuresMondatory.push(reader.int32());
+                        message.featuresMandatory.push(reader.int32());
                     break;
                 case /* uint32 fromIndex */ 5:
                     message.fromIndex = reader.uint32();
@@ -321,14 +322,14 @@ class GetBedsRequest$Type extends MessageType<GetBedsRequest> {
         /* Date dateRangeHigh = 2; */
         if (message.dateRangeHigh)
             Date.internalBinaryWrite(message.dateRangeHigh, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
-        /* string place = 3; */
-        if (message.place !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.place);
-        /* repeated Feature featuresMondatory = 4; */
-        if (message.featuresMondatory.length) {
+        /* Coordinates coordinates = 3; */
+        if (message.coordinates)
+            Coordinates.internalBinaryWrite(message.coordinates, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        /* repeated Feature featuresMandatory = 4; */
+        if (message.featuresMandatory.length) {
             writer.tag(4, WireType.LengthDelimited).fork();
-            for (let i = 0; i < message.featuresMondatory.length; i++)
-                writer.int32(message.featuresMondatory[i]);
+            for (let i = 0; i < message.featuresMandatory.length; i++)
+                writer.int32(message.featuresMandatory[i]);
             writer.join();
         }
         /* uint32 fromIndex = 5; */

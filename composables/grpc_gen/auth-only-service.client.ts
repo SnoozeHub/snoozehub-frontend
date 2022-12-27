@@ -47,6 +47,8 @@ export interface IAuthOnlyServiceClient {
      */
     setProfilePic(input: ProfilePic, options?: RpcOptions): UnaryCall<ProfilePic, Empty>;
     /**
+     * It also delete all his beds and booking availabilities, review to other's beds, and
+     *
      * @generated from protobuf rpc: DeleteAccount(Empty) returns (Empty);
      */
     deleteAccount(input: Empty, options?: RpcOptions): UnaryCall<Empty, Empty>;
@@ -60,6 +62,7 @@ export interface IAuthOnlyServiceClient {
     /**
      * FOR EVERY FOLLOWING RPC IS ASSUMED THAT THE CALLER HAS A VERIFIED ACCOUNT
      * GUEST RPCs
+     * "Human proof token" are then sent through mail to both guest, and host
      *
      * The book is available
      *
@@ -156,6 +159,8 @@ export class AuthOnlyServiceClient implements IAuthOnlyServiceClient, ServiceInf
         return stackIntercept<ProfilePic, Empty>("unary", this._transport, method, opt, input);
     }
     /**
+     * It also delete all his beds and booking availabilities, review to other's beds, and
+     *
      * @generated from protobuf rpc: DeleteAccount(Empty) returns (Empty);
      */
     deleteAccount(input: Empty, options?: RpcOptions): UnaryCall<Empty, Empty> {
@@ -175,6 +180,7 @@ export class AuthOnlyServiceClient implements IAuthOnlyServiceClient, ServiceInf
     /**
      * FOR EVERY FOLLOWING RPC IS ASSUMED THAT THE CALLER HAS A VERIFIED ACCOUNT
      * GUEST RPCs
+     * "Human proof token" are then sent through mail to both guest, and host
      *
      * The book is available
      *

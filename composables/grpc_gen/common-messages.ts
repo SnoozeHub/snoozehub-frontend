@@ -64,23 +64,27 @@ export interface Booking {
  */
 export interface BedMutableInfo {
     /**
-     * @generated from protobuf field: string place = 1;
+     * @generated from protobuf field: string address = 1;
      */
-    place: string; // length=1-100. Maximum sensitive (aka it search the exact string)
+    address: string; // length=1-100. Maximum sensitive (aka it search the exact string)
     /**
-     * @generated from protobuf field: repeated bytes images = 2;
+     * @generated from protobuf field: Coordinates coordinates = 2;
+     */
+    coordinates?: Coordinates;
+    /**
+     * @generated from protobuf field: repeated bytes images = 3;
      */
     images: Uint8Array[]; // Valid 1-5 AVIF images, max size = 512kb
     /**
-     * @generated from protobuf field: string description = 5;
+     * @generated from protobuf field: string description = 4;
      */
-    description: string;
+    description: string; // length=0-200
     /**
-     * @generated from protobuf field: repeated Feature features = 3;
+     * @generated from protobuf field: repeated Feature features = 5;
      */
     features: Feature[]; // Distinct
     /**
-     * @generated from protobuf field: uint32 minimumDaysNotice = 4;
+     * @generated from protobuf field: uint32 minimumDaysNotice = 6;
      */
     minimumDaysNotice: number; //  min = 1, max = 30
 }
@@ -136,9 +140,9 @@ export interface Review {
      */
     evaluation: number; // min = 0, max = 50. For example 42 is evaluated as 4.2
     /**
-     * @generated from protobuf field: optional string comment = 2;
+     * @generated from protobuf field: string comment = 2;
      */
-    comment?: string; // length=1-200
+    comment: string; // length=0-200
 }
 /**
  * @generated from protobuf message Date
@@ -156,6 +160,19 @@ export interface Date {
      * @generated from protobuf field: uint32 year = 3;
      */
     year: number;
+}
+/**
+ * @generated from protobuf message Coordinates
+ */
+export interface Coordinates {
+    /**
+     * @generated from protobuf field: double latitude = 1;
+     */
+    latitude: number; // range: [-90, 90]
+    /**
+     * @generated from protobuf field: double longitude = 2;
+     */
+    longitude: number; // range: [-180, 180]
 }
 /**
  * @generated from protobuf enum Feature
@@ -393,15 +410,16 @@ export const Booking = new Booking$Type();
 class BedMutableInfo$Type extends MessageType<BedMutableInfo> {
     constructor() {
         super("BedMutableInfo", [
-            { no: 1, name: "place", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "images", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
-            { no: 5, name: "description", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "features", kind: "enum", repeat: 1 /*RepeatType.PACKED*/, T: () => ["Feature", Feature] },
-            { no: 4, name: "minimumDaysNotice", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+            { no: 1, name: "address", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "coordinates", kind: "message", T: () => Coordinates },
+            { no: 3, name: "images", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
+            { no: 4, name: "description", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "features", kind: "enum", repeat: 1 /*RepeatType.PACKED*/, T: () => ["Feature", Feature] },
+            { no: 6, name: "minimumDaysNotice", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<BedMutableInfo>): BedMutableInfo {
-        const message = { place: "", images: [], description: "", features: [], minimumDaysNotice: 0 };
+        const message = { address: "", images: [], description: "", features: [], minimumDaysNotice: 0 };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<BedMutableInfo>(this, message, value);
@@ -412,23 +430,26 @@ class BedMutableInfo$Type extends MessageType<BedMutableInfo> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* string place */ 1:
-                    message.place = reader.string();
+                case /* string address */ 1:
+                    message.address = reader.string();
                     break;
-                case /* repeated bytes images */ 2:
+                case /* Coordinates coordinates */ 2:
+                    message.coordinates = Coordinates.internalBinaryRead(reader, reader.uint32(), options, message.coordinates);
+                    break;
+                case /* repeated bytes images */ 3:
                     message.images.push(reader.bytes());
                     break;
-                case /* string description */ 5:
+                case /* string description */ 4:
                     message.description = reader.string();
                     break;
-                case /* repeated Feature features */ 3:
+                case /* repeated Feature features */ 5:
                     if (wireType === WireType.LengthDelimited)
                         for (let e = reader.int32() + reader.pos; reader.pos < e;)
                             message.features.push(reader.int32());
                     else
                         message.features.push(reader.int32());
                     break;
-                case /* uint32 minimumDaysNotice */ 4:
+                case /* uint32 minimumDaysNotice */ 6:
                     message.minimumDaysNotice = reader.uint32();
                     break;
                 default:
@@ -443,25 +464,28 @@ class BedMutableInfo$Type extends MessageType<BedMutableInfo> {
         return message;
     }
     internalBinaryWrite(message: BedMutableInfo, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* string place = 1; */
-        if (message.place !== "")
-            writer.tag(1, WireType.LengthDelimited).string(message.place);
-        /* repeated bytes images = 2; */
+        /* string address = 1; */
+        if (message.address !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.address);
+        /* Coordinates coordinates = 2; */
+        if (message.coordinates)
+            Coordinates.internalBinaryWrite(message.coordinates, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
+        /* repeated bytes images = 3; */
         for (let i = 0; i < message.images.length; i++)
-            writer.tag(2, WireType.LengthDelimited).bytes(message.images[i]);
-        /* string description = 5; */
+            writer.tag(3, WireType.LengthDelimited).bytes(message.images[i]);
+        /* string description = 4; */
         if (message.description !== "")
-            writer.tag(5, WireType.LengthDelimited).string(message.description);
-        /* repeated Feature features = 3; */
+            writer.tag(4, WireType.LengthDelimited).string(message.description);
+        /* repeated Feature features = 5; */
         if (message.features.length) {
-            writer.tag(3, WireType.LengthDelimited).fork();
+            writer.tag(5, WireType.LengthDelimited).fork();
             for (let i = 0; i < message.features.length; i++)
                 writer.int32(message.features[i]);
             writer.join();
         }
-        /* uint32 minimumDaysNotice = 4; */
+        /* uint32 minimumDaysNotice = 6; */
         if (message.minimumDaysNotice !== 0)
-            writer.tag(4, WireType.Varint).uint32(message.minimumDaysNotice);
+            writer.tag(6, WireType.Varint).uint32(message.minimumDaysNotice);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -646,11 +670,11 @@ class Review$Type extends MessageType<Review> {
     constructor() {
         super("Review", [
             { no: 1, name: "evaluation", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
-            { no: 2, name: "comment", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "comment", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<Review>): Review {
-        const message = { evaluation: 0 };
+        const message = { evaluation: 0, comment: "" };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Review>(this, message, value);
@@ -664,7 +688,7 @@ class Review$Type extends MessageType<Review> {
                 case /* uint32 evaluation */ 1:
                     message.evaluation = reader.uint32();
                     break;
-                case /* optional string comment */ 2:
+                case /* string comment */ 2:
                     message.comment = reader.string();
                     break;
                 default:
@@ -682,8 +706,8 @@ class Review$Type extends MessageType<Review> {
         /* uint32 evaluation = 1; */
         if (message.evaluation !== 0)
             writer.tag(1, WireType.Varint).uint32(message.evaluation);
-        /* optional string comment = 2; */
-        if (message.comment !== undefined)
+        /* string comment = 2; */
+        if (message.comment !== "")
             writer.tag(2, WireType.LengthDelimited).string(message.comment);
         let u = options.writeUnknownFields;
         if (u !== false)
@@ -756,3 +780,57 @@ class Date$Type extends MessageType<Date> {
  * @generated MessageType for protobuf message Date
  */
 export const Date = new Date$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Coordinates$Type extends MessageType<Coordinates> {
+    constructor() {
+        super("Coordinates", [
+            { no: 1, name: "latitude", kind: "scalar", T: 1 /*ScalarType.DOUBLE*/ },
+            { no: 2, name: "longitude", kind: "scalar", T: 1 /*ScalarType.DOUBLE*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Coordinates>): Coordinates {
+        const message = { latitude: 0, longitude: 0 };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Coordinates>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Coordinates): Coordinates {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* double latitude */ 1:
+                    message.latitude = reader.double();
+                    break;
+                case /* double longitude */ 2:
+                    message.longitude = reader.double();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Coordinates, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* double latitude = 1; */
+        if (message.latitude !== 0)
+            writer.tag(1, WireType.Bit64).double(message.latitude);
+        /* double longitude = 2; */
+        if (message.longitude !== 0)
+            writer.tag(2, WireType.Bit64).double(message.longitude);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Coordinates
+ */
+export const Coordinates = new Coordinates$Type();
