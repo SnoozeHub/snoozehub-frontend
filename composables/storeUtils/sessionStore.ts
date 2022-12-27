@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { AuthResponse } from "../grpc_gen/public-service";
 
 export enum Languages {
   IT = "IT",
@@ -19,21 +20,24 @@ export function enumFromStringValue<T>(
 }
 
 export const useSessionStore = defineStore("sessionStore", {
-  state: () => {
-    return {
-      isWeb3CapableBrowser: false,
-      userIsAuthenticated: false,
-      settings: { darkTheme: true, language: Languages.EN },
-    };
-  },
+  state: () => ({
+    isWeb3CapableBrowser: false,
+    userIsAuthenticated: false,
+    settings: { darkTheme: true, language: Languages.EN },
+    authToken: "",
+  }),
   getters: {
     getIsWeb3CapableBrowser: (state) => state.isWeb3CapableBrowser,
     getUserIsAuthenticated: (state) => state.userIsAuthenticated,
     getSettings: (state) => state.settings,
   },
   actions: {
-    setUserIsAuthenticated(userIsAuthenticated: boolean): void {
-      this.userIsAuthenticated = userIsAuthenticated;
+    setUserIsAuthenticated(authResponse: AuthResponse): void {
+      this.userIsAuthenticated = authResponse.accountExist;
+      if (this.userIsAuthenticated && authResponse.authToken) {
+        this.authToken = authResponse.authToken;
+        localStorage.setItem("authToken", this.authToken);
+      }
     },
     setIsWeb3CapableBrowser(isWeb3CapableBrowser: boolean): void {
       this.isWeb3CapableBrowser = isWeb3CapableBrowser;
@@ -47,6 +51,14 @@ export const useSessionStore = defineStore("sessionStore", {
       if (!this.settings) return;
       const settings = JSON.parse(settingsJSON as string) as Settings;
       this.setSettings(settings);
+    },
+    restorePreviousSession() {
+      this.userIsAuthenticated = new Boolean(
+        localStorage.getItem("userIsAuthenticated")
+      ) as boolean;
+      if (this.getUserIsAuthenticated) {
+        this.authToken = localStorage.getItem("authToken") as string;
+      }
     },
   },
 });

@@ -4,17 +4,15 @@ import { AuthOnlyServiceClient } from "../grpc_gen/auth-only-service.client";
 import { PublicServiceClient } from "../grpc_gen/public-service.client";
 
 export const useGrpcStore = defineStore("grpcStore", {
-  state: () => {
-    return {
-      grpcWebProxyURL: "http://localhost:8080",
-      webFetchTransportIsInitiated: false,
-      publicServiceClientIsInitiated: false,
-      authOnlyServiceClientIsInitiated: false,
-      grpcWebFetchTransport: null as GrpcWebFetchTransport | null,
-      publicServiceClient: null as PublicServiceClient | null,
-      authOnlyServiceClient: null as AuthOnlyServiceClient | null,
-    };
-  },
+  state: () => ({
+    grpcWebProxyURL: "http://localhost:8080",
+    webFetchTransportIsInitiated: false,
+    publicServiceClientIsInitiated: false,
+    authOnlyServiceClientIsInitiated: false,
+    grpcWebFetchTransport: null as GrpcWebFetchTransport | null,
+    publicServiceClient: null as PublicServiceClient | null,
+    authOnlyServiceClient: null as AuthOnlyServiceClient | null,
+  }),
   getters: {
     getGrpcWebFetchTransport: (state) => state.grpcWebFetchTransport,
     getPublicServiceClient: (state) => state.publicServiceClient,
@@ -22,7 +20,7 @@ export const useGrpcStore = defineStore("grpcStore", {
   },
   actions: {
     initWebFetchTransport() {
-      if (this.webFetchTransportIsInitiated) {
+      if (!this.webFetchTransportIsInitiated) {
         this.grpcWebFetchTransport = new GrpcWebFetchTransport({
           baseUrl: this.grpcWebProxyURL,
         });
