@@ -92,9 +92,9 @@ export interface Booking {
      */
     bedId?: BedId;
     /**
-     * @generated from protobuf field: uint32 date = 2;
+     * @generated from protobuf field: Date date = 2;
      */
-    date: number; // Refers to the night between the date and the next day, 8 digit (base 10) number, for example 30012000 -> 30-01-2000.
+    date?: Date; // Refers to the night between the date and the next day
 }
 /**
  * @generated from protobuf message BedMutableInfo
@@ -109,9 +109,9 @@ export interface BedMutableInfo {
      */
     images: Uint8Array[]; // Valid 1-5 AVIF images, max size = 512kb
     /**
-     * @generated from protobuf field: optional string description = 5;
+     * @generated from protobuf field: string description = 5;
      */
-    description?: string; // Not empty (trimmed)
+    description: string;
     /**
      * @generated from protobuf field: Features features = 3;
      */
@@ -139,13 +139,13 @@ export interface BedList_Bed {
      */
     id?: BedId;
     /**
-     * @generated from protobuf field: optional BedMutableInfo bedMutableInfo = 2;
+     * @generated from protobuf field: BedMutableInfo bedMutableInfo = 2;
      */
     bedMutableInfo?: BedMutableInfo;
     /**
-     * @generated from protobuf field: repeated uint32 dateAvailables = 3;
+     * @generated from protobuf field: repeated Date dateAvailables = 3;
      */
-    dateAvailables: number[]; // 0-90 .  Refers to the night between the date and the next day, 8 digit (base 10) number, for example 30012000 -> 30-01-2000. It's valid
+    dateAvailables: Date[]; // 0-90 .  Refers to the night between the date and the next day. It's valid
     /**
      * @generated from protobuf field: uint32 reviewCount = 4;
      */
@@ -176,6 +176,23 @@ export interface Review {
      * @generated from protobuf field: optional string comment = 2;
      */
     comment?: string; // length=1-200
+}
+/**
+ * @generated from protobuf message Date
+ */
+export interface Date {
+    /**
+     * @generated from protobuf field: uint32 day = 1;
+     */
+    day: number;
+    /**
+     * @generated from protobuf field: uint32 month = 2;
+     */
+    month: number;
+    /**
+     * @generated from protobuf field: uint32 year = 3;
+     */
+    year: number;
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class Empty$Type extends MessageType<Empty> {
@@ -419,11 +436,11 @@ class Booking$Type extends MessageType<Booking> {
     constructor() {
         super("Booking", [
             { no: 1, name: "bedId", kind: "message", T: () => BedId },
-            { no: 2, name: "date", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+            { no: 2, name: "date", kind: "message", T: () => Date }
         ]);
     }
     create(value?: PartialMessage<Booking>): Booking {
-        const message = { date: 0 };
+        const message = {};
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<Booking>(this, message, value);
@@ -437,8 +454,8 @@ class Booking$Type extends MessageType<Booking> {
                 case /* BedId bedId */ 1:
                     message.bedId = BedId.internalBinaryRead(reader, reader.uint32(), options, message.bedId);
                     break;
-                case /* uint32 date */ 2:
-                    message.date = reader.uint32();
+                case /* Date date */ 2:
+                    message.date = Date.internalBinaryRead(reader, reader.uint32(), options, message.date);
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -455,9 +472,9 @@ class Booking$Type extends MessageType<Booking> {
         /* BedId bedId = 1; */
         if (message.bedId)
             BedId.internalBinaryWrite(message.bedId, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
-        /* uint32 date = 2; */
-        if (message.date !== 0)
-            writer.tag(2, WireType.Varint).uint32(message.date);
+        /* Date date = 2; */
+        if (message.date)
+            Date.internalBinaryWrite(message.date, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -474,13 +491,13 @@ class BedMutableInfo$Type extends MessageType<BedMutableInfo> {
         super("BedMutableInfo", [
             { no: 1, name: "place", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "images", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
-            { no: 5, name: "description", kind: "scalar", opt: true, T: 9 /*ScalarType.STRING*/ },
+            { no: 5, name: "description", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 3, name: "features", kind: "message", T: () => Features },
             { no: 4, name: "minimumDaysNotice", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<BedMutableInfo>): BedMutableInfo {
-        const message = { place: "", images: [], minimumDaysNotice: 0 };
+        const message = { place: "", images: [], description: "", minimumDaysNotice: 0 };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<BedMutableInfo>(this, message, value);
@@ -497,7 +514,7 @@ class BedMutableInfo$Type extends MessageType<BedMutableInfo> {
                 case /* repeated bytes images */ 2:
                     message.images.push(reader.bytes());
                     break;
-                case /* optional string description */ 5:
+                case /* string description */ 5:
                     message.description = reader.string();
                     break;
                 case /* Features features */ 3:
@@ -524,8 +541,8 @@ class BedMutableInfo$Type extends MessageType<BedMutableInfo> {
         /* repeated bytes images = 2; */
         for (let i = 0; i < message.images.length; i++)
             writer.tag(2, WireType.LengthDelimited).bytes(message.images[i]);
-        /* optional string description = 5; */
-        if (message.description !== undefined)
+        /* string description = 5; */
+        if (message.description !== "")
             writer.tag(5, WireType.LengthDelimited).string(message.description);
         /* Features features = 3; */
         if (message.features)
@@ -596,7 +613,7 @@ class BedList_Bed$Type extends MessageType<BedList_Bed> {
         super("BedList.Bed", [
             { no: 1, name: "id", kind: "message", T: () => BedId },
             { no: 2, name: "bedMutableInfo", kind: "message", T: () => BedMutableInfo },
-            { no: 3, name: "dateAvailables", kind: "scalar", repeat: 1 /*RepeatType.PACKED*/, T: 13 /*ScalarType.UINT32*/ },
+            { no: 3, name: "dateAvailables", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Date },
             { no: 4, name: "reviewCount", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
             { no: 5, name: "averageEvaluation", kind: "scalar", opt: true, T: 13 /*ScalarType.UINT32*/ }
         ]);
@@ -616,15 +633,11 @@ class BedList_Bed$Type extends MessageType<BedList_Bed> {
                 case /* BedId id */ 1:
                     message.id = BedId.internalBinaryRead(reader, reader.uint32(), options, message.id);
                     break;
-                case /* optional BedMutableInfo bedMutableInfo */ 2:
+                case /* BedMutableInfo bedMutableInfo */ 2:
                     message.bedMutableInfo = BedMutableInfo.internalBinaryRead(reader, reader.uint32(), options, message.bedMutableInfo);
                     break;
-                case /* repeated uint32 dateAvailables */ 3:
-                    if (wireType === WireType.LengthDelimited)
-                        for (let e = reader.int32() + reader.pos; reader.pos < e;)
-                            message.dateAvailables.push(reader.uint32());
-                    else
-                        message.dateAvailables.push(reader.uint32());
+                case /* repeated Date dateAvailables */ 3:
+                    message.dateAvailables.push(Date.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 case /* uint32 reviewCount */ 4:
                     message.reviewCount = reader.uint32();
@@ -647,16 +660,12 @@ class BedList_Bed$Type extends MessageType<BedList_Bed> {
         /* BedId id = 1; */
         if (message.id)
             BedId.internalBinaryWrite(message.id, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
-        /* optional BedMutableInfo bedMutableInfo = 2; */
+        /* BedMutableInfo bedMutableInfo = 2; */
         if (message.bedMutableInfo)
             BedMutableInfo.internalBinaryWrite(message.bedMutableInfo, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
-        /* repeated uint32 dateAvailables = 3; */
-        if (message.dateAvailables.length) {
-            writer.tag(3, WireType.LengthDelimited).fork();
-            for (let i = 0; i < message.dateAvailables.length; i++)
-                writer.uint32(message.dateAvailables[i]);
-            writer.join();
-        }
+        /* repeated Date dateAvailables = 3; */
+        for (let i = 0; i < message.dateAvailables.length; i++)
+            Date.internalBinaryWrite(message.dateAvailables[i], writer.tag(3, WireType.LengthDelimited).fork(), options).join();
         /* uint32 reviewCount = 4; */
         if (message.reviewCount !== 0)
             writer.tag(4, WireType.Varint).uint32(message.reviewCount);
@@ -774,3 +783,64 @@ class Review$Type extends MessageType<Review> {
  * @generated MessageType for protobuf message Review
  */
 export const Review = new Review$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class Date$Type extends MessageType<Date> {
+    constructor() {
+        super("Date", [
+            { no: 1, name: "day", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 2, name: "month", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 3, name: "year", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Date>): Date {
+        const message = { day: 0, month: 0, year: 0 };
+        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
+        if (value !== undefined)
+            reflectionMergePartial<Date>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Date): Date {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* uint32 day */ 1:
+                    message.day = reader.uint32();
+                    break;
+                case /* uint32 month */ 2:
+                    message.month = reader.uint32();
+                    break;
+                case /* uint32 year */ 3:
+                    message.year = reader.uint32();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Date, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* uint32 day = 1; */
+        if (message.day !== 0)
+            writer.tag(1, WireType.Varint).uint32(message.day);
+        /* uint32 month = 2; */
+        if (message.month !== 0)
+            writer.tag(2, WireType.Varint).uint32(message.month);
+        /* uint32 year = 3; */
+        if (message.year !== 0)
+            writer.tag(3, WireType.Varint).uint32(message.year);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message Date
+ */
+export const Date = new Date$Type();

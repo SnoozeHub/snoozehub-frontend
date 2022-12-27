@@ -30,7 +30,7 @@ export interface IPublicServiceClient {
      */
     auth(input: AuthRequest, options?: RpcOptions): UnaryCall<AuthRequest, AuthResponse>;
     /**
-     * Every bed returned has the field bedMutableInfo mondadory
+     * Every bed returned has the field bedMutableInfo mandatory
      *
      * @generated from protobuf rpc: GetBeds(GetBedsRequest) returns (BedList);
      */
@@ -66,7 +66,7 @@ export class PublicServiceClient implements IPublicServiceClient, ServiceInfo {
         return stackIntercept<AuthRequest, AuthResponse>("unary", this._transport, method, opt, input);
     }
     /**
-     * Every bed returned has the field bedMutableInfo mondadory
+     * Every bed returned has the field bedMutableInfo mandatory
      *
      * @generated from protobuf rpc: GetBeds(GetBedsRequest) returns (BedList);
      */

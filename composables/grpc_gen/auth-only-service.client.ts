@@ -97,8 +97,6 @@ export interface IAuthOnlyServiceClient {
      */
     removeMyBed(input: BedId, options?: RpcOptions): UnaryCall<BedId, Empty>;
     /**
-     * Every bed returned doesn't have the field bedMutableInfo
-     *
      * @generated from protobuf rpc: GetMyBeds(Empty) returns (BedList);
      */
     getMyBeds(input: Empty, options?: RpcOptions): UnaryCall<Empty, BedList>;
@@ -235,8 +233,6 @@ export class AuthOnlyServiceClient implements IAuthOnlyServiceClient, ServiceInf
         return stackIntercept<BedId, Empty>("unary", this._transport, method, opt, input);
     }
     /**
-     * Every bed returned doesn't have the field bedMutableInfo
-     *
      * @generated from protobuf rpc: GetMyBeds(Empty) returns (BedList);
      */
     getMyBeds(input: Empty, options?: RpcOptions): UnaryCall<Empty, BedList> {

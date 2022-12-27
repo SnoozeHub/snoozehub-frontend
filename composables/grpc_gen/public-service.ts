@@ -17,6 +17,7 @@ import { MessageType } from "@protobuf-ts/runtime";
 import { Review } from "./common-messages";
 import { BedId } from "./common-messages";
 import { Features } from "./common-messages";
+import { Date } from "./common-messages";
 /**
  * @generated from protobuf message GetNonceResponse
  */
@@ -59,21 +60,21 @@ export interface AuthResponse {
  */
 export interface GetBedsRequest {
     /**
-     * @generated from protobuf field: uint32 dateRangeLow = 1;
+     * @generated from protobuf field: Date dateRangeLow = 1;
      */
-    dateRangeLow: number; // 8 digit (base 10) number, for example 30012000 -> 30-01-2000. It's valid
+    dateRangeLow?: Date; // It's valid
     /**
-     * @generated from protobuf field: uint32 dateRangeHigh = 2;
+     * @generated from protobuf field: Date dateRangeHigh = 2;
      */
-    dateRangeHigh: number; // 8 digit (base 10) number, for example 30012000 -> 30-01-2000. It's valid
+    dateRangeHigh?: Date; // It's valid
     /**
      * @generated from protobuf field: string place = 3;
      */
-    place: string; // length=1-100
+    place: string; // length=1-100. Maximum sensitive (aka it search the exact string)
     /**
-     * @generated from protobuf field: Features featuresMondadory = 4;
+     * @generated from protobuf field: Features featuresMandatory = 4;
      */
-    featuresMondadory?: Features;
+    featuresMandatory?: Features;
     /**
      * Get first N results in order by proximity from fromIndex to fromIndex+N where N=15.
      *
@@ -103,7 +104,7 @@ export interface GetReviewsResponse {
     /**
      * @generated from protobuf field: repeated Review reviews = 1;
      */
-    reviews: Review[]; // 0-4 reviews. The field comment is mondadory
+    reviews: Review[]; // 0-4 reviews. The field comment is mandatory
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class GetNonceResponse$Type extends MessageType<GetNonceResponse> {
@@ -264,15 +265,15 @@ export const AuthResponse = new AuthResponse$Type();
 class GetBedsRequest$Type extends MessageType<GetBedsRequest> {
     constructor() {
         super("GetBedsRequest", [
-            { no: 1, name: "dateRangeLow", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
-            { no: 2, name: "dateRangeHigh", kind: "scalar", T: 13 /*ScalarType.UINT32*/ },
+            { no: 1, name: "dateRangeLow", kind: "message", T: () => Date },
+            { no: 2, name: "dateRangeHigh", kind: "message", T: () => Date },
             { no: 3, name: "place", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "featuresMondadory", kind: "message", T: () => Features },
+            { no: 4, name: "featuresMandatory", kind: "message", T: () => Features },
             { no: 5, name: "fromIndex", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<GetBedsRequest>): GetBedsRequest {
-        const message = { dateRangeLow: 0, dateRangeHigh: 0, place: "", fromIndex: 0 };
+        const message = { place: "", fromIndex: 0 };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<GetBedsRequest>(this, message, value);
@@ -283,17 +284,17 @@ class GetBedsRequest$Type extends MessageType<GetBedsRequest> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* uint32 dateRangeLow */ 1:
-                    message.dateRangeLow = reader.uint32();
+                case /* Date dateRangeLow */ 1:
+                    message.dateRangeLow = Date.internalBinaryRead(reader, reader.uint32(), options, message.dateRangeLow);
                     break;
-                case /* uint32 dateRangeHigh */ 2:
-                    message.dateRangeHigh = reader.uint32();
+                case /* Date dateRangeHigh */ 2:
+                    message.dateRangeHigh = Date.internalBinaryRead(reader, reader.uint32(), options, message.dateRangeHigh);
                     break;
                 case /* string place */ 3:
                     message.place = reader.string();
                     break;
-                case /* Features featuresMondadory */ 4:
-                    message.featuresMondadory = Features.internalBinaryRead(reader, reader.uint32(), options, message.featuresMondadory);
+                case /* Features featuresMandatory */ 4:
+                    message.featuresMandatory = Features.internalBinaryRead(reader, reader.uint32(), options, message.featuresMandatory);
                     break;
                 case /* uint32 fromIndex */ 5:
                     message.fromIndex = reader.uint32();
@@ -310,18 +311,18 @@ class GetBedsRequest$Type extends MessageType<GetBedsRequest> {
         return message;
     }
     internalBinaryWrite(message: GetBedsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* uint32 dateRangeLow = 1; */
-        if (message.dateRangeLow !== 0)
-            writer.tag(1, WireType.Varint).uint32(message.dateRangeLow);
-        /* uint32 dateRangeHigh = 2; */
-        if (message.dateRangeHigh !== 0)
-            writer.tag(2, WireType.Varint).uint32(message.dateRangeHigh);
+        /* Date dateRangeLow = 1; */
+        if (message.dateRangeLow)
+            Date.internalBinaryWrite(message.dateRangeLow, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        /* Date dateRangeHigh = 2; */
+        if (message.dateRangeHigh)
+            Date.internalBinaryWrite(message.dateRangeHigh, writer.tag(2, WireType.LengthDelimited).fork(), options).join();
         /* string place = 3; */
         if (message.place !== "")
             writer.tag(3, WireType.LengthDelimited).string(message.place);
-        /* Features featuresMondadory = 4; */
-        if (message.featuresMondadory)
-            Features.internalBinaryWrite(message.featuresMondadory, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
+        /* Features featuresMandatory = 4; */
+        if (message.featuresMandatory)
+            Features.internalBinaryWrite(message.featuresMandatory, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
         /* uint32 fromIndex = 5; */
         if (message.fromIndex !== 0)
             writer.tag(5, WireType.Varint).uint32(message.fromIndex);
