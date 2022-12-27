@@ -2,13 +2,20 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 const provider = await detectEthereumProvider();
 
-if (provider) {
-  // From now on, this should always be true:
-  // provider === window.ethereum
-  console.log("Success!!!");
+console.log(isWeb3CapableBrowserKey, userIsAuthenticatedKey);
 
+provide(isWeb3CapableBrowserKey, new Boolean(provider));
+const userIsAuthenticated = ref(false);
 
-}</script>
+function updateUserIsAuthenticated(value: boolean) {
+  userIsAuthenticated.value = value;
+}
+provide(userIsAuthenticatedKey, {
+  userIsAuthenticated,
+  updateUserIsAuthenticated,
+});
+
+</script>
 
 <template>
   <div>
