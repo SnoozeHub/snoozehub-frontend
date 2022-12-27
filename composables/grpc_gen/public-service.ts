@@ -16,7 +16,7 @@ import { MESSAGE_TYPE } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
 import { Review } from "./common-messages";
 import { BedId } from "./common-messages";
-import { Features } from "./common-messages";
+import { Feature } from "./common-messages";
 import { Date } from "./common-messages";
 /**
  * @generated from protobuf message GetNonceResponse
@@ -62,19 +62,19 @@ export interface GetBedsRequest {
     /**
      * @generated from protobuf field: Date dateRangeLow = 1;
      */
-    dateRangeLow?: Date; // It's valid
+    dateRangeLow?: Date; // It's valid. > today (aka from tomorrow)
     /**
      * @generated from protobuf field: Date dateRangeHigh = 2;
      */
-    dateRangeHigh?: Date; // It's valid
+    dateRangeHigh?: Date; // It's valid. dateRangeHigh >= dateRangeLow
     /**
      * @generated from protobuf field: string place = 3;
      */
     place: string; // length=1-100. Maximum sensitive (aka it search the exact string)
     /**
-     * @generated from protobuf field: Features featuresMandatory = 4;
+     * @generated from protobuf field: repeated Feature featuresMondatory = 4;
      */
-    featuresMandatory?: Features;
+    featuresMondatory: Feature[]; // Distinct
     /**
      * Get first N results in order by proximity from fromIndex to fromIndex+N where N=15.
      *
@@ -268,12 +268,12 @@ class GetBedsRequest$Type extends MessageType<GetBedsRequest> {
             { no: 1, name: "dateRangeLow", kind: "message", T: () => Date },
             { no: 2, name: "dateRangeHigh", kind: "message", T: () => Date },
             { no: 3, name: "place", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 4, name: "featuresMandatory", kind: "message", T: () => Features },
+            { no: 4, name: "featuresMondatory", kind: "enum", repeat: 1 /*RepeatType.PACKED*/, T: () => ["Feature", Feature] },
             { no: 5, name: "fromIndex", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<GetBedsRequest>): GetBedsRequest {
-        const message = { place: "", fromIndex: 0 };
+        const message = { place: "", featuresMondatory: [], fromIndex: 0 };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<GetBedsRequest>(this, message, value);
@@ -293,8 +293,12 @@ class GetBedsRequest$Type extends MessageType<GetBedsRequest> {
                 case /* string place */ 3:
                     message.place = reader.string();
                     break;
-                case /* Features featuresMandatory */ 4:
-                    message.featuresMandatory = Features.internalBinaryRead(reader, reader.uint32(), options, message.featuresMandatory);
+                case /* repeated Feature featuresMondatory */ 4:
+                    if (wireType === WireType.LengthDelimited)
+                        for (let e = reader.int32() + reader.pos; reader.pos < e;)
+                            message.featuresMondatory.push(reader.int32());
+                    else
+                        message.featuresMondatory.push(reader.int32());
                     break;
                 case /* uint32 fromIndex */ 5:
                     message.fromIndex = reader.uint32();
@@ -320,9 +324,13 @@ class GetBedsRequest$Type extends MessageType<GetBedsRequest> {
         /* string place = 3; */
         if (message.place !== "")
             writer.tag(3, WireType.LengthDelimited).string(message.place);
-        /* Features featuresMandatory = 4; */
-        if (message.featuresMandatory)
-            Features.internalBinaryWrite(message.featuresMandatory, writer.tag(4, WireType.LengthDelimited).fork(), options).join();
+        /* repeated Feature featuresMondatory = 4; */
+        if (message.featuresMondatory.length) {
+            writer.tag(4, WireType.LengthDelimited).fork();
+            for (let i = 0; i < message.featuresMondatory.length; i++)
+                writer.int32(message.featuresMondatory[i]);
+            writer.join();
+        }
         /* uint32 fromIndex = 5; */
         if (message.fromIndex !== 0)
             writer.tag(5, WireType.Varint).uint32(message.fromIndex);

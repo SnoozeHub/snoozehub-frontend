@@ -47,43 +47,6 @@ export interface ProfilePic {
     image?: Uint8Array; // Valid AVIF image, max size = 512kb
 }
 /**
- * @generated from protobuf message Features
- */
-export interface Features {
-    /**
-     * @generated from protobuf field: bool internetConnection = 1;
-     */
-    internetConnection: boolean;
-    /**
-     * @generated from protobuf field: bool bathroom = 2;
-     */
-    bathroom: boolean;
-    /**
-     * @generated from protobuf field: bool heating = 3;
-     */
-    heating: boolean;
-    /**
-     * @generated from protobuf field: bool airConditioner = 4;
-     */
-    airConditioner: boolean;
-    /**
-     * @generated from protobuf field: bool electricalOutlet = 5;
-     */
-    electricalOutlet: boolean;
-    /**
-     * @generated from protobuf field: bool tap = 6;
-     */
-    tap: boolean;
-    /**
-     * @generated from protobuf field: bool bedLinens = 7;
-     */
-    bedLinens: boolean;
-    /**
-     * @generated from protobuf field: bool pillows = 8;
-     */
-    pillows: boolean;
-}
-/**
  * @generated from protobuf message Booking
  */
 export interface Booking {
@@ -113,9 +76,9 @@ export interface BedMutableInfo {
      */
     description: string;
     /**
-     * @generated from protobuf field: Features features = 3;
+     * @generated from protobuf field: repeated Feature features = 3;
      */
-    features?: Features;
+    features: Feature[]; // Distinct
     /**
      * @generated from protobuf field: uint32 minimumDaysNotice = 4;
      */
@@ -145,7 +108,7 @@ export interface BedList_Bed {
     /**
      * @generated from protobuf field: repeated Date dateAvailables = 3;
      */
-    dateAvailables: Date[]; // 0-90 .  Refers to the night between the date and the next day. It's valid
+    dateAvailables: Date[]; // 0-90 .  Refers to the night between the date and the next day. It's valid. Every date is > today
     /**
      * @generated from protobuf field: uint32 reviewCount = 4;
      */
@@ -193,6 +156,43 @@ export interface Date {
      * @generated from protobuf field: uint32 year = 3;
      */
     year: number;
+}
+/**
+ * @generated from protobuf enum Feature
+ */
+export enum Feature {
+    /**
+     * @generated from protobuf enum value: internetConnection = 0;
+     */
+    internetConnection = 0,
+    /**
+     * @generated from protobuf enum value: bathroom = 1;
+     */
+    bathroom = 1,
+    /**
+     * @generated from protobuf enum value: heating = 2;
+     */
+    heating = 2,
+    /**
+     * @generated from protobuf enum value: airConditioner = 3;
+     */
+    airConditioner = 3,
+    /**
+     * @generated from protobuf enum value: electricalOutlet = 4;
+     */
+    electricalOutlet = 4,
+    /**
+     * @generated from protobuf enum value: tap = 5;
+     */
+    tap = 5,
+    /**
+     * @generated from protobuf enum value: bedLinens = 6;
+     */
+    bedLinens = 6,
+    /**
+     * @generated from protobuf enum value: pillows = 7;
+     */
+    pillows = 7
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class Empty$Type extends MessageType<Empty> {
@@ -336,102 +336,6 @@ class ProfilePic$Type extends MessageType<ProfilePic> {
  */
 export const ProfilePic = new ProfilePic$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class Features$Type extends MessageType<Features> {
-    constructor() {
-        super("Features", [
-            { no: 1, name: "internetConnection", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 2, name: "bathroom", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 3, name: "heating", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 4, name: "airConditioner", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 5, name: "electricalOutlet", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 6, name: "tap", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 7, name: "bedLinens", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 8, name: "pillows", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
-        ]);
-    }
-    create(value?: PartialMessage<Features>): Features {
-        const message = { internetConnection: false, bathroom: false, heating: false, airConditioner: false, electricalOutlet: false, tap: false, bedLinens: false, pillows: false };
-        globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
-        if (value !== undefined)
-            reflectionMergePartial<Features>(this, message, value);
-        return message;
-    }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Features): Features {
-        let message = target ?? this.create(), end = reader.pos + length;
-        while (reader.pos < end) {
-            let [fieldNo, wireType] = reader.tag();
-            switch (fieldNo) {
-                case /* bool internetConnection */ 1:
-                    message.internetConnection = reader.bool();
-                    break;
-                case /* bool bathroom */ 2:
-                    message.bathroom = reader.bool();
-                    break;
-                case /* bool heating */ 3:
-                    message.heating = reader.bool();
-                    break;
-                case /* bool airConditioner */ 4:
-                    message.airConditioner = reader.bool();
-                    break;
-                case /* bool electricalOutlet */ 5:
-                    message.electricalOutlet = reader.bool();
-                    break;
-                case /* bool tap */ 6:
-                    message.tap = reader.bool();
-                    break;
-                case /* bool bedLinens */ 7:
-                    message.bedLinens = reader.bool();
-                    break;
-                case /* bool pillows */ 8:
-                    message.pillows = reader.bool();
-                    break;
-                default:
-                    let u = options.readUnknownField;
-                    if (u === "throw")
-                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
-                    let d = reader.skip(wireType);
-                    if (u !== false)
-                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
-            }
-        }
-        return message;
-    }
-    internalBinaryWrite(message: Features, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* bool internetConnection = 1; */
-        if (message.internetConnection !== false)
-            writer.tag(1, WireType.Varint).bool(message.internetConnection);
-        /* bool bathroom = 2; */
-        if (message.bathroom !== false)
-            writer.tag(2, WireType.Varint).bool(message.bathroom);
-        /* bool heating = 3; */
-        if (message.heating !== false)
-            writer.tag(3, WireType.Varint).bool(message.heating);
-        /* bool airConditioner = 4; */
-        if (message.airConditioner !== false)
-            writer.tag(4, WireType.Varint).bool(message.airConditioner);
-        /* bool electricalOutlet = 5; */
-        if (message.electricalOutlet !== false)
-            writer.tag(5, WireType.Varint).bool(message.electricalOutlet);
-        /* bool tap = 6; */
-        if (message.tap !== false)
-            writer.tag(6, WireType.Varint).bool(message.tap);
-        /* bool bedLinens = 7; */
-        if (message.bedLinens !== false)
-            writer.tag(7, WireType.Varint).bool(message.bedLinens);
-        /* bool pillows = 8; */
-        if (message.pillows !== false)
-            writer.tag(8, WireType.Varint).bool(message.pillows);
-        let u = options.writeUnknownFields;
-        if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
-        return writer;
-    }
-}
-/**
- * @generated MessageType for protobuf message Features
- */
-export const Features = new Features$Type();
-// @generated message type with reflection information, may provide speed optimized methods
 class Booking$Type extends MessageType<Booking> {
     constructor() {
         super("Booking", [
@@ -492,12 +396,12 @@ class BedMutableInfo$Type extends MessageType<BedMutableInfo> {
             { no: 1, name: "place", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
             { no: 2, name: "images", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 12 /*ScalarType.BYTES*/ },
             { no: 5, name: "description", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "features", kind: "message", T: () => Features },
+            { no: 3, name: "features", kind: "enum", repeat: 1 /*RepeatType.PACKED*/, T: () => ["Feature", Feature] },
             { no: 4, name: "minimumDaysNotice", kind: "scalar", T: 13 /*ScalarType.UINT32*/ }
         ]);
     }
     create(value?: PartialMessage<BedMutableInfo>): BedMutableInfo {
-        const message = { place: "", images: [], description: "", minimumDaysNotice: 0 };
+        const message = { place: "", images: [], description: "", features: [], minimumDaysNotice: 0 };
         globalThis.Object.defineProperty(message, MESSAGE_TYPE, { enumerable: false, value: this });
         if (value !== undefined)
             reflectionMergePartial<BedMutableInfo>(this, message, value);
@@ -517,8 +421,12 @@ class BedMutableInfo$Type extends MessageType<BedMutableInfo> {
                 case /* string description */ 5:
                     message.description = reader.string();
                     break;
-                case /* Features features */ 3:
-                    message.features = Features.internalBinaryRead(reader, reader.uint32(), options, message.features);
+                case /* repeated Feature features */ 3:
+                    if (wireType === WireType.LengthDelimited)
+                        for (let e = reader.int32() + reader.pos; reader.pos < e;)
+                            message.features.push(reader.int32());
+                    else
+                        message.features.push(reader.int32());
                     break;
                 case /* uint32 minimumDaysNotice */ 4:
                     message.minimumDaysNotice = reader.uint32();
@@ -544,9 +452,13 @@ class BedMutableInfo$Type extends MessageType<BedMutableInfo> {
         /* string description = 5; */
         if (message.description !== "")
             writer.tag(5, WireType.LengthDelimited).string(message.description);
-        /* Features features = 3; */
-        if (message.features)
-            Features.internalBinaryWrite(message.features, writer.tag(3, WireType.LengthDelimited).fork(), options).join();
+        /* repeated Feature features = 3; */
+        if (message.features.length) {
+            writer.tag(3, WireType.LengthDelimited).fork();
+            for (let i = 0; i < message.features.length; i++)
+                writer.int32(message.features[i]);
+            writer.join();
+        }
         /* uint32 minimumDaysNotice = 4; */
         if (message.minimumDaysNotice !== 0)
             writer.tag(4, WireType.Varint).uint32(message.minimumDaysNotice);
