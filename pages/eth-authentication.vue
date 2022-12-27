@@ -1,18 +1,32 @@
 <script setup lang="ts">
-import { UserIsAuthenticated } from '~~/composables/injectionKeys';
+import { RpcError } from '@protobuf-ts/runtime-rpc';
+import { Errors } from '~~/composables/errors';
+import { useGrpcStore, useSessionStore } from '~~/composables/storeExport';
 
 let loading = ref(false);
 
-const { userIsAuthenticated, updateUserIsAuthenticated } = inject<UserIsAuthenticated>(userIsAuthenticatedKey) as UserIsAuthenticated;
+let errors = ref(new Set<Errors>());
+
+const sessionStore = useSessionStore();
+const grpcStore = useGrpcStore();
 async function acceptTerms() {
     try {
         loading.value = true
-        setTimeout(() => (loading.value = false), 3000)
-        console.log("Initiating handshake!");
-        const authenticationOutcome = await init_handshake()
-        updateUserIsAuthenticated(authenticationOutcome);
-    } catch (e) {
-        console.error(e);
+        const authenticationOutcome = await useInitHandshake();
+        loading.value = false;
+        sessionStore.setUserIsAuthenticated(authenticationOutcome);
+        if (authenticationOutcome) {
+            grpcStore.initAuthOnlyServiceClient()
+            navigateTo("/");
+        }
+        else
+            navigateTo("/signup");
+
+    } catch (err) {
+        if (err instanceof RpcError)
+            errors.value.add(Errors.GrpcError);
+        else
+            errors.value.add(Errors.EthereumRequestError);
         loading.value = false;
     }
 }
@@ -21,6 +35,8 @@ async function acceptTerms() {
 
 <template>
     <div class="main-container">
+        <ErrorsPrompt :errors="errors"></ErrorsPrompt>
+
         <h1 id="terms">You are now going to be prompted to allow SnoozeHub to read and process your public ETH address,
             if you
             don't want to share
