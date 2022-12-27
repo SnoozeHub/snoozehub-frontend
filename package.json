@@ -24,6 +24,7 @@
     "grpc-web": "^1.4.2",
     "nuxt": "^3.0.0",
     "ufo": "^0.8.6",
+    "v-calendar": "3.0.0-alpha.8",
     "vite": "^3.2.5",
     "vite-plugin-vuetify": "^1.0.1",
     "vue": "^3.2.45",
