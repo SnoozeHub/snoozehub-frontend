@@ -12,6 +12,7 @@
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/eth-sig-util": "^5.0.2",
     "@nuxt/kit": "^3.0.0",
+    "@pinia/nuxt": "^0.4.6",
     "@protobuf-ts/grpcweb-transport": "^2.8.2",
     "@protobuf-ts/runtime": "^2.8.2",
     "@protobuf-ts/runtime-rpc": "^2.8.2",
