@@ -13,20 +13,20 @@ const cards = ref([
 </script>
 
 <template>
-    <v-card>
-        <v-carousel v-for="card in cards" :key="card.title">
-            <v-carousel-item :src="card.src" height="200px" cover>
+    <v-card class="card">
+        <v-carousel class="mx-auto">
+            <v-carousel-item v-for="card in cards" :key="card.title" :src="card.src" style="aspect-ratio: 1;" cover>
             </v-carousel-item></v-carousel>
 
         <v-list>
             <v-list-item>
-                {{ bed.bedMutableInfo?.description }}
+                Bed description: {{ bed.bedMutableInfo?.description }}
             </v-list-item>
             <v-list-item>
-                {{ bed.averageEvaluation }}
+                Average evaluation: {{ bed.averageEvaluation }}
             </v-list-item>
             <v-list-item>
-                {{ bed.reviewCount }}
+                Review count: {{ bed.reviewCount }}
             </v-list-item>
         </v-list>
         <v-card-actions>
@@ -41,3 +41,10 @@ const cards = ref([
     </v-card>
 
 </template>
+
+<style scoped>
+.card {
+    max-width: fit-content;
+    margin: auto;
+}
+</style>
