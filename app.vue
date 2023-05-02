@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import detectEthereumProvider from '@metamask/detect-provider';
-import { useSessionStore } from './composables/storeExport';
+import { useSessionStore, useGrpcStore } from './composables/storeExport';
 const provider = await detectEthereumProvider();
 
 const sessionStore = useSessionStore();
