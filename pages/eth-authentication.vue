@@ -37,8 +37,9 @@ async function acceptTerms() {
     <div class="main-container">
         <ErrorsPrompt :errors="errors"></ErrorsPrompt>
 
-        <h1 id="terms">You are now going to be prompted to allow SnoozeHub to read and process your public ETH address,
-            if you
+        <h1 id="terms">You are now going to be prompted to allow SnoozeHub to read and process your public ETH address.
+            <br>
+            If you
             don't want to share
             this information with us DON'T click on the button below
         </h1>
