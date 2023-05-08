@@ -1,6 +1,9 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 import vuetify from "vite-plugin-vuetify";
 export default defineNuxtConfig({
+  devServer: {
+    port: 3015,
+  },
   nitro: {
     serveStatic: true,
   },
