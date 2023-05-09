@@ -1,4 +1,4 @@
-version: '3.3'
+version: "3.3"
 
 services:
   nuxt:
@@ -8,7 +8,13 @@ services:
     container_name: nuxt_build
     command: npm run startProduction
     volumes:
-    - .:/app
-    - /app/node_modules
+      - .:/app
+      - /app/node_modules
     ports:
       - "3000:3000"
+  envoy:
+    image: envoyproxy/envoy:v1.26-latest
+    ports:
+      - "3010:3010"
+    volumes:
+      - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
