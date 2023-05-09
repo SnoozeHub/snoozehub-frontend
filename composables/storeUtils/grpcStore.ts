@@ -5,7 +5,7 @@ import { PublicServiceClient } from "../grpc_gen/public-service.client";
 
 export const useGrpcStore = defineStore("grpcStore", {
   state: () => ({
-    grpcWebProxyURL: "http://localhost:3000",
+    grpcWebProxyURL: "http://localhost:3010",
     webFetchTransportIsInitiated: false,
     publicServiceClientIsInitiated: false,
     authOnlyServiceClientIsInitiated: false,

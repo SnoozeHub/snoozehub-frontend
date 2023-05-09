@@ -14,12 +14,11 @@ static_resources:
               typed_config:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
                 codec_type: auto
-                use_remote_address: true
-                stat_prefix: route
+                stat_prefix: ingress_http
                 route_config:
                   name: local_route
                   virtual_hosts:
-                    - name: local_service
+                    - name: localhost
                       domains: ["*"]
                       routes:
                         - match: { prefix: "/PublicService" }
@@ -39,9 +38,9 @@ static_resources:
                         max_age: "1728000"
                         expose_headers: custom-header-1,grpc-status,grpc-message
                 http_filters:
-                  # - name: envoy.filters.http.grpc_web
-                  #   typed_config:
-                  #     "@type": type.googleapis.com/envoy.extensions.filters.http.grpc_web.v3.GrpcWeb
+                  - name: envoy.filters.http.grpc_web
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.filters.http.grpc_web.v3.GrpcWeb
                   - name: envoy.filters.http.cors
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.cors.v3.Cors
@@ -65,9 +64,7 @@ static_resources:
                       address: host.docker.internal
                       port_value: 9090
     - name: nuxt-service
-      connect_timeout: 0.25s
       type: logical_dns
-      http2_protocol_options: {}
       lb_policy: round_robin
       load_assignment:
         cluster_name: cluster_1
