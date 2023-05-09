@@ -25,9 +25,6 @@ dependencies:
   '@protobuf-ts/runtime-rpc':
     specifier: ^2.9.0
     version: 2.9.0
-  '@types/google-protobuf':
-    specifier: ^3.15.6
-    version: 3.15.6
   '@types/node':
     specifier: ^18.16.5
     version: 18.16.5
@@ -37,12 +34,6 @@ dependencies:
   defu:
     specifier: ^6.1.2
     version: 6.1.2
-  google-protobuf:
-    specifier: ^3.21.2
-    version: 3.21.2
-  grpc-web:
-    specifier: ^1.4.2
-    version: 1.4.2
   nuxt:
     specifier: ^3.4.3
     version: 3.4.3(@types/node@18.16.5)
@@ -1472,10 +1463,6 @@ packages:
 
   /@types/estree@1.0.1:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
-    dev: false
-
-  /@types/google-protobuf@3.15.6:
-    resolution: {integrity: sha512-pYVNNJ+winC4aek+lZp93sIKxnXt5qMkuKmaqS3WGuTq0Bw1ZDYNBgzG5kkdtwcv+GmYJGo3yEg6z2cKKAiEdw==}
     dev: false
 
   /@types/graceful-fs@4.1.6:
@@ -3294,16 +3281,8 @@ packages:
       slash: 4.0.0
     dev: false
 
-  /google-protobuf@3.21.2:
-    resolution: {integrity: sha512-3MSOYFO5U9mPGikIYCzK0SaThypfGgS6bHqrUGXG3DPHCrb+txNqeEcns1W0lkGfk0rCyNXm7xB9rMxnCiZOoA==}
-    dev: false
-
   /graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
-
-  /grpc-web@1.4.2:
-    resolution: {integrity: sha512-gUxWq42l5ldaRplcKb4Pw5O4XBONWZgz3vxIIXnfIeJj8Jc3wYiq2O4c9xzx/NGbbPEej4rhI62C9eTENwLGNw==}
-    dev: false
 
   /gzip-size@7.0.0:
     resolution: {integrity: sha512-O1Ld7Dr+nqPnmGpdhzLmMTQ4vAsD+rHwMm1NLUmoUFFymBOMKxCCrtDxqdBRYXdeEPEi3SyoR4TizJLQrnKBNA==}
