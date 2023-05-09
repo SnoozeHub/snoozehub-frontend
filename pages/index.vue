@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { BedList_Bed } from '~~/composables/grpc_gen/common-messages'
+import { BedList } from '~~/composables/grpc_gen/common-messages'
 import { useGrpcStore, useSessionStore } from '~~/composables/storeExport'
 import { useComputedWidth } from '~~/composables/breakpoints'
 import { useDisplay } from 'vuetify'
 
 
-let bedList = ref<BedList_Bed[]>()
+let bedList = ref<BedList>()
 const grpcStore = useGrpcStore()
 const sessionStore = useSessionStore()
 
@@ -18,7 +18,7 @@ if (sessionStore.getUserIsAuthenticated)
 try {
     const newBedList = await useFetchBeds()
     if (newBedList == null) throw Errors.NoBedsFound
-    bedList.value = newBedList as BedList_Bed[]
+    bedList.value = newBedList as BedList
     console.log(bedList)
 } catch (err) {
     console.log(err)
@@ -35,7 +35,7 @@ const computedWith = computed(() => useComputedWidth(width.value))
     <DateIntervalPicker></DateIntervalPicker>
     <v-container fluid class="container">
         <v-row justify="space-around">
-            <v-col v-for="bed in bedList" :key="(bed.id?.bedId as string)">
+            <v-col v-for="bed in bedList?.beds" :key="(bed.id?.bedId as string)">
                 <BedCard :bed="bed"></BedCard>
             </v-col>
         </v-row>

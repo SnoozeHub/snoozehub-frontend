@@ -23,6 +23,7 @@ async function acceptTerms() {
             navigateTo("/signup");
 
     } catch (err) {
+        console.log(err);
         if (err instanceof RpcError)
             errors.value.add(Errors.GrpcError);
         else
@@ -47,7 +48,6 @@ async function acceptTerms() {
             to
             proceed </v-btn>
     </div>
-
 </template>
 
 <style scoped>

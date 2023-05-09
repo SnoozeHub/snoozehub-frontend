@@ -10,6 +10,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.8.14",
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/eth-sig-util": "^5.1.0",
     "@nuxt/kit": "^3.4.3",
@@ -18,7 +19,7 @@
     "@protobuf-ts/grpcweb-transport": "^2.9.0",
     "@protobuf-ts/runtime": "^2.9.0",
     "@protobuf-ts/runtime-rpc": "^2.9.0",
-    "@types/node": "^18.16.5",
+    "@types/node": "^18.16.6",
     "buffer": "^6.0.3",
     "defu": "^6.1.2",
     "nuxt": "^3.4.3",
