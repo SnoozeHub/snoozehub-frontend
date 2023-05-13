@@ -23,34 +23,13 @@ export async function useInitHandshake() {
     method: "personal_sign",
     params: [nonce, from, "brbrbrbbr"],
   });
-  console.log("signedNonce", typeof signedNonce, signedNonce);
 
-
-// this function is from chatpgpt
-function hexToUint8Array(hexString: string): Uint8Array {
-  const trimmedHex = hexString.startsWith("0x") ? hexString.slice(2) : hexString;
-  const hexLength = trimmedHex.length;
-  
-  if (hexLength % 2 !== 0) {
-    throw new Error("Invalid hexadecimal string: length must be even");
-  }
-  
-  const byteLength = hexLength / 2;
-  const uint8Array = new Uint8Array(byteLength);
-  
-  for (let i = 0; i < byteLength; i++) {
-    const byteHex = trimmedHex.substr(i * 2, 2);
-    const byteValue = parseInt(byteHex, 16);
-    uint8Array[i] = byteValue;
-  }
-  
-  return uint8Array;
-}
-
+  const byteArray = Buffer.from(signedNonce.slice(2), "hex");
+  const hexSignedNonce = new Uint8Array(byteArray);
 
   const auth_request: AuthRequest = {
     nonce,
-    signedNonce: hexToUint8Array(signedNonce),
+    signedNonce: hexSignedNonce,
   };
   console.log("auth_request", auth_request);
   const authOutcome = await publicServiceClient.auth(auth_request);
