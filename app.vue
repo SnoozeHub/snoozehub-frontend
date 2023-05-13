@@ -10,9 +10,9 @@ sessionStore.restorePreviousSession();
 </script>
 
 <template>
-  <div>
+  <v-app>
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-  </div>
+  </v-app>
 </template>

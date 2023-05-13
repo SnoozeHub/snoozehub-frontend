@@ -42,9 +42,14 @@ export const useSessionStore = defineStore("sessionStore", {
     setIsWeb3CapableBrowser(isWeb3CapableBrowser: boolean): void {
       this.isWeb3CapableBrowser = isWeb3CapableBrowser;
     },
+    saveSettings(): void {
+      localStorage.setItem("settings", JSON.stringify(this.settings));
+    },
     setSettings(settings: Settings): void {
       this.settings = settings;
-      localStorage.setItem("settings", JSON.stringify(settings));
+    },
+    setTheme(darkTheme: boolean): void {
+      this.settings.darkTheme = darkTheme;
     },
     restoreLocalStoragePreferences() {
       const settingsJSON = localStorage.getItem("settings");

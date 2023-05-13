@@ -1,15 +1,22 @@
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay, useTheme } from 'vuetify';
 import { useSessionStore } from '~~/composables/storeExport';
 
 let showDrawer = ref(false);
 const sessionStore = useSessionStore();
+const vuetifyTheme = useTheme();
 
 function login() {
     navigateTo('/eth-authentication');
     showDrawer.value = false;
 }
 
+function toggleTheme() {
+    const theme = sessionStore.getSettings.darkTheme;
+    sessionStore.setTheme(!theme);
+    vuetifyTheme.global.name.value = !theme ? 'dark' : 'light';
+
+}
 function logout() {
     const grpcStore = useGrpcStore();
     sessionStore.logout();
@@ -52,7 +59,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
                     </div>
                     <div class="inner-layout">
                         <v-btn icon="mdi-translate"></v-btn>
-                        <v-btn icon="mdi-brightness-4"></v-btn>
+                        <v-btn icon="mdi-brightness-4" @click="toggleTheme"></v-btn>
                         <v-app-bar-nav-icon variant="text" @click.stop="showDrawer = !showDrawer"></v-app-bar-nav-icon>
                     </div>
 
