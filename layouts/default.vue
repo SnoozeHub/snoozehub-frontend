@@ -44,7 +44,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
 </script>
 <template>
     <div>
-        <v-layout>
+        <v-layout class="fill-height">
             <v-app-bar prominent elevation="2">
                 <div class="default-layout">
 

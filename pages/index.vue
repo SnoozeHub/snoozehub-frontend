@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BedList } from '~~/composables/grpc_gen/common-messages'
+import { Bed, BedList } from '~~/composables/grpc_gen/common-messages'
 import { useGrpcStore, useSessionStore } from '~~/composables/storeExport'
 import { useComputedWidth } from '~~/composables/breakpoints'
 import { useDisplay } from 'vuetify'
@@ -18,7 +18,7 @@ if (sessionStore.getUserIsAuthenticated)
 try {
     const newBedList = await useFetchBeds()
     if (newBedList == null) throw Errors.NoBedsFound
-    bedList.value = newBedList as BedList
+    bedList.value = { beds: newBedList }
     console.log(bedList)
 } catch (err) {
     console.log(err)

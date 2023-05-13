@@ -6,13 +6,16 @@ const provider = await detectEthereumProvider();
 const sessionStore = useSessionStore();
 sessionStore.setIsWeb3CapableBrowser(provider != null);
 sessionStore.restorePreviousSession();
-
 </script>
 
 <template>
-  <v-app>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </v-app>
+  <div>
+    <v-app>
+      <NuxtLayout class="fill-height">
+        <v-main>
+          <NuxtPage />
+        </v-main>
+      </NuxtLayout>
+    </v-app>
+  </div>
 </template>
