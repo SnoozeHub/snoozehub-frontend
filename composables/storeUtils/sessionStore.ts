@@ -60,5 +60,11 @@ export const useSessionStore = defineStore("sessionStore", {
         this.authToken = localStorage.getItem("authToken") as string;
       }
     },
+    logout() {
+      this.userIsAuthenticated = false;
+      this.authToken = "";
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userIsAuthenticated");
+    },
   },
 });

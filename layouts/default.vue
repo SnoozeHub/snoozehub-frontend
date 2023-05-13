@@ -10,6 +10,12 @@ function login() {
     showDrawer.value = false;
 }
 
+function logout() {
+    const grpcStore = useGrpcStore();
+    sessionStore.logout();
+    grpcStore.authOnlyServiceClient?.logout;
+}
+
 const loading = ref<boolean>(false);
 
 const query = ref<string>();
@@ -55,23 +61,21 @@ const computedWidth = computed(() => useComputedWidth(width.value))
             <v-navigation-drawer v-model="showDrawer" location="right" temporary>
                 <v-list v-if="!sessionStore.userIsAuthenticated">
 
-                    <v-list-item prepend-icon="mdi-account-plus-outline" title="Log In / Sign Up"
-                        value="Log In / Sign Up" @click="login">
+                    <v-list-item prepend-icon="mdi-account-plus-outline" title="Log In / Sign Up" value="Log In / Sign Up"
+                        @click="login">
                     </v-list-item>
 
                 </v-list>
                 <v-list v-else>
-                    <v-list-item prepend-icon="mdi-calendar-month" title="My bookings"
-                        value="My bookings"></v-list-item>
+                    <v-list-item prepend-icon="mdi-calendar-month" title="My bookings" value="My bookings"></v-list-item>
                     <v-list-item prepend-icon="mdi-bunk-bed" title="My beds" value="My beds"></v-list-item>
-                    <v-list-item prepend-icon="mdi-logout" title="Log Out" value="Log Out"></v-list-item>
+                    <v-list-item prepend-icon="mdi-logout" title="Log Out" value="Log Out" @click="logout"></v-list-item>
 
                 </v-list>
 
                 <v-divider></v-divider>
                 <v-list density="compact" nav>
-                    <v-list-item prepend-icon="mdi-chat-question-outline" title="Get Help"
-                        value="Get Help"></v-list-item>
+                    <v-list-item prepend-icon="mdi-chat-question-outline" title="Get Help" value="Get Help"></v-list-item>
                 </v-list>
             </v-navigation-drawer>
 
