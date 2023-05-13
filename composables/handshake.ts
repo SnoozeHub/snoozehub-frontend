@@ -24,11 +24,13 @@ export async function useInitHandshake() {
     method: "personal_sign",
     params: [msg, from, "brbrbrbbr"],
   });
-
+  console.log("signedNonce", typeof signedNonce, signedNonce);
   const auth_request: AuthRequest = {
-    nonce: nonce,
-    signedNonce: signedNonce,
+    nonce,
+    signedNonce: Uint8Array.from(signedNonce),
   };
+  console.log("auth_request", auth_request);
   const authOutcome = await publicServiceClient.auth(auth_request);
+  console.log("authOutcome", authOutcome);
   return authOutcome?.response;
 }
