@@ -26,7 +26,7 @@ export async function useInitHandshake() {
   console.log("signedNonce", typeof signedNonce, signedNonce);
 
 
-// this function from chatpgpt
+// this function is from chatpgpt
 function hexToUint8Array(hexString: string): Uint8Array {
   const trimmedHex = hexString.startsWith("0x") ? hexString.slice(2) : hexString;
   const hexLength = trimmedHex.length;
