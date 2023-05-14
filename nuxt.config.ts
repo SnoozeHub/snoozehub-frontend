@@ -1,6 +1,16 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 import vuetify from "vite-plugin-vuetify";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "url";
+import VueI18nVitePlugin from "@intlify/unplugin-vue-i18n/vite";
+
 export default defineNuxtConfig({
+  runtimeConfig: {
+    // The private keys which are only available server-side
+    public: {
+      googleMapsApiKey: "asd",
+    },
+  },
   devServer: {
     port: 3000,
   },
@@ -20,6 +30,14 @@ export default defineNuxtConfig({
     ssr: {
       noExternal: ["vuetify"], // add the vuetify vite plugin
     },
+    plugins: [
+      VueI18nVitePlugin({
+        include: resolve(
+          dirname(fileURLToPath(import.meta.url)),
+          "./locales/*.json"
+        ), // provide a path to the folder where you'll store translation data (see below)
+      }),
+    ],
   },
   modules: [
     // @ts-ignore
