@@ -2,18 +2,20 @@
     <v-container>
         <v-card>
             <v-card-title>
-                Enter Your Information Below
+                {{ $t('information_request') }}
             </v-card-title>
             <v-card-text>
                 <v-form @submit.prevent="submitForm">
-                    <v-text-field v-model="name" label="Name" required hint="This field is required"></v-text-field>
-                    <v-text-field v-model="surname" label="Surname" required hint="This field is required"></v-text-field>
-                    <v-text-field v-model="email" label="Email" required :rules="emailRules"
-                        hint="This field is required"></v-text-field>
-                    <v-text-field v-model="telegram" label="Telegram Account" required
-                        hint="This field is required"></v-text-field>
-                    <v-file-input v-model="photos" label="Upload Photos"></v-file-input>
-                    <v-btn type="submit" color="primary" :disabled="!isFormValid">Submit</v-btn>
+                    <v-text-field v-model="name" v-bind:label="$t('name')" required
+                        v-bind:hint="$t('required_field')"></v-text-field>
+                    <v-text-field v-model="surname" v-bind:label="$t('surname')" required
+                        v-bind:hint="$t('required_field')"></v-text-field>
+                    <v-text-field v-model="email" v-bind:label="$t('email')" required :rules="emailRules"
+                        v-bind:hint="$t('required_field')"></v-text-field>
+                    <v-text-field v-model="telegram" v-bind:label="$t('telegram_account')" required
+                        v-bind:hint="$t('required_field')"></v-text-field>
+                    <v-file-input v-model="photos" v-bind:label="$t('photos')"></v-file-input>
+                    <v-btn type="submit" color="primary" :disabled="!isFormValid">{{ $t('submit') }}</v-btn>
                 </v-form>
             </v-card-text>
         </v-card>
@@ -21,6 +23,9 @@
 </template>
   
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const emailRules = [
     (v: string) => {
@@ -29,7 +34,7 @@ const emailRules = [
             '^(([^<>()\\[\\]\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.' +
             '[0-9]{1,3}\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$'
         );
-        return rex.test(v) || 'E-mail must be valid';
+        return rex.test(v) || t('email_must_be_valid');
     }]
 
 const isFormValid = computed(() => {

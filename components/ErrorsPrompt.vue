@@ -4,14 +4,20 @@ const props = defineProps<{ errors: Set<Errors> }>();
 </script>
 
 <template>
-    <v-alert prominent title="Error connecting to our servers" type="error" variant="tonal"
+    <v-alert prominent v-bind:title="$t('connection_error_title')" type="error" variant="tonal"
         v-if="props.errors.has(Errors.GrpcError)" closable class="alert">
-        We are currently experiencing some issues connecting to our servers. Please try again in a second.
+        {{ $t('connection_error_body') }}
     </v-alert>
-    <v-alert prominent title="ETH blockchain error" type="error" variant="tonal"
+    <v-alert prominent v-bind:title="$t('eth_error_title')" type="error" variant="tonal"
         v-if="props.errors.has(Errors.EthereumRequestError)" closable class="alert">
-        We are currently experiencing some issues processing ETH requests on the blockchain. Please try again in a
-        second.
+        {{ $t('eth_error_body') }}
+    </v-alert>
+    <v-alert prominent v-bind:title="$t('web3_browser_error_title')" v-if="props.errors.has(Errors.Web3CapableBrowserError)"
+        closable class="alert-danger">
+        <template #icon>
+            {{ $t('web3_browser_error_body') }}
+        </template>
+
     </v-alert>
 </template>
 <style scoped>
@@ -19,5 +25,13 @@ const props = defineProps<{ errors: Set<Errors> }>();
     margin-top: 1%;
     width: 70%;
 
+}
+
+/*make it the entire length of the page and appear at the top 
+*/
+.alert-danger {
+    width: 100%;
+    background-color: #da1f12;
+    color: white;
 }
 </style>

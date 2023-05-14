@@ -15,7 +15,7 @@ async function acceptTerms() {
         const authenticationOutcome = await useInitHandshake();
         loading.value = false;
         sessionStore.setUserIsAuthenticated(authenticationOutcome);
-        if (authenticationOutcome) {
+        if (authenticationOutcome.accountExist) {
             grpcStore.initAuthOnlyServiceClient()
             navigateTo("/");
         }
@@ -38,15 +38,10 @@ async function acceptTerms() {
     <div class="main-container">
         <ErrorsPrompt :errors="errors"></ErrorsPrompt>
 
-        <h1 id="terms">You are now going to be prompted to allow SnoozeHub to read and process your public ETH address.
-            <br>
-            If you
-            don't want to share
-            this information with us DON'T click on the button below
+        <h1 id="terms">{{ $t('tos') }}
         </h1>
-        <v-btn :loading="loading" :disabled="loading" color="secondary" @click="acceptTerms">I understand and I want
-            to
-            proceed </v-btn>
+        <v-btn :loading="loading" :disabled="loading" color="secondary" @click="acceptTerms">
+            {{ $t('accept_agreement') }}</v-btn>
     </div>
 </template>
 

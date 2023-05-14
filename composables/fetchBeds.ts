@@ -1,22 +1,30 @@
 import { Feature } from "./grpc_gen/common-messages";
 import { GetBedsRequest } from "./grpc_gen/public-service";
 import { useGrpcStore } from "./storeExport";
-import { Date } from "./grpc_gen/common-messages";
+import { Date as GrpcDate } from "./grpc_gen/common-messages";
 
-export async function useFetchBeds() {
+export async function useFetchBeds(
+  dateRangeHigh: Date,
+  dateRangeLow: Date,
+  coords: google.maps.LatLng,
+  featuresMandatory: Feature[],
+  fromIndex: number
+) {
   const grpcState = useGrpcStore();
-  // const sessionStore = useSessionStore();
-
   const getBedRequest: GetBedsRequest = {
-    dateRangeHigh: { day: 1, month: 10, year: 2023 } as Date,
-    dateRangeLow: { day: 1, month: 7, year: 2023 } as Date,
-    coordinates: { latitude: 0, longitude: 0 },
-    featuresMandatory: [
-      Feature.internetConnection,
-      Feature.bathroom,
-      Feature.electricalOutlet,
-    ],
-    fromIndex: 12,
+    dateRangeHigh: {
+      day: dateRangeHigh.getDay(),
+      month: dateRangeHigh.getMonth(),
+      year: dateRangeHigh.getFullYear(),
+    } as GrpcDate,
+    dateRangeLow: {
+      day: dateRangeLow.getDay(),
+      month: dateRangeLow.getMonth(),
+      year: dateRangeLow.getFullYear(),
+    } as GrpcDate,
+    coordinates: { latitude: coords.lat(), longitude: coords.lng() },
+    featuresMandatory,
+    fromIndex,
   };
   const publicServiceClient = grpcState.getPublicServiceClient;
   const getBedsRequest = await publicServiceClient?.getBeds(getBedRequest);

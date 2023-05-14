@@ -1,10 +1,6 @@
 import { defineStore } from "pinia";
 import { AuthResponse } from "../grpc_gen/public-service";
-
-export enum Languages {
-  IT = "IT",
-  EN = "EN",
-}
+import { Languages } from "../languageUtils";
 export interface Settings {
   darkTheme: boolean;
   language: Languages;
@@ -21,28 +17,37 @@ export function enumFromStringValue<T>(
 
 export const useSessionStore = defineStore("sessionStore", {
   state: () => ({
+    autocompleteService: null as google.maps.places.AutocompleteService | null,
+    geocoderService: null as google.maps.Geocoder | null,
     isWeb3CapableBrowser: false,
     userIsAuthenticated: false,
     settings: { darkTheme: true, language: Languages.EN },
     authToken: "",
   }),
   getters: {
+    getLanguage: (state) => state.settings.language,
+    getAutocompleteService: (state) => state.autocompleteService,
     getIsWeb3CapableBrowser: (state) => state.isWeb3CapableBrowser,
     getUserIsAuthenticated: (state) => state.userIsAuthenticated,
     getSettings: (state) => state.settings,
+    getDarkTheme: (state) => state.settings.darkTheme,
   },
   actions: {
     setUserIsAuthenticated(authResponse: AuthResponse): void {
       this.userIsAuthenticated = authResponse.accountExist;
       if (this.userIsAuthenticated && authResponse.authToken) {
         this.authToken = authResponse.authToken;
-        localStorage.setItem("authToken", this.authToken);
       }
     },
     setIsWeb3CapableBrowser(isWeb3CapableBrowser: boolean): void {
       this.isWeb3CapableBrowser = isWeb3CapableBrowser;
     },
-    saveSettings(): void {
+    saveSession(): void {
+      localStorage.setItem(
+        "userIsAuthenticated",
+        this.userIsAuthenticated.toString()
+      );
+      localStorage.setItem("authToken", this.authToken);
       localStorage.setItem("settings", JSON.stringify(this.settings));
     },
     setSettings(settings: Settings): void {
@@ -51,13 +56,19 @@ export const useSessionStore = defineStore("sessionStore", {
     setTheme(darkTheme: boolean): void {
       this.settings.darkTheme = darkTheme;
     },
-    restoreLocalStoragePreferences() {
-      const settingsJSON = localStorage.getItem("settings");
-      if (!this.settings) return;
-      const settings = JSON.parse(settingsJSON as string) as Settings;
-      this.setSettings(settings);
+    toggleLanguage(): void {
+      this.settings.language =
+        this.settings.language == Languages.EN ? Languages.IT : Languages.EN;
     },
     restorePreviousSession() {
+      //restores user preferences from local storage
+      const settingsJSON = localStorage.getItem("settings");
+
+      if (settingsJSON != "null") {
+        const settings = JSON.parse(settingsJSON as string) as Settings;
+        this.setSettings(settings);
+      }
+      //restores user authentication from local storage
       this.userIsAuthenticated = new Boolean(
         localStorage.getItem("userIsAuthenticated")
       ) as boolean;

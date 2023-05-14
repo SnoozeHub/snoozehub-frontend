@@ -31,7 +31,6 @@ export async function useInitHandshake() {
     nonce,
     signedNonce: hexSignedNonce,
   };
-  console.log("auth_request", auth_request);
   const authOutcome = await publicServiceClient.auth(auth_request);
   console.log("authOutcome", authOutcome);
   return authOutcome?.response;
