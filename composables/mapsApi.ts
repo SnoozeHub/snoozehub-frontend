@@ -1,8 +1,9 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { useI18n } from "vue-i18n";
+import { usegmapsStore } from "./storeUtils/gMapsStore";
 
 export function useInitGoogleApis() {
-  const sessionStore = useSessionStore();
+  const gmapsStore = usegmapsStore();
 
   const env = useRuntimeConfig();
   const loader = new Loader({
@@ -18,8 +19,8 @@ export function useInitGoogleApis() {
     const { Geocoder } = (await google.maps.importLibrary(
       "geocoding"
     )) as google.maps.GeocodingLibrary;
-    sessionStore.autocompleteService = new AutocompleteService();
-    sessionStore.geocoderService = new Geocoder();
+    gmapsStore.autocompleteService = new AutocompleteService();
+    gmapsStore.geocoderService = new Geocoder();
   });
 }
 
@@ -34,8 +35,8 @@ export async function useFetchCompletion(
     return Promise.resolve(lastResults);
   } else {
     lastCallTime = now;
-    const sessionStore = useSessionStore();
-    const autocompleteService = sessionStore.autocompleteService;
+    const gmapsStore = usegmapsStore();
+    const autocompleteService = gmapsStore.autocompleteService;
     if (!query || !autocompleteService) {
       return [];
     }
@@ -53,8 +54,8 @@ export async function useFetchCompletion(
 export async function useFetchCoordinates(
   placeId: string
 ): Promise<google.maps.LatLng> {
-  const sessionStore = useSessionStore();
-  const geocoderService = sessionStore.geocoderService;
+  const gmapsStore = usegmapsStore();
+  const geocoderService = gmapsStore.getGeocoderService;
   if (!geocoderService) {
     return Promise.resolve(new google.maps.LatLng(-34, 151));
   }

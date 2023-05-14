@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { BedList } from '~~/composables/grpc_gen/common-messages'
 import { useComputedWidth } from '~~/composables/breakpoints'
 import { useDisplay } from 'vuetify/lib/framework.mjs'
+import { storeToRefs } from 'pinia'
+import { useCacheStore } from '~/composables/storeUtils/cacheStore';
 
-
-const bedList = ref<BedList>()
+const { bedsList } = storeToRefs(useCacheStore());
 
 
 const { width } = useDisplay()
@@ -17,7 +17,7 @@ const computedWith = computed(() => useComputedWidth(width.value))
 <template>
     <v-container fluid class="container">
         <v-row justify="space-around">
-            <v-col v-for="bed in bedList?.beds" :key="(bed.id?.bedId as string)">
+            <v-col v-for="bed in bedsList?.value" :key="(bed.id?.bedId as string)">
                 <BedCard :bed="bed"></BedCard>
             </v-col>
         </v-row>
