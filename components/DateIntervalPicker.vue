@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import { useTheme } from 'vuetify/lib/framework.mjs';
+import { useI18n } from 'vue-i18n';
+
 export interface Range {
     start: Date;
     end: Date;
 }
-import { useTheme } from 'vuetify/lib/framework.mjs';
-
 
 const vuetifyTheme = useTheme();
+const { locale } = useI18n();
 
 
 const range = reactive<Range>({
@@ -39,7 +41,8 @@ const darkTheme = computed(() => {
 
 <template>
     <v-date-picker :is-dark="darkTheme" v-model="range" :select-attribute="selectDragAttribute" borderless transparent
-        :drag-attribute="selectDragAttribute" is-range @drag="dragValue = $event" expanded color="blue">
+        v-bind:locale="locale" :drag-attribute="selectDragAttribute" is-range @drag="dragValue = $event" expanded
+        color="blue">
         <template v-slot:day-popover="{ format }">
             <div>
                 {{ format(dragValue ? dragValue?.start : range.start, 'MMM D') }}
