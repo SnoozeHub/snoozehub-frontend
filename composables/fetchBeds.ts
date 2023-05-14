@@ -12,22 +12,21 @@ export async function useFetchBeds(
 ) {
   const grpcState = useGrpcStore();
   const getBedRequest: GetBedsRequest = {
-    dateRangeHigh: {
-      day: dateRangeHigh.getDay(),
-      month: dateRangeHigh.getMonth(),
-      year: dateRangeHigh.getFullYear(),
-    } as GrpcDate,
-    dateRangeLow: {
-      day: dateRangeLow.getDay(),
-      month: dateRangeLow.getMonth(),
-      year: dateRangeLow.getFullYear(),
-    } as GrpcDate,
+    dateRangeHigh: dateToGrpcDate(dateRangeHigh),
+    dateRangeLow: dateToGrpcDate(dateRangeLow),
     coordinates: { latitude: coords.lat(), longitude: coords.lng() },
     featuresMandatory,
     fromIndex,
   };
   const publicServiceClient = grpcState.getPublicServiceClient;
   const getBedsRequest = await publicServiceClient?.getBeds(getBedRequest);
-  console.log(getBedsRequest?.requestHeaders);
   return getBedsRequest?.response.beds;
+}
+
+function dateToGrpcDate(date: Date): GrpcDate {
+  return {
+    day: date.getDay(),
+    month: date.getMonth(),
+    year: date.getFullYear(),
+  };
 }

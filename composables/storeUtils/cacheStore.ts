@@ -3,7 +3,7 @@ import { Bed } from "../grpc_gen/common-messages";
 
 export const useCacheStore = defineStore("cacheStore", {
   state: () => ({
-    bedsList: null as Bed[] | null,
+    bedsList: undefined as Bed[] | undefined,
   }),
   getters: {
     getBedsList: (state) => state.bedsList,

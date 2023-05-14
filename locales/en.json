@@ -3,6 +3,7 @@
     "search": "Search",
     "cancel": "Cancel",
     "my_bookings": "My Bookings",
+    "when_to_go": "When do you want to go?",
     "my_beds": "My Beds",
     "logout": "Log Out",
     "get_help": "Get Help",
@@ -24,5 +25,8 @@
     "photos": "Upload Photos",
     "required_field": "This field is required",
     "submit": "Submit",
-    "email_must_be_valid": "Email must be valid"
+    "email_must_be_valid": "Email must be valid",
+    "file_type_size_error": "File type/size not supported (max 512kb, JPG/PNG only)",
+    "registration_error_title": "Registration error",
+    "registration_error_body": "We are unable to process your registration request at the moment. Please try again later."
 }

@@ -17,7 +17,12 @@ const props = defineProps<{ errors: Set<Errors> }>();
         <template #icon>
             {{ $t('web3_browser_error_body') }}
         </template>
-
+    </v-alert>
+    <v-alert prominent v-bind:title="$t('registration_error_title')" v-if="props.errors.has(Errors.RegistrationError)"
+        closable class="alert-danger">
+        <template #icon>
+            {{ $t('registration_error_body') }}
+        </template>
     </v-alert>
 </template>
 <style scoped>

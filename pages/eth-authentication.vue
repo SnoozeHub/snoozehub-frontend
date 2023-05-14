@@ -3,9 +3,9 @@ import { RpcError } from '@protobuf-ts/runtime-rpc';
 import { Errors } from '~~/composables/errors';
 import { useGrpcStore, useSessionStore } from '~~/composables/storeExport';
 
-let loading = ref(false);
+const loading = ref(false);
 
-let errors = ref(new Set<Errors>());
+const errors = ref(new Set<Errors>());
 
 const sessionStore = useSessionStore();
 const grpcStore = useGrpcStore();

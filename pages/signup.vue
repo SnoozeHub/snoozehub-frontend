@@ -1,5 +1,7 @@
 <template>
     <v-container>
+        <ErrorsPrompt :errors="errors"></ErrorsPrompt>
+
         <v-card>
             <v-card-title>
                 {{ $t('information_request') }}
@@ -14,7 +16,8 @@
                         v-bind:hint="$t('required_field')"></v-text-field>
                     <v-text-field v-model="telegram" v-bind:label="$t('telegram_account')" required
                         v-bind:hint="$t('required_field')"></v-text-field>
-                    <v-file-input v-model="photos" v-bind:label="$t('photos')"></v-file-input>
+                    <v-file-input v-model="photos" v-bind:label="$t('photos')" :max-files="1"
+                        :rules="[file => file[0].size <= 512000 && ['image/jpeg', 'image/png', 'image/jpg'].includes(file[0].type) || $t('file_type_size_error')]"></v-file-input>
                     <v-btn type="submit" color="primary" :disabled="!isFormValid">{{ $t('submit') }}</v-btn>
                 </v-form>
             </v-card-text>
@@ -24,7 +27,8 @@
   
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-
+import { ProfilePic } from '~/composables/grpc_gen/common-messages';
+import { Errors } from '~/composables/errors';
 const { t } = useI18n();
 
 const emailRules = [
@@ -41,7 +45,7 @@ const isFormValid = computed(() => {
     return !!name.value && !!surname.value && !!email.value && !!telegram.value;
 });
 
-import { ProfilePic } from '~/composables/grpc_gen/common-messages';
+const errors = ref(new Set<Errors>());
 
 const name = ref('');
 const surname = ref('');
@@ -49,20 +53,28 @@ const email = ref('');
 const telegram = ref('');
 const photos = ref<File[] | undefined>();
 
-function submitForm() {
+async function submitForm() {
     // Submit form logic 
     console.log('Form submitted!');
     const grpcStore = useGrpcStore();
-    const regOutcome = grpcStore.authOnlyServiceClient?.signUp({
+    const regOutcome = await grpcStore.authOnlyServiceClient?.signUp({
         name: name.value + ' ' + surname.value,
         mail: email.value,
         telegramUsername: telegram.value,
     });
-    if (photos.value != undefined && photos.value?.length > 1) {
-        console.log('More than one photo uploaded!');
+    if (regOutcome?.status.code as string != '0') {
+        errors.value.add(Errors.RegistrationError);
+        return;
     }
-    const profilePic = { photo: photos.value?.[0] } as ProfilePic;
-    grpcStore.authOnlyServiceClient?.setProfilePic(profilePic)
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(photos.value?.[0] as File)
+    await new Promise(resolve => reader.addEventListener('load', resolve));
+    const profilePic = { photo: new Uint8Array(reader.result as ArrayBuffer) } as ProfilePic;
+    const picUpload = await grpcStore.authOnlyServiceClient?.setProfilePic(profilePic);
+    if (picUpload?.status.code as string != '0') {
+        errors.value.add(Errors.RegistrationError);
+        return;
+    }
 }
 </script>
   

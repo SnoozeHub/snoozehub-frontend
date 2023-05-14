@@ -5,4 +5,5 @@ export enum Errors {
   EthereumRequestError = "EthereumRequestError",
   GrpcError = "GrpcError",
   NoBedsFound = "NoBedsFound",
+  RegistrationError = "RegistrationError",
 }

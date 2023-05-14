@@ -5,10 +5,13 @@ import { useSessionStore } from '~~/composables/storeExport';
 import { Range } from '~~/components/DateIntervalPicker.vue';
 import { useFetchCompletion, useFetchCoordinates } from '~/composables/mapsApi';
 import { useI18n } from 'vue-i18n';
+import { useCacheStore } from '~/composables/storeUtils/cacheStore';
+import { storeToRefs } from 'pinia';
 
 let web3Errors = ref(new Set<Errors>());
 
 const sessionStore = useSessionStore();
+const { bedsList } = storeToRefs(useCacheStore());
 const vuetifyTheme = useTheme();
 const { locale } = useI18n();
 
@@ -52,9 +55,8 @@ async function searchBeds() {
     if (!query.value) return;
     searching.value = true;
     const coordinates = await useFetchCoordinates(place_id.value);
-    console.log(coordinates.toJSON());
-    const fetchBeds = await useFetchBeds(range.start, range.start, coordinates, [], 1);
-    console.log(fetchBeds);
+    bedsList.value = await useFetchBeds(range.start, range.start, coordinates, [], 1);
+    console.log(bedsList);
     searching.value = false;
     showBookingOverlay.value = false;
 }
@@ -114,7 +116,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
             </v-app-bar>
             <v-dialog v-model="showBookingOverlay" width="400">
                 <v-card>
-                    <v-card-title>{{ $t('place_to_go') }}</v-card-title>
+                    <v-card-title>{{ $t('when_to_go') }}</v-card-title>
                     <v-card-text>
                         <v-text-field class="inner-search" readonly v-model="query" :loading="searching"></v-text-field>
                         <DateIntervalPicker :emit-dates="searching" @dates-chosen="(value: Range) => range = value">

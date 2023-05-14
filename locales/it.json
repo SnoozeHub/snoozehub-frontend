@@ -1,5 +1,6 @@
 {
     "place_to_go": "Dove vuoi andare?",
+    "when_to_go": "Quando vuoi andare?",
     "search": "Cerca",
     "cancel": "Annulla",
     "my_bookings": "Le mie Prenotazioni",
@@ -24,5 +25,8 @@
     "photos": "Carica Foto",
     "required_field": "Questo campo è obbligatorio",
     "submit": "Invia",
-    "email_must_be_valid": "L'email deve essere valida"
+    "email_must_be_valid": "L'email deve essere valida",
+    "file_type_size_error": "Il file deve essere in formato .jpg o .png e non deve superare i 512KB",
+    "registration_error_title": "Errore in fase di registrazione",
+    "registration_error_body": "Al momento non siamo in grado di elaborare la tua richiesta di registrazione. Riprova più tardi."
 }
