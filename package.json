@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "startProduction": "npm run build && node .output/server/index.mjs",
+    "startProduction": "npm run build && source .env && node .output/server/index.mjs",
     "build": "npx nuxi build",
     "dev": "npx nuxi dev",
     "generate": "nuxt generate",
@@ -13,7 +13,6 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.15.1",
     "@grpc/grpc-js": "^1.8.14",
-    "@intlify/unplugin-vue-i18n": "^0.10.0",
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/eth-sig-util": "^5.1.0",
     "@nuxt/kit": "^3.4.3",
@@ -28,7 +27,7 @@
     "nuxt": "^3.4.3",
     "ufo": "^0.8.6",
     "v-calendar": "^3.0.3",
-    "vite": "^3.2.6",
+    "vite": "^4.3.5",
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.3.2",
     "vue-i18n": "9",
@@ -36,6 +35,7 @@
     "vuetify": "^3.2.4"
   },
   "devDependencies": {
+    "@intlify/unplugin-vue-i18n": "^0.10.0",
     "@mdi/font": "^7.2.96",
     "@types/google.maps": "^3.53.1",
     "jest": "^29.5.0"

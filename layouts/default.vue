@@ -46,8 +46,8 @@ function toggleLanguage() {
 }
 function logout() {
     const grpcStore = useGrpcStore();
+    grpcStore.authOnlyServiceClient?.logout({ authtoken: sessionStore.getAuthToken });
     sessionStore.logout();
-    grpcStore.authOnlyServiceClient?.logout;
 }
 
 
@@ -124,8 +124,8 @@ const computedWidth = computed(() => useComputedWidth(width.value))
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn @click="showBookingOverlay = false; searching = false">Cancel</v-btn>
-                        <v-btn color="rgb(59, 130, 246)" @click="searchBeds">Search</v-btn>
+                        <v-btn @click="showBookingOverlay = false; searching = false">{{ $t('cancel') }}</v-btn>
+                        <v-btn color="rgb(59, 130, 246)" @click="searchBeds">{{ $t('search') }}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>

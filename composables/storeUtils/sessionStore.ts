@@ -25,6 +25,7 @@ export const useSessionStore = defineStore("sessionStore", {
     authToken: "",
   }),
   getters: {
+    getAuthToken: (state) => state.authToken,
     getTheme: (state) => (state.settings.darkTheme ? "dark" : "light"),
     getLanguage: (state) => state.settings.language,
     getAutocompleteService: (state) => state.autocompleteService,

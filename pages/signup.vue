@@ -17,7 +17,7 @@
                     <v-text-field v-model="telegram" v-bind:label="$t('telegram_account')" required
                         v-bind:hint="$t('required_field')"></v-text-field>
                     <v-file-input v-model="photos" v-bind:label="$t('photos')" :max-files="1"
-                        :rules="[file => file[0].size <= 512000 && ['image/jpeg', 'image/png', 'image/jpg'].includes(file[0].type) || $t('file_type_size_error')]"></v-file-input>
+                        :rules="[file => (file.size == 0 || (file[0]?.size <= 512000 && ['image/jpeg', 'image/png', 'image/jpg'].includes(file[0]?.type))) || $t('file_type_size_error')]"></v-file-input>
                     <v-btn type="submit" color="primary" :disabled="!isFormValid">{{ $t('submit') }}</v-btn>
                 </v-form>
             </v-card-text>
@@ -30,6 +30,7 @@ import { useI18n } from 'vue-i18n';
 import { ProfilePic } from '~/composables/grpc_gen/common-messages';
 import { Errors } from '~/composables/errors';
 const { t } = useI18n();
+const sessionStore = useSessionStore();
 
 const emailRules = [
     (v: string) => {
@@ -61,9 +62,13 @@ async function submitForm() {
         name: name.value + ' ' + surname.value,
         mail: email.value,
         telegramUsername: telegram.value,
-    });
-    if (regOutcome?.status.code as string != '0') {
+    }, { authtoken: sessionStore });
+    if (regOutcome?.status.code as string != 'OK') {
+        console.log(regOutcome);
         errors.value.add(Errors.RegistrationError);
+        return;
+    }
+    if (!photos.value) {
         return;
     }
     const reader = new FileReader();
@@ -71,10 +76,11 @@ async function submitForm() {
     await new Promise(resolve => reader.addEventListener('load', resolve));
     const profilePic = { photo: new Uint8Array(reader.result as ArrayBuffer) } as ProfilePic;
     const picUpload = await grpcStore.authOnlyServiceClient?.setProfilePic(profilePic);
-    if (picUpload?.status.code as string != '0') {
+    if (picUpload?.status.code as string != 'OK') {
         errors.value.add(Errors.RegistrationError);
         return;
     }
+    navigateTo('/');
 }
 </script>
   
