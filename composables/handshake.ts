@@ -6,11 +6,12 @@ import { AuthRequest } from "./grpc_gen/public-service";
 import { useGrpcStore } from "./storeExport";
 
 export async function useInitHandshake() {
-  const grpcState = useGrpcStore();
-  grpcState.initPublicServiceClient();
+  const grpcStore = useGrpcStore();
+  const sessionStore = useSessionStore();
+  grpcStore.initPublicServiceClient();
 
   const publicServiceClient =
-    grpcState.getPublicServiceClient as PublicServiceClient;
+    grpcStore.getPublicServiceClient as PublicServiceClient;
 
   const nonceRequest = await publicServiceClient.getNonce(Empty);
   const nonce = nonceRequest?.response.nonce;
@@ -33,5 +34,8 @@ export async function useInitHandshake() {
   };
   const authOutcome = await publicServiceClient.auth(auth_request);
   console.log("authOutcome", authOutcome);
-  return authOutcome?.response;
+  const authenticationOutcome = authOutcome?.response;
+  sessionStore.setUserIsAuthenticated(authenticationOutcome);
+  grpcStore.initAuthOnlyServiceClient();
+  return authenticationOutcome;
 }

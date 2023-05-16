@@ -17,7 +17,7 @@ const computedWith = computed(() => useComputedWidth(width.value))
 <template>
     <v-container fluid class="container">
         <v-row justify="space-around">
-            <v-col v-for="bed in bedsList?.value" :key="(bed.id?.bedId as string)">
+            <v-col v-for="bed in bedsList" :key="(bed.id?.bedId as string)">
                 <BedCard :bed="bed"></BedCard>
             </v-col>
         </v-row>

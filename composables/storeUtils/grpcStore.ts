@@ -6,43 +6,60 @@ import { PublicServiceClient } from "../grpc_gen/public-service.client";
 export const useGrpcStore = defineStore("grpcStore", {
   state: () => ({
     grpcWebProxyURL: "http://localhost:3010",
-    webFetchTransportIsInitiated: false,
+    publicWebFetchTransportIsInitiated: false,
     publicServiceClientIsInitiated: false,
-    authOnlyServiceClientIsInitiated: false,
-    grpcWebFetchTransport: null as GrpcWebFetchTransport | null,
+    publicWebFetchTransport: null as GrpcWebFetchTransport | null,
     publicServiceClient: null as PublicServiceClient | null,
+    authOnlyWebFetchTransportIsInitiated: false,
+    authOnlyServiceClientIsInitiated: false,
+    authOnlyWebFetchTransport: null as GrpcWebFetchTransport | null,
     authOnlyServiceClient: null as AuthOnlyServiceClient | null,
   }),
   getters: {
-    getGrpcWebFetchTransport: (state) => state.grpcWebFetchTransport,
+    getPublicWebFetchTransport: (state) => state.publicWebFetchTransport,
     getPublicServiceClient: (state) => state.publicServiceClient,
+    getAuthOnlyWebFetchTransport: (state) => state.authOnlyWebFetchTransport,
     getAuthOnlyServiceClient: (state) => state.authOnlyServiceClient,
   },
   actions: {
-    initWebFetchTransport() {
-      if (!this.webFetchTransportIsInitiated) {
-        this.grpcWebFetchTransport = new GrpcWebFetchTransport({
+    initPublicWebFetchTransport() {
+      if (!this.publicWebFetchTransportIsInitiated) {
+        this.publicWebFetchTransport = new GrpcWebFetchTransport({
           baseUrl: this.grpcWebProxyURL,
         });
-        this.webFetchTransportIsInitiated = true;
+        this.publicWebFetchTransportIsInitiated = true;
+      }
+    },
+    initAuthOnlyWebFetchTransport() {
+      if (!this.authOnlyWebFetchTransportIsInitiated) {
+        const sessionStore = useSessionStore();
+        this.authOnlyWebFetchTransport = new GrpcWebFetchTransport({
+          baseUrl: this.grpcWebProxyURL,
+          meta: {
+            authtoken: sessionStore.getAuthToken,
+          },
+        });
+        this.authOnlyWebFetchTransportIsInitiated = true;
       }
     },
     initPublicServiceClient() {
       if (!this.publicServiceClientIsInitiated) {
-        if (!this.webFetchTransportIsInitiated) this.initWebFetchTransport();
+        if (!this.publicWebFetchTransportIsInitiated)
+          this.initPublicWebFetchTransport();
 
         this.publicServiceClient = new PublicServiceClient(
-          this.getGrpcWebFetchTransport as GrpcWebFetchTransport
+          this.getPublicWebFetchTransport as GrpcWebFetchTransport
         );
         this.publicServiceClientIsInitiated = true;
       }
     },
     initAuthOnlyServiceClient() {
       if (!this.authOnlyServiceClientIsInitiated) {
-        if (!this.webFetchTransportIsInitiated) this.initWebFetchTransport();
+        if (!this.authOnlyWebFetchTransportIsInitiated)
+          this.initAuthOnlyWebFetchTransport();
 
         this.authOnlyServiceClient = new AuthOnlyServiceClient(
-          this.getGrpcWebFetchTransport as GrpcWebFetchTransport
+          this.authOnlyWebFetchTransport as GrpcWebFetchTransport
         );
         this.authOnlyServiceClientIsInitiated = true;
       }

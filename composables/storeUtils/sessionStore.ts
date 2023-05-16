@@ -37,9 +37,7 @@ export const useSessionStore = defineStore("sessionStore", {
   actions: {
     setUserIsAuthenticated(authResponse: AuthResponse): void {
       this.userIsAuthenticated = authResponse.accountExist;
-      if (this.userIsAuthenticated && authResponse.authToken) {
-        this.authToken = authResponse.authToken;
-      }
+      this.authToken = authResponse.authToken;
     },
     setIsWeb3CapableBrowser(isWeb3CapableBrowser: boolean): void {
       this.isWeb3CapableBrowser = isWeb3CapableBrowser;
@@ -74,8 +72,17 @@ export const useSessionStore = defineStore("sessionStore", {
       this.userIsAuthenticated = new Boolean(
         localStorage.getItem("userIsAuthenticated")
       ) as boolean;
+
       if (this.getUserIsAuthenticated) {
-        this.authToken = localStorage.getItem("authToken") as string;
+        this.authToken = localStorage.getItem("authtoken") as string;
+        if (this.getAuthToken == null) {
+          this.userIsAuthenticated = false;
+          localStorage.removeItem("userIsAuthenticated");
+          return;
+        }
+        const grpcStore = useGrpcStore();
+
+        grpcStore.initAuthOnlyServiceClient();
       }
     },
     logout() {

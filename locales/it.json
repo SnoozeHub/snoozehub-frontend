@@ -11,9 +11,9 @@
     "accept_agreement": "HO CAPITO E VOGLIO PROCEDERE",
     "tos": "Ora ti verrà chiesto di permettere a SnoozeHub di leggere e processare il tuo indirizzo ETH pubblico. \nSe non vuoi condividere queste informazioni con noi NON cliccare sul pulsante qui sotto",
     "search_bar_placeholder": "Verso la tua prossima avventura!",
-    "connection_error_title": "Errore di connessione ai nostri server",
+    "connection_error_title": "Errore di connessione ai nostri server: {err}",
     "connection_error_body": "Al momento stiamo riscontrando alcuni problemi di connessione ai nostri server. Riprova tra qualche secondo.",
-    "eth_error_title": "Errore blockchain ETH",
+    "eth_error_title": "Errore blockchain ETH: {err}",
     "eth_error_body": "Al momento stiamo riscontrando alcuni problemi di elaborazione delle richieste ETH sulla blockchain. Riprova tra qualche secondo.",
     "web3_browser_error_title": "Nessun browser web3 rilevato!",
     "web3_browser_error_body": "Non sembra che il tuo browser supporti web3. Utilizza un browser web3 o installa l'estensione Metamask sul tuo browser attuale.",
@@ -27,6 +27,8 @@
     "submit": "Invia",
     "email_must_be_valid": "L'email deve essere valida",
     "file_type_size_error": "Il file deve essere in formato .jpg o .png e non deve superare i 512KB",
-    "registration_error_title": "Errore in fase di registrazione",
-    "registration_error_body": "Al momento non siamo in grado di elaborare la tua richiesta di registrazione. Riprova più tardi."
+    "registration_error_title": "Errore in fase di registrazione: {err} ",
+    "registration_error_body": "Al momento non siamo in grado di elaborare la tua richiesta di registrazione. ",
+    "bed_query_error": "Errore in fase di ricerca letto: {err}",
+    "bed_query_error_body": "Al momento non siamo in grado di elaborare la tua richiesta di ricerca letto. "
 }

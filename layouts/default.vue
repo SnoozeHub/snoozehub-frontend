@@ -7,8 +7,10 @@ import { useFetchCompletion, useFetchCoordinates } from '~/composables/mapsApi';
 import { useI18n } from 'vue-i18n';
 import { useCacheStore } from '~/composables/storeUtils/cacheStore';
 import { storeToRefs } from 'pinia';
+import { Empty } from '~/composables/grpc_gen/common-messages';
+import { useErrorsStore } from '~/composables/storeUtils/errorStore';
 
-let web3Errors = ref(new Set<Errors>());
+const { errorSet, errorMessage } = storeToRefs(useErrorsStore())
 
 const sessionStore = useSessionStore();
 const { bedsList } = storeToRefs(useCacheStore());
@@ -26,7 +28,7 @@ const query = ref<string>("");
 const place_id = ref<string>("");
 const autocompleteResults = ref<google.maps.places.AutocompletePrediction[]>([]);
 if (!sessionStore.getIsWeb3CapableBrowser) {
-    web3Errors.value.add(Errors.Web3CapableBrowserError);
+    errorSet.value.add(Errors.Web3CapableBrowserError);
 }
 function login() {
     navigateTo('/eth-authentication');
@@ -46,7 +48,7 @@ function toggleLanguage() {
 }
 function logout() {
     const grpcStore = useGrpcStore();
-    grpcStore.authOnlyServiceClient?.logout({ authtoken: sessionStore.getAuthToken });
+    grpcStore.authOnlyServiceClient?.logout(Empty);
     sessionStore.logout();
 }
 
@@ -55,8 +57,15 @@ async function searchBeds() {
     if (!query.value) return;
     searching.value = true;
     const coordinates = await useFetchCoordinates(place_id.value);
-    bedsList.value = await useFetchBeds(range.start, range.start, coordinates, [], 1);
-    console.log(bedsList);
+    try {
+        bedsList.value = await useFetchBeds(range.start, range.end, coordinates, [], 1);
+    } catch (e: any) {
+        errorMessage.value = e.message;
+        errorSet.value.add(Errors.NoBedsFound);
+        showBookingOverlay.value = false;
+        searching.value = false;
+        return;
+    }
     searching.value = false;
     showBookingOverlay.value = false;
 }
@@ -78,8 +87,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
 </script>
 <template>
     <div>
-
-        <ErrorsPrompt :errors="web3Errors"></ErrorsPrompt>
+        <ErrorsPrompt :errors="errorSet" :error-message="errorMessage"></ErrorsPrompt>
         <v-layout class="fill-height">
             <v-app-bar prominent elevation="2">
                 <div class="default-layout">
@@ -138,8 +146,10 @@ const computedWidth = computed(() => useComputedWidth(width.value))
 
                 </v-list>
                 <v-list v-else>
-                    <v-list-item prepend-icon="mdi-calendar-month" v-bind:title="$t('my_bookings')"></v-list-item>
-                    <v-list-item prepend-icon="mdi-bunk-bed" v-bind:title="$t('my_beds')"></v-list-item>
+                    <v-list-item prepend-icon="mdi-calendar-month" v-bind:title="$t('my_bookings')"
+                        @click="navigateTo('bookings')"></v-list-item>
+                    <v-list-item prepend-icon="mdi-bunk-bed" v-bind:title="$t('my_beds')"
+                        @click="navigateTo('beds')"></v-list-item>
                     <v-list-item prepend-icon="mdi-logout" v-bind:title="$t('logout')" @click="logout"></v-list-item>
 
                 </v-list>

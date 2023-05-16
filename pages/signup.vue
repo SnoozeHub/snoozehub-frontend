@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <ErrorsPrompt :errors="errors"></ErrorsPrompt>
+        <ErrorsPrompt :errors="errorSet" :error-message="errorMessage"></ErrorsPrompt>
 
         <v-card>
             <v-card-title>
@@ -17,7 +17,7 @@
                     <v-text-field v-model="telegram" v-bind:label="$t('telegram_account')" required
                         v-bind:hint="$t('required_field')"></v-text-field>
                     <v-file-input v-model="photos" v-bind:label="$t('photos')" :max-files="1"
-                        :rules="[file => (file.size == 0 || (file[0]?.size <= 512000 && ['image/jpeg', 'image/png', 'image/jpg'].includes(file[0]?.type))) || $t('file_type_size_error')]"></v-file-input>
+                        :rules="fileRules"></v-file-input>
                     <v-btn type="submit" color="primary" :disabled="!isFormValid">{{ $t('submit') }}</v-btn>
                 </v-form>
             </v-card-text>
@@ -29,9 +29,14 @@
 import { useI18n } from 'vue-i18n';
 import { ProfilePic } from '~/composables/grpc_gen/common-messages';
 import { Errors } from '~/composables/errors';
+import { storeToRefs } from 'pinia';
+import { useErrorsStore } from '~/composables/storeUtils/errorStore';
 const { t } = useI18n();
-const sessionStore = useSessionStore();
-
+const fileRules = [
+    (files: Array<File>) => {
+        return files.length !== 1 || (files[0].size <= 512000 && ['image/jpeg', 'image/png', 'image/jpg'].includes(files[0].type)) || t('file_type_size_error');
+    }
+]
 const emailRules = [
     (v: string) => {
         const rex = new RegExp(
@@ -43,10 +48,10 @@ const emailRules = [
     }]
 
 const isFormValid = computed(() => {
-    return !!name.value && !!surname.value && !!email.value && !!telegram.value;
+    return !!name.value && !!surname.value && !!email.value && !!telegram.value && emailRules[0](email.value);
 });
 
-const errors = ref(new Set<Errors>());
+const { errorSet, errorMessage } = storeToRefs(useErrorsStore());
 
 const name = ref('');
 const surname = ref('');
@@ -58,16 +63,19 @@ async function submitForm() {
     // Submit form logic 
     console.log('Form submitted!');
     const grpcStore = useGrpcStore();
-    const regOutcome = await grpcStore.authOnlyServiceClient?.signUp({
-        name: name.value + ' ' + surname.value,
-        mail: email.value,
-        telegramUsername: telegram.value,
-    }, { authtoken: sessionStore });
-    if (regOutcome?.status.code as string != 'OK') {
-        console.log(regOutcome);
-        errors.value.add(Errors.RegistrationError);
+    try {
+        await grpcStore.authOnlyServiceClient?.signUp({
+            name: name.value + ' ' + surname.value,
+            mail: email.value,
+            telegramUsername: telegram.value,
+        });
+    } catch (e: any) {
+        errorMessage.value = e.message;
+        console.log(e);
+        errorSet.value.add(Errors.RegistrationError);
         return;
     }
+
     if (!photos.value) {
         return;
     }
@@ -77,7 +85,7 @@ async function submitForm() {
     const profilePic = { photo: new Uint8Array(reader.result as ArrayBuffer) } as ProfilePic;
     const picUpload = await grpcStore.authOnlyServiceClient?.setProfilePic(profilePic);
     if (picUpload?.status.code as string != 'OK') {
-        errors.value.add(Errors.RegistrationError);
+        errorSet.value.add(Errors.RegistrationError);
         return;
     }
     navigateTo('/');

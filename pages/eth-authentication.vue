@@ -1,33 +1,32 @@
 <script setup lang="ts">
 import { RpcError } from '@protobuf-ts/runtime-rpc';
+import { useErrorsStore } from '~/composables/storeUtils/errorStore';
 import { Errors } from '~~/composables/errors';
-import { useGrpcStore, useSessionStore } from '~~/composables/storeExport';
-
+import { storeToRefs } from 'pinia';
 const loading = ref(false);
 
-const errors = ref(new Set<Errors>());
+const { errorSet, errorMessage } = storeToRefs(useErrorsStore());
 
-const sessionStore = useSessionStore();
-const grpcStore = useGrpcStore();
+
 async function acceptTerms() {
     try {
         loading.value = true
         const authenticationOutcome = await useInitHandshake();
         loading.value = false;
-        sessionStore.setUserIsAuthenticated(authenticationOutcome);
+
         if (authenticationOutcome.accountExist) {
-            grpcStore.initAuthOnlyServiceClient()
             navigateTo("/");
         }
         else
             navigateTo("/signup");
 
-    } catch (err) {
+    } catch (err: any) {
         console.log(err);
+        errorMessage.value = err.message;
         if (err instanceof RpcError)
-            errors.value.add(Errors.GrpcError);
+            errorSet.value.add(Errors.GrpcError);
         else
-            errors.value.add(Errors.EthereumRequestError);
+            errorSet.value.add(Errors.EthereumRequestError);
         loading.value = false;
     }
 }
@@ -36,7 +35,7 @@ async function acceptTerms() {
 
 <template>
     <div class="main-container">
-        <ErrorsPrompt :errors="errors"></ErrorsPrompt>
+        <ErrorsPrompt :errors="errorSet" :error-message="errorMessage"></ErrorsPrompt>
 
         <h1 id="terms">{{ $t('tos') }}
         </h1>
