@@ -21,6 +21,9 @@ static_resources:
                     - name: localhost
                       domains: ["*"]
                       routes:
+                        - match: { prefix: "/docs" }
+                          route:
+                            cluster: swagger-service
                         - match: { prefix: "/PublicService" }
                           route:
                             cluster: grpc-service
@@ -75,3 +78,15 @@ static_resources:
                     socket_address:
                       address: host.docker.internal
                       port_value: 3000
+    - name: swagger-service
+      type: logical_dns
+      lb_policy: round_robin
+      load_assignment:
+        cluster_name: cluster_2
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: host.docker.internal
+                      port_value: 5000

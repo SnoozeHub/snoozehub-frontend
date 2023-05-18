@@ -15,3 +15,13 @@ services:
       - "3010:3010"
     volumes:
       - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
+  swagger:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "5000:8080"
+    volumes:
+      - ./swagger-gen:/foo
+    environment:
+      - SWAGGER_JSON=/foo/auth-only-service.swagger.json
+      - BASE_URL=/docs
+    command:
