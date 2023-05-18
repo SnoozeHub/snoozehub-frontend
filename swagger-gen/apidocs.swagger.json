@@ -1,0 +1,316 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "auth-only-service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "AuthOnlyService"
+    },
+    {
+      "name": "PublicService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "AccountInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "length=1-40"
+        },
+        "mail": {
+          "type": "string",
+          "title": "Is a valid mail format, max length=60"
+        },
+        "telegramUsername": {
+          "type": "string",
+          "title": "Valid format, without '@'"
+        }
+      }
+    },
+    "AuthResponse": {
+      "type": "object",
+      "properties": {
+        "authToken": {
+          "type": "string",
+          "description": "Not empty",
+          "title": "Every token has an expiration time of 24 hours"
+        },
+        "accountExist": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Bed": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/BedId"
+        },
+        "hostPublicKey": {
+          "type": "string",
+          "title": "in hexadecimal, start with 0x, valid (corresponding account exist)"
+        },
+        "hostTelegramUsername": {
+          "type": "string"
+        },
+        "bedMutableInfo": {
+          "$ref": "#/definitions/BedMutableInfo"
+        },
+        "dateAvailables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/Date"
+          },
+          "title": "0-90 .  Refers to the night between the date and the next day. It's valid. Every date is \u003e today. Max date is today + 90 days"
+        },
+        "reviewCount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "averageEvaluation": {
+          "type": "integer",
+          "format": "int64",
+          "title": "min = 0, max = 50. For example 42 is evaluated as 4.2. Not set if and only if reviewCount is 0"
+        }
+      }
+    },
+    "BedId": {
+      "type": "object",
+      "properties": {
+        "bedId": {
+          "type": "string",
+          "title": "Not empty. Is valid (exist)"
+        }
+      }
+    },
+    "BedList": {
+      "type": "object",
+      "properties": {
+        "beds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/Bed"
+          }
+        }
+      }
+    },
+    "BedMutableInfo": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "title": "length=1-100. Maximum sensitive (aka it search the exact string)"
+        },
+        "coordinates": {
+          "$ref": "#/definitions/Coordinates"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "byte"
+          },
+          "title": "Valid 1-5 AVIF images, max size = 512kb"
+        },
+        "description": {
+          "type": "string",
+          "title": "length=0-200"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Feature"
+          },
+          "title": "Distinct"
+        },
+        "minimumDaysNotice": {
+          "type": "integer",
+          "format": "int64",
+          "title": "min = 1, max = 30"
+        }
+      }
+    },
+    "BookResponse": {
+      "type": "object",
+      "properties": {
+        "isBookingUnlocked": {
+          "type": "boolean",
+          "title": "If true: client can pay, else the booking is locked"
+        }
+      }
+    },
+    "Coordinates": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "format": "double",
+          "title": "range: [-90, 90]"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "double",
+          "title": "range: [-180, 180]"
+        }
+      }
+    },
+    "Date": {
+      "type": "object",
+      "properties": {
+        "day": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "month": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "year": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "DateInterval": {
+      "type": "object",
+      "properties": {
+        "startDate": {
+          "$ref": "#/definitions/Date",
+          "title": "Refers to the night between the date and the next day. \u003e= startDate"
+        },
+        "endDate": {
+          "$ref": "#/definitions/Date",
+          "title": "Refers to the night between the date and the next day. \u003e= startDate"
+        }
+      }
+    },
+    "Empty": {
+      "type": "object"
+    },
+    "Feature": {
+      "type": "string",
+      "enum": [
+        "internetConnection",
+        "bathroom",
+        "heating",
+        "airConditioner",
+        "electricalOutlet",
+        "tap",
+        "bedLinens",
+        "pillows"
+      ],
+      "default": "internetConnection"
+    },
+    "GetBedResponse": {
+      "type": "object",
+      "properties": {
+        "bed": {
+          "$ref": "#/definitions/Bed",
+          "title": "Not set only if the bed with the requested id doesn't exist"
+        }
+      }
+    },
+    "GetMyReviewResponse": {
+      "type": "object",
+      "properties": {
+        "review": {
+          "$ref": "#/definitions/Review"
+        }
+      }
+    },
+    "GetNonceResponse": {
+      "type": "object",
+      "properties": {
+        "nonce": {
+          "type": "string",
+          "title": "Not empty"
+        }
+      }
+    },
+    "GetReviewsResponse": {
+      "type": "object",
+      "properties": {
+        "reviews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/Review"
+          },
+          "title": "0-4 reviews. The field comment is mandatory"
+        }
+      }
+    },
+    "ProfilePic": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "string",
+          "format": "byte",
+          "title": "Valid AVIF image, max size = 512kb"
+        }
+      }
+    },
+    "Review": {
+      "type": "object",
+      "properties": {
+        "evaluation": {
+          "type": "integer",
+          "format": "int64",
+          "title": "min = 0, max = 50. For example 42 is evaluated as 4.2"
+        },
+        "comment": {
+          "type": "string",
+          "title": "length=0-200"
+        }
+      }
+    },
+    "VerifyMailResponse": {
+      "type": "object",
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

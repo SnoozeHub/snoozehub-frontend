@@ -22,6 +22,6 @@ services:
     volumes:
       - ./swagger-gen:/foo
     environment:
-      - SWAGGER_JSON=/foo/auth-only-service.swagger.json
+      - SWAGGER_JSON=/foo/apidocs.swagger.json
       - BASE_URL=/docs
     command:
