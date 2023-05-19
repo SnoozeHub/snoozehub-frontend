@@ -5,6 +5,9 @@ services:
   nuxt:
     image: ghcr.io/snoozehub/snoozehub-frontend
     command: npm run startProduction
+    volumes:
+      - ./.env:/app/.env
+
   envoy:
     image: envoyproxy/envoy:v1.26-latest
     ports:
