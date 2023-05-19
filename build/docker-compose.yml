@@ -3,10 +3,10 @@ version: "3.9"
 
 services:
   nuxt:
-    image: ghcr.io/snoozehub/snoozehub-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
     command: npm run startProduction
-    volumes:
-      - ./.env:/app/.env
 
   envoy:
     image: envoyproxy/envoy:v1.26-latest
