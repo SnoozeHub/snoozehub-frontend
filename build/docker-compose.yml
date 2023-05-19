@@ -4,7 +4,7 @@ version: "3.9"
 services:
   nuxt:
     build:
-      context: .
+      context: ..
       dockerfile: Dockerfile
     command: npm run startProduction
 
