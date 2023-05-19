@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM arm64v8/node
 WORKDIR /app
 RUN apk update && apk upgrade
 RUN apk add git curl

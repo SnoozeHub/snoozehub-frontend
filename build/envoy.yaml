@@ -58,7 +58,7 @@ static_resources:
               common_tls_context:
                 tls_certificates:
                   certificate_chain:
-                    filename: "/etc/letsencrypt/live/snoozehub.it/cert.pem"
+                    filename: "/etc/letsencrypt/live/snoozehub.it/fullchain.pem"
                   private_key:
                     filename: "/etc/letsencrypt/live/snoozehub.it/privkey.pem"
 
