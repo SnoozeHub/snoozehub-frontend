@@ -7,8 +7,6 @@ services:
     command: npm run startProduction
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
   envoy:
     image: envoyproxy/envoy:v1.26-latest
     ports:
