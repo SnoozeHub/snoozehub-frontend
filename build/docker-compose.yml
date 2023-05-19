@@ -3,14 +3,21 @@ version: "3.9"
 
 services:
   nuxt:
-    image: ghcr.io/snoozehub/snoozehub-frontend
+    build:
+      context: ..
+      dockerfile: Dockerfile
     command: npm run startProduction
+
   envoy:
     image: envoyproxy/envoy:v1.26-latest
     ports:
       - "443:3010"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
+      - /etc/letsencrypt/live/snoozehub.it/privkey.pem:/etc/letsencrypt/live/snoozehub.it/privkey.pem
+      - /etc/letsencrypt/live/snoozehub.it/fullchain.pem:/etc/letsencrypt/live/snoozehub.it/fullchain.pem
+    environment:
+      - ENVOY_UID=0
   swagger:
     image: swaggerapi/swagger-ui
     volumes:
