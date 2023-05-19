@@ -51,16 +51,16 @@ static_resources:
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
 
-            transport_socket:
-              name: envoy.transport_sockets.tls
-              typed_config:
-                "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
-                common_tls_context:
-                  tls_certificates:
-                  - certificate_chain:
-                      filename: certs/servercert.pem
-                    private_key:
-                      filename: certs/serverkey.pem
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
+              common_tls_context:
+                tls_certificates:
+                  certificate_chain:
+                    filename: "/etc/letsencrypt/live/snoozehub.it/cert.pem"
+                  private_key:
+                    filename: "/etc/letsencrypt/live/snoozehub.it/privkey.pem"
 
 
   clusters:
