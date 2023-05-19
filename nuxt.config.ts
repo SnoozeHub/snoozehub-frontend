@@ -1,6 +1,6 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 import vuetify from "vite-plugin-vuetify";
-import { resolve, dirname } from "node:path";
+import path, { resolve, dirname } from "node:path";
 import { fileURLToPath } from "url";
 import VueI18nVitePlugin from "@intlify/unplugin-vue-i18n/vite";
 
@@ -40,22 +40,12 @@ export default defineNuxtConfig({
     ],
   },
   modules: [
+    "@pinia/nuxt",
     // @ts-ignore
-    async (options, nuxt) => {
+    async (_, nuxt) => {
       nuxt.hooks.hook("vite:extendConfig", (config) =>
         config.plugins.push(vuetify())
       );
     },
-    [
-      "@pinia/nuxt",
-      {
-        autoImports: [
-          // automatically imports `defineStore`
-          "defineStore", // import { defineStore } from 'pinia'
-          // automatically imports `defineStore` as `definePiniaStore`
-          ["defineStore", "definePiniaStore"], // import { defineStore as definePiniaStore } from 'pinia'
-        ],
-      },
-    ],
   ],
 });

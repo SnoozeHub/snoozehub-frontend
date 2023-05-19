@@ -4,9 +4,9 @@ services:
   nuxt:
     build:
       context: .
-    image: nuxt_build
-    container_name: nuxt_build
-    command: npm run startProduction
+    command: pnpm run startProduction
+    volumes:
+      - .:/app
     ports:
       - "3000:3000"
   envoy:
