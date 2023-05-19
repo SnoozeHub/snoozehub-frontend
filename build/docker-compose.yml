@@ -1,26 +1,24 @@
+
 version: "3.9"
 
 services:
   nuxt:
-    build:
-      context: .
+    image: ghcr.io/snoozeHub/snoozehub-frontend
     command: npm run startProduction
-    ports:
-      - "3000:3000"
   envoy:
     image: envoyproxy/envoy:v1.26-latest
     ports:
-      - "443:443"
-      - "80:80"
+      - "443:3010"
     volumes:
-      - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
-      - ./certs/:/etc/certs
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
   swagger:
     image: swaggerapi/swagger-ui
-    ports:
-      - "8080:8080"
     volumes:
       - ./swagger-gen:/foo
     environment:
       - SWAGGER_JSON=/foo/apidocs.swagger.json
       - BASE_URL=/docs
+
+networks:
+  proxynet:
+    name: custom_network
