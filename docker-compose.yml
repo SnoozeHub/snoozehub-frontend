@@ -12,9 +12,11 @@ services:
   envoy:
     image: envoyproxy/envoy:v1.26-latest
     ports:
-      - "3010:3010"
+      - "443:443"
+      - "80:80"
     volumes:
       - ./envoy/envoy.yaml:/etc/envoy/envoy.yaml
+      - ./certs/:/etc/certs
   swagger:
     image: swaggerapi/swagger-ui
     ports:
@@ -22,6 +24,6 @@ services:
     volumes:
       - ./swagger-gen:/foo
     environment:
-      - SWAGGER_JSON=/foo/apidocs.swagger.json
+      - SWAGGER_JSON=/foo/.swagger.json
       - BASE_URL=/docs
     command:

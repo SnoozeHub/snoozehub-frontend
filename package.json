@@ -11,7 +11,7 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.15.1",
+    "@googlemaps/js-api-loader": "^1.15.2",
     "@grpc/grpc-js": "^1.8.14",
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/eth-sig-util": "^5.1.0",
