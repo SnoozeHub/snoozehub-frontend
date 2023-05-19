@@ -64,7 +64,8 @@ export const useSessionStore = defineStore("sessionStore", {
       //restores user preferences from local storage
       const settingsJSON = localStorage.getItem("settings");
 
-      if (settingsJSON != "null") {
+      if (settingsJSON != null) {
+        console.log(settingsJSON);
         const settings = JSON.parse(settingsJSON as string) as Settings;
         this.setSettings(settings);
       }
