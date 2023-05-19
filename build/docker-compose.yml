@@ -14,8 +14,8 @@ services:
       - "443:3010"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
-      - /etc/letsencrypt/live/snoozehub.it/privkey.pem:/etc/letsencrypt/privkey.pem
-      - /etc/letsencrypt/live/snoozehub.it/fullchain.pem:/etc/letsencrypt/fullchain.pem
+      - /etc/letsencrypt/live/snoozehub.it/privkey.pem:/etc/letsencrypt/live/snoozehub.it/privkey.pem
+      - /etc/letsencrypt/live/snoozehub.it/fullchain.pem:/etc/letsencrypt/live/snoozehub.it/fullchain.pem
     environment:
       - ENVOY_UID=0
   swagger:
