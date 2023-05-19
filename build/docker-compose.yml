@@ -3,7 +3,7 @@ version: "3.9"
 
 services:
   nuxt:
-    image: ghcr.io/snoozeHub/snoozehub-frontend
+    image: ghcr.io/snoozehub/snoozehub-frontend
     command: npm run startProduction
   envoy:
     image: envoyproxy/envoy:v1.26-latest
