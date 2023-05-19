@@ -1,9 +1,9 @@
-import { createVuetify } from 'vuetify'
+import "@mdi/font/css/materialdesignicons.css";
+import { createVuetify } from "vuetify";
+import "vuetify/styles";
 
-export default defineNuxtPlugin(nuxtApp => {
-    const vuetify = createVuetify({
-        // your config will come here
-    })
+export default defineNuxtPlugin((nuxtApp) => {
+  const vuetify = createVuetify();
 
-    nuxtApp.vueApp.use(vuetify)
-})
+  nuxtApp.vueApp.use(vuetify);
+});

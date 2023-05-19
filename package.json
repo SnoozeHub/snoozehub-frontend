@@ -1,22 +1,43 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
+    "startProduction": "npm run build && source .env && node .output/server/index.mjs",
+    "build": "npx nuxi build",
+    "dev": "npx nuxi dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "devDependencies": {
-    "defu": "^6.1.0",
-    "nuxt": "3.0.0-rc.12",
-    "ufo": "^0.8.6",
-    "vite-plugin-vuetify": "^1.0.0",
-    "vuetify": "^3.0.1"
+    "postinstall": "nuxt prepare",
+    "test": "jest --coverage"
   },
   "dependencies": {
-    "grpc-web": "^1.4.2",
-    "vite": "^3.0.0",
-    "vue": "^3.2.0"
+    "@googlemaps/js-api-loader": "^1.15.2",
+    "@grpc/grpc-js": "^1.8.14",
+    "@metamask/detect-provider": "^2.0.0",
+    "@metamask/eth-sig-util": "^5.1.0",
+    "@nuxt/kit": "^3.5.0",
+    "@pinia/nuxt": "^0.4.11",
+    "@popperjs/core": "^2.11.7",
+    "@protobuf-ts/grpcweb-transport": "^2.9.0",
+    "@protobuf-ts/runtime": "^2.9.0",
+    "@protobuf-ts/runtime-rpc": "^2.9.0",
+    "@types/node": "^18.16.13",
+    "buffer": "^6.0.3",
+    "defu": "^6.1.2",
+    "nuxt": "^3.5.0",
+    "ufo": "^0.8.6",
+    "v-calendar": "^3.0.3",
+    "vite": "^4.3.8",
+    "vite-plugin-vuetify": "^1.0.2",
+    "vue": "^3.3.4",
+    "vue-i18n": "^9.2.2",
+    "vue-router": "^4.2.1",
+    "vuetify": "^3.2.5",
+    "@intlify/unplugin-vue-i18n": "^0.10.0",
+    "@mdi/font": "^7.2.96",
+    "@types/google.maps": "^3.53.1"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0"
   }
 }

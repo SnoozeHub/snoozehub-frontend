@@ -95,6 +95,7 @@ out
 # Nuxt.js build / generate output
 .nuxt
 dist
+.output
 
 # Gatsby files
 .cache/
@@ -160,9 +161,9 @@ test/
 
 # End of https://www.toptal.com/developers/gitignore/api/nuxtjs,node,vue
 
-
-
-
-package-lock.json
 .pnpm-store
 node-jiti
+
+update_grpc
+
+certs/*

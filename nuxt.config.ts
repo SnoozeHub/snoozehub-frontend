@@ -1,39 +1,51 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
-import vuetify from 'vite-plugin-vuetify';
+import vuetify from "vite-plugin-vuetify";
+import path, { resolve, dirname } from "node:path";
+import { fileURLToPath } from "url";
+import VueI18nVitePlugin from "@intlify/unplugin-vue-i18n/vite";
+
 export default defineNuxtConfig({
-    ssr: false,
-    // head: {
-    //     script: [
-    //         { ssr: false, src: "/grpc-gen/auth-only-service_pb.js" },
-    //         { ssr: false, src: "/grpc-gen/-service_pb.js" },
-    //         { ssr: false, src: "/grpc-gen/common-messages_pb.js" },
-    //         { ssr: false, src: "/grpc-gen/Auth-only-serviceServiceClientPb.ts" },
-    //         { ssr: false, src: "/grpc-gen/Public-serviceServiceClientPb.ts" }
-    //       ]
-    // }
-    // ,
-    build: {
-        transpile: ['grpc-web']
+  runtimeConfig: {
+    // The private keys which are only available server-side
+    public: {
+      googleMapsApiKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    },
+  },
+  devServer: {
+    port: 3000,
+  },
+  nitro: {
+    serveStatic: true,
+  },
+  imports: {
+    dirs: ["composables"],
+  },
+  ssr: false,
+  build: {
+    transpile: ["grpc-web"],
+  },
+
+  css: ["vuetify/styles"], // vuetify ships precompiled css, no need to import sass
+  vite: {
+    ssr: {
+      noExternal: ["vuetify"], // add the vuetify vite plugin
     },
     plugins: [
-        '@/plugins/grpc-gen/Auth-only-serviceServiceClientPb.ts'
+      VueI18nVitePlugin({
+        include: resolve(
+          dirname(fileURLToPath(import.meta.url)),
+          "./locales/*.json"
+        ), // provide a path to the folder where you'll store translation data (see below)
+      }),
     ],
-    css: ['vuetify/styles'], // vuetify ships precompiled css, no need to import sass
-    vite: {
-        // @ts-ignore
-        // curently this will lead to a type error, but hopefully will be fixed soon #justBetaThings
-        ssr: {
-            noExternal: ['vuetify'], // add the vuetify vite plugin
-        },
+  },
+  modules: [
+    "@pinia/nuxt",
+    // @ts-ignore
+    async (_, nuxt) => {
+      nuxt.hooks.hook("vite:extendConfig", (config) =>
+        config.plugins.push(vuetify())
+      );
     },
-    modules: [
-        // @ts-ignore
-        // this adds the vuetify vite plugin
-        // also produces type errors in the current beta release
-        async (options, nuxt) => {
-            nuxt.hooks.hook('vite:extendConfig', config => config.plugins.push(
-                vuetify()
-            ))
-        }
-    ]
-})
+  ],
+});
