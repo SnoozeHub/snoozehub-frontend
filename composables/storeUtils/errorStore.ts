@@ -3,16 +3,15 @@ import { Errors } from "../errors";
 
 export const useErrorsStore = defineStore("errorsStore", {
   state: () => ({
-    errorMessage: "",
-    errorSet: new Set<Errors>(),
+    errorSet: new Set<[Errors, string]>(),
   }),
   getters: {
-    getErrorMessage: (state) => state.errorMessage,
     getErrorSet: (state) => state.errorSet,
   },
   actions: {
-    setErrorMessage(message: string) {
-      this.errorMessage = message;
+    displayError(error: any, errorType: Errors) {
+      const errorMessage = error?.message;
+      this.errorSet.add([errorType, errorMessage]);
     },
   },
 });

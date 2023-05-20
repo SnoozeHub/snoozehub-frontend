@@ -1,28 +1,24 @@
 <script setup lang="ts">
 import { Errors } from '~~/composables/errors';
-const props = defineProps<{ errors: Set<Errors>, errorMessage: string }>();
+const props = defineProps<{ errors: Set<[Errors, string]> }>();
+
+function createStringFromError(error: Errors, isTitle = true) {
+    const errorToMessageMap: Record<Errors, string> = {
+        [Errors.GrpcError]: 'connection_error',
+        [Errors.NoBedsFound]: 'bed_query_error',
+        [Errors.EthereumRequestError]: 'eth_error',
+        [Errors.Web3CapableBrowserError]: 'web3_browser_error',
+        [Errors.RegistrationError]: 'registration_error',
+        [Errors.Unknown]: 'unknown_error',
+    }
+    return isTitle ? `${errorToMessageMap[error]}_title` : `${errorToMessageMap[error]}_body`;
+}
 </script>
 
 <template>
-    <v-alert prominent v-bind:title="$t('connection_error_title')" type="error" variant="tonal"
-        v-if="props.errors.has(Errors.GrpcError)" closable class="alert">
-        {{ $t('connection_error_body') }}
-    </v-alert>
-    <v-alert prominent v-bind:title="$t('bed_query_error', { err: props.errorMessage })" type="error" variant="tonal"
-        v-if="props.errors.has(Errors.NoBedsFound)" closable class="alert">
-        {{ $t('bed_query_error_body') }}
-    </v-alert>
-    <v-alert prominent v-bind:title="$t('eth_error_title', { err: props.errorMessage })" type="error" variant="tonal"
-        v-if="props.errors.has(Errors.EthereumRequestError)" closable class="alert">
-        {{ $t('eth_error_body') }}
-    </v-alert>
-    <v-alert prominent v-bind:title="$t('web3_browser_error_title', { err: props.errorMessage })"
-        v-if="props.errors.has(Errors.Web3CapableBrowserError)" closable class="alert-danger">
-        {{ $t('web3_browser_error_body') }}
-    </v-alert>
-    <v-alert prominent v-bind:title="$t('registration_error_title', { err: props.errorMessage })"
-        v-if="props.errors.has(Errors.RegistrationError)" closable class="alert-danger">
-        {{ $t('registration_error_body') }}
+    <v-alert prominent v-bind:title="$t(createStringFromError(error[0]), { err: error[1] })" type="error" variant="tonal"
+        v-for="error in props.errors" :key="error[0]" closable class="alert">
+        {{ $t(createStringFromError(error[0], false)) }}
     </v-alert>
 </template>
 <style scoped>

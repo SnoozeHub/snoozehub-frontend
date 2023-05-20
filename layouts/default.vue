@@ -10,7 +10,8 @@ import { storeToRefs } from 'pinia';
 import { Empty } from '~/composables/grpc_gen/common-messages';
 import { useErrorsStore } from '~/composables/storeUtils/errorStore';
 
-const { errorSet, errorMessage } = storeToRefs(useErrorsStore())
+const { displayError } = useErrorsStore()
+const { errorSet } = storeToRefs(useErrorsStore());
 
 const sessionStore = useSessionStore();
 const { bedsList } = storeToRefs(useCacheStore());
@@ -28,7 +29,7 @@ const query = ref<string>("");
 const place_id = ref<string>("");
 const autocompleteResults = ref<google.maps.places.AutocompletePrediction[]>([]);
 if (!sessionStore.getIsWeb3CapableBrowser) {
-    errorSet.value.add(Errors.Web3CapableBrowserError);
+    displayError(new Error('Web3 capable browser required'), Errors.Web3CapableBrowserError);
 }
 function login() {
     navigateTo('/eth-authentication');
@@ -60,8 +61,7 @@ async function searchBeds() {
     try {
         bedsList.value = await useFetchBeds(range.start, range.end, coordinates, [], 1);
     } catch (e: any) {
-        errorMessage.value = e.message;
-        errorSet.value.add(Errors.NoBedsFound);
+        displayError(e, Errors.NoBedsFound);
         showBookingOverlay.value = false;
         searching.value = false;
         return;
@@ -87,7 +87,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
 </script>
 <template>
     <div>
-        <ErrorsPrompt :errors="errorSet" :error-message="errorMessage"></ErrorsPrompt>
+        <ErrorsPrompt :errors="errorSet"></ErrorsPrompt>
         <v-layout class="fill-height">
             <v-app-bar prominent elevation="2">
                 <div class="default-layout">

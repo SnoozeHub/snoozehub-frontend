@@ -1,7 +1,5 @@
 <template>
     <v-container>
-        <ErrorsPrompt :errors="errorSet" :error-message="errorMessage"></ErrorsPrompt>
-
         <v-card>
             <v-card-title>
                 {{ $t('information_request') }}
@@ -51,7 +49,7 @@ const isFormValid = computed(() => {
     return !!name.value && !!surname.value && !!email.value && !!telegram.value && emailRules[0](email.value);
 });
 
-const { errorSet, errorMessage } = storeToRefs(useErrorsStore());
+const { displayError } = useErrorsStore();
 
 const name = ref('');
 const surname = ref('');
@@ -61,7 +59,6 @@ const photos = ref<File[] | undefined>();
 
 async function submitForm() {
     // Submit form logic 
-    console.log('Form submitted!');
     const grpcStore = useGrpcStore();
     try {
         await grpcStore.authOnlyServiceClient?.signUp({
@@ -70,9 +67,7 @@ async function submitForm() {
             telegramUsername: telegram.value,
         });
     } catch (e: any) {
-        errorMessage.value = e.message;
-        console.log(e);
-        errorSet.value.add(Errors.RegistrationError);
+        displayError(e, Errors.RegistrationError);
         return;
     }
 
@@ -83,9 +78,10 @@ async function submitForm() {
     reader.readAsArrayBuffer(photos.value?.[0] as File)
     await new Promise(resolve => reader.addEventListener('load', resolve));
     const profilePic = { photo: new Uint8Array(reader.result as ArrayBuffer) } as ProfilePic;
-    const picUpload = await grpcStore.authOnlyServiceClient?.setProfilePic(profilePic);
-    if (picUpload?.status.code as string != 'OK') {
-        errorSet.value.add(Errors.RegistrationError);
+    try {
+        const picUpload = await grpcStore.authOnlyServiceClient?.setProfilePic(profilePic);
+    } catch (e) {
+        displayError(e, Errors.RegistrationError);
         return;
     }
     navigateTo('/');

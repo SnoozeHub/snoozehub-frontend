@@ -2,10 +2,9 @@
 import { RpcError } from '@protobuf-ts/runtime-rpc';
 import { useErrorsStore } from '~/composables/storeUtils/errorStore';
 import { Errors } from '~~/composables/errors';
-import { storeToRefs } from 'pinia';
 const loading = ref(false);
 
-const { errorSet, errorMessage } = storeToRefs(useErrorsStore());
+const { displayError } = useErrorsStore();
 
 
 async function acceptTerms() {
@@ -22,11 +21,10 @@ async function acceptTerms() {
 
     } catch (err: any) {
         console.log(err);
-        errorMessage.value = err.message;
         if (err instanceof RpcError)
-            errorSet.value.add(Errors.GrpcError);
+            displayError(err, Errors.GrpcError);
         else
-            errorSet.value.add(Errors.EthereumRequestError);
+            displayError(err, Errors.EthereumRequestError);
         loading.value = false;
     }
 }
@@ -35,7 +33,6 @@ async function acceptTerms() {
 
 <template>
     <div class="main-container">
-        <ErrorsPrompt :errors="errorSet" :error-message="errorMessage"></ErrorsPrompt>
 
         <h1 id="terms">{{ $t('tos') }}
         </h1>
