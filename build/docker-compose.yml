@@ -5,27 +5,34 @@ services:
   nuxt:
     build:
       context: ..
-      dockerfile: Dockerfile
+    container_name: nuxt
+    networks:
+      - proxynet
     command: npm run startProduction
 
   envoy:
     image: envoyproxy/envoy:v1.26-latest
+    networks:
+      - proxynet
     ports:
-      - "443:3010"
+      - "80:80"
+      - "443:443"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
-      - /etc/letsencrypt/live/snoozehub.it/privkey.pem:/etc/letsencrypt/live/snoozehub.it/privkey.pem
-      - /etc/letsencrypt/live/snoozehub.it/fullchain.pem:/etc/letsencrypt/live/snoozehub.it/fullchain.pem
-    environment:
-      - ENVOY_UID=0
+      - /etc/letsencrypt/live/snoozehub.it/privkey.pem:/certs/privkey.pem
+      - /etc/letsencrypt/live/snoozehub.it/fullchain.pem:/certs/cert.pem
   swagger:
     image: swaggerapi/swagger-ui
+    container_name: swagger
+    networks:
+      - proxynet
     volumes:
-      - ./swagger-gen:/foo
+      - ../swagger-gen:/foo
     environment:
       - SWAGGER_JSON=/foo/apidocs.swagger.json
       - BASE_URL=/docs
 
 networks:
   proxynet:
-    name: custom_network
+    external: 
+      name: custom_network

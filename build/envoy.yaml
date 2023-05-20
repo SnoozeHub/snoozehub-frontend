@@ -19,7 +19,7 @@ static_resources:
                   virtual_hosts:
                     - name: localhost
                       domains:
-                        - "snoozehub.it"
+                        - "*"
                       routes:
                         - match:
                             prefix: "/"
@@ -83,9 +83,9 @@ static_resources:
               common_tls_context:
                 tls_certificates:
                   certificate_chain:
-                    filename: "/etc/letsencrypt/live/snoozehub.it/fullchain.pem"
+                    filename: "/certs/cert.pem"
                   private_key:
-                    filename: "/etc/letsencrypt/live/snoozehub.it/privkey.pem"
+                    filename: "/certs/privkey.pem"
 
   clusters:
     - name: grpc-service
