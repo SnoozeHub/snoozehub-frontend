@@ -33,7 +33,7 @@ export async function useInitHandshake() {
     signedNonce: hexSignedNonce,
   };
   const authOutcome = await publicServiceClient.auth(auth_request);
-  console.log("authOutcome", authOutcome);
+  // console.log("authOutcome", authOutcome);
   const authenticationOutcome = authOutcome?.response;
   sessionStore.setUserIsAuthenticated(authenticationOutcome);
   grpcStore.initAuthOnlyServiceClient();
