@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     // The private keys which are only available server-side
     public: {
       googleMapsApiKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+      domainName: process.env.NUXT_PUBLIC_DOMAIN_NAME,
     },
   },
   devServer: {

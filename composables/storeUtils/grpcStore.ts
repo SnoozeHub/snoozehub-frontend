@@ -5,7 +5,7 @@ import { PublicServiceClient } from "../grpc_gen/public-service.client";
 
 export const useGrpcStore = defineStore("grpcStore", {
   state: () => ({
-    grpcWebProxyURL: "http://localhost:3010",
+    grpcWebProxyURL: "",
     publicWebFetchTransportIsInitiated: false,
     publicServiceClientIsInitiated: false,
     publicWebFetchTransport: null as GrpcWebFetchTransport | null,
@@ -22,7 +22,14 @@ export const useGrpcStore = defineStore("grpcStore", {
     getAuthOnlyServiceClient: (state) => state.authOnlyServiceClient,
   },
   actions: {
+    initGrpcWebProxyUrl() {
+      if (this.grpcWebProxyURL != "") return;
+      const runtimeConfig = useRuntimeConfig();
+      this.grpcWebProxyURL =
+        runtimeConfig.public.domainName || "https://localhost/";
+    },
     initPublicWebFetchTransport() {
+      this.initGrpcWebProxyUrl();
       if (!this.publicWebFetchTransportIsInitiated) {
         this.publicWebFetchTransport = new GrpcWebFetchTransport({
           baseUrl: this.grpcWebProxyURL,
@@ -31,6 +38,7 @@ export const useGrpcStore = defineStore("grpcStore", {
       }
     },
     initAuthOnlyWebFetchTransport() {
+      this.initGrpcWebProxyUrl();
       if (!this.authOnlyWebFetchTransportIsInitiated) {
         const sessionStore = useSessionStore();
         this.authOnlyWebFetchTransport = new GrpcWebFetchTransport({
