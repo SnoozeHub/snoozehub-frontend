@@ -5,13 +5,12 @@ services:
   nuxt:
     build:
       context: ..
-      dockerfile: Dockerfile
     command: npm run startProduction
 
   envoy:
     image: envoyproxy/envoy:v1.26-latest
     ports:
-      - "443:3010"
+      - "443:443"
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
       - /etc/letsencrypt/live/snoozehub.it/privkey.pem:/etc/letsencrypt/live/snoozehub.it/privkey.pem
@@ -21,7 +20,7 @@ services:
   swagger:
     image: swaggerapi/swagger-ui
     volumes:
-      - ./swagger-gen:/foo
+      - ../swagger-gen:/foo
     environment:
       - SWAGGER_JSON=/foo/apidocs.swagger.json
       - BASE_URL=/docs
