@@ -184,6 +184,38 @@
         ]
       }
     },
+    "/AuthOnlyService/GetMyBookings": {
+      "post": {
+        "operationId": "AuthOnlyService_GetMyBookings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BookingInfoList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        ],
+        "tags": [
+          "AuthOnlyService"
+        ]
+      }
+    },
     "/AuthOnlyService/GetMyReview": {
       "get": {
         "summary": "It returns the optional own review for the BedId",
@@ -238,6 +270,38 @@
         ]
       }
     },
+    "/AuthOnlyService/ModifyBookingAvailability": {
+      "post": {
+        "operationId": "AuthOnlyService_ModifyBookingAvailability",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BookingAvailability"
+            }
+          }
+        ],
+        "tags": [
+          "AuthOnlyService"
+        ]
+      }
+    },
     "/AuthOnlyService/ModifyMyBed": {
       "put": {
         "operationId": "AuthOnlyService_ModifyMyBed",
@@ -272,7 +336,6 @@
     },
     "/AuthOnlyService/RemoveBookAvailability": {
       "delete": {
-        "summary": "rpc ModifyBookingAvailability(BookingAvailability) returns (Empty) {\n\toption (google.api.http) = {\n\t\tpost: \"/AuthOnlyService/ModifyBookingAvailability\"\n\t\tbody: \"*\"\n\t};\n}  // NOT GOING TO BE IMPLEMENTED!!",
         "operationId": "AuthOnlyService_RemoveBookAvailability",
         "responses": {
           "200": {
@@ -378,7 +441,6 @@
     },
     "/AuthOnlyService/RemoveReview": {
       "delete": {
-        "summary": "rpc GetMyBookings(Empty) returns (BookingInfoList) {\n\toption (google.api.http) = {\n\t\tpost: \"/AuthOnlyService/GetMyBookings\"\n\t\tbody: \"*\"\n\t};\n} // NOT GOING TO BE IMPLEMENTED",
         "operationId": "AuthOnlyService_RemoveReview",
         "responses": {
           "200": {
@@ -563,6 +625,38 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/VerifyMailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthOnlyService"
+        ]
+      }
+    },
+    "/AuthOnlyService/getBookingsByBookAvailability": {
+      "post": {
+        "operationId": "AuthOnlyService_getBookingsByBookAvailability",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/BookingInfoList"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BookingAvailability"
             }
           }
         ],
@@ -1006,6 +1100,39 @@
         },
         "dateInterval": {
           "$ref": "#/definitions/DateInterval"
+        }
+      }
+    },
+    "BookingInfo": {
+      "type": "object",
+      "properties": {
+        "booking": {
+          "$ref": "#/definitions/Booking"
+        },
+        "bookingCode": {
+          "type": "string",
+          "title": "length = 6"
+        },
+        "hostPublicKey": {
+          "type": "string",
+          "title": "in hexadecimal, start with 0x, valid (corresponding account exist)"
+        },
+        "guestPublicKey": {
+          "type": "string",
+          "title": "in hexadecimal, start with 0x, valid (corresponding account exist)"
+        }
+      },
+      "title": "Is valid"
+    },
+    "BookingInfoList": {
+      "type": "object",
+      "properties": {
+        "bookingInfos": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/BookingInfo"
+          }
         }
       }
     },
