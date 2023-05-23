@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { RpcError } from '@protobuf-ts/runtime-rpc';
-import { useErrorsStore } from '~/composables/storeUtils/errorStore';
+import { useMessageStore } from '~/composables/storeUtils/userMessageStore';
 import { Errors } from '~~/composables/errors';
 const loading = ref(false);
 
-const { displayError } = useErrorsStore();
+const sessionStore = useSessionStore();
+const { displayError } = useMessageStore();
 
 
 async function acceptTerms() {

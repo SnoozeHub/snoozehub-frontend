@@ -35,7 +35,7 @@ export async function useInitHandshake() {
   const authOutcome = await publicServiceClient.auth(auth_request);
   // console.log("authOutcome", authOutcome);
   const authenticationOutcome = authOutcome?.response;
-  sessionStore.setUserIsAuthenticated(authenticationOutcome);
+  sessionStore.parseAuthResponse(authenticationOutcome);
   grpcStore.initAuthOnlyServiceClient();
   return authenticationOutcome;
 }
