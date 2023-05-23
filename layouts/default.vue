@@ -7,7 +7,7 @@ import { useFetchCompletion, useFetchCoordinates } from '~/composables/mapsApi';
 import { useI18n } from 'vue-i18n';
 import { useCacheStore } from '~/composables/storeUtils/cacheStore';
 import { storeToRefs } from 'pinia';
-import { Empty } from '~/composables/grpc_gen/common-messages';
+import { Bed, Empty } from '~/composables/grpc_gen/common-messages';
 import { useMessageStore } from '~/composables/storeUtils/userMessageStore';
 
 const { displayError } = useMessageStore()
@@ -17,7 +17,7 @@ const { bedsList } = storeToRefs(useCacheStore());
 const vuetifyTheme = useTheme();
 const { locale } = useI18n();
 
-const range = reactive<Range>({
+const range = ref<Range>({
     start: new Date(),
     end: new Date(new Date().setDate(new Date().getDate() + 7)),
 })
@@ -53,12 +53,13 @@ function logout() {
 }
 
 
-async function searchBeds() {
+async function searchBeds(range: Range) {
     if (!query.value) return;
     searching.value = true;
     const coordinates = await useFetchCoordinates(place_id.value);
     try {
-        bedsList.value = await useFetchBeds(range.start, range.end, coordinates, [], 1);
+        bedsList.value = await useFetchBeds(range.end, range.start, coordinates, [], 1) as Bed[];
+        console.log(bedsList.value);
     } catch (e: any) {
         displayError(e, Errors.NoBedsFound);
         showBookingOverlay.value = false;
@@ -67,6 +68,7 @@ async function searchBeds() {
     }
     searching.value = false;
     showBookingOverlay.value = false;
+    navigateTo('/')
 }
 
 async function fetchCompletion() {
@@ -103,12 +105,9 @@ const computedWidth = computed(() => useComputedWidth(width.value))
                                             @click:append-inner="selectResult(autocompleteResults[0])"></v-text-field>
 
                                     </v-card-text>
-                                </v-card></template><v-list v-show="autocompleteResults.length > 0">
-                                <v-list-item v-for=" result  in  autocompleteResults " :key="result.place_id"
-                                    @click="selectResult(result)">
-                                    <v-list-item-title v-html="result.description"></v-list-item-title>
-                                </v-list-item>
-                            </v-list>
+                                </v-card></template>
+                            <Autocompletion :autocomplete-results="autocompleteResults" :select-result="selectResult">
+                            </Autocompletion>
                         </v-menu>
                     </div>
                     <div class="inner-layout">
@@ -124,31 +123,29 @@ const computedWidth = computed(() => useComputedWidth(width.value))
                     <v-card-title>{{ $t('when_to_go') }}</v-card-title>
                     <v-card-text>
                         <v-text-field class="inner-search" readonly v-model="query" :loading="searching"></v-text-field>
-                        <DateIntervalPicker :emit-dates="searching" @dates-chosen="(value: Range) => range = value">
+                        <DateIntervalPicker :emit-dates="searching" @dates-chosen="searchBeds">
                         </DateIntervalPicker>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn @click="showBookingOverlay = false; searching = false">{{ $t('cancel') }}</v-btn>
-                        <v-btn color="rgb(59, 130, 246)" @click="searchBeds">{{ $t('search') }}</v-btn>
+                        <v-btn color="rgb(59, 130, 246)" @click="searching = true">{{ $t('search') }}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
 
             <v-navigation-drawer v-model="showDrawer" location="right" temporary>
                 <v-list v-if="!sessionStore.userIsAuthenticated">
-
                     <v-list-item prepend-icon="mdi-account-plus-outline" v-bind:title="$t('login_signup')" @click="login">
                     </v-list-item>
-
                 </v-list>
                 <v-list v-else>
                     <v-list-item prepend-icon="mdi-calendar-month" v-bind:title="$t('my_bookings')"
-                        @click="navigateTo('bookings')"></v-list-item>
+                        @click="navigateTo('/my-bookings')"></v-list-item>
                     <v-list-item prepend-icon="mdi-bunk-bed" v-bind:title="$t('my_beds')"
-                        @click="navigateTo('beds')"></v-list-item>
+                        @click="navigateTo('/my-beds')"></v-list-item>
                     <v-list-item prepend-icon="mdi-account" v-bind:title="$t('my_profile')"
-                        @click="navigateTo('my-profile')"></v-list-item>
+                        @click="navigateTo('/my-profile')"></v-list-item>
 
                     <v-list-item prepend-icon="mdi-logout" v-bind:title="$t('logout')" @click="logout"></v-list-item>
 
@@ -160,7 +157,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
                 </v-list>
             </v-navigation-drawer>
 
-            <v-main>
+            <v-main style="padding-top: 0;">
                 <div class="main-container">
                     <slot />
                 </div>
@@ -180,7 +177,8 @@ const computedWidth = computed(() => useComputedWidth(width.value))
 }
 
 .main-container {
-    max-width: v-bind(computedWidth);
+    min-width: v-bind(computedWidth);
+    padding-top: 0px;
     margin: auto;
 }
 

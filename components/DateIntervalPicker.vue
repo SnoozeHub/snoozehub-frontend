@@ -11,43 +11,40 @@ const vuetifyTheme = useTheme();
 const { locale } = useI18n();
 
 
-const range = reactive<Range>({
-    start: new Date(),
-    end: new Date(new Date().setDate(new Date().getDate() + 7)),
-});
-const props = defineProps<{ emitDates: boolean }>();
+const range = ref<Range>();
+const props = defineProps<{ emitDates: boolean, disabledDates?: Date[] }>();
 const emit = defineEmits<{ 'dates-chosen': [value: Range] }>()
 
 watch(() => props.emitDates, (newVal, _) => {
     if (newVal)
-        emit('dates-chosen', range);
+        emit('dates-chosen', range.value as Range);
 })
 
-const dragValue = ref<null | { start: Date, end: Date }>(null);
-const selectDragAttribute = computed(() => {
-    return {
-        popover: {
-            visibility: 'hover',
-            isInteractive: false, // Defaults to true when using slot
-        }
-    }
-});
+
 
 const darkTheme = computed(() => {
     return vuetifyTheme.current.value.dark;
 })
 
+const dragValue = ref<Range>();
+const selectDragAttribute = computed(() => ({
+    popover: {
+        visibility: 'hover',
+        isInteractive: false,
+    },
+}));
+
 </script>
 
 <template>
-    <v-date-picker :is-dark="darkTheme" v-model="range" :select-attribute="selectDragAttribute" borderless transparent
-        v-bind:locale="locale" :drag-attribute="selectDragAttribute" is-range @drag="dragValue = $event" expanded
-        color="blue">
-        <template v-slot:day-popover="{ format }">
-            <div>
-                {{ format(dragValue ? dragValue?.start : range.start, 'MMM D') }}
+    <v-date-picker :min-date="new Date()" :is-dark="darkTheme" v-model.range="range" borderless transparent
+        v-bind:locale="locale" expanded color="blue" :disabled-dates='disabledDates' :select-attribute="selectDragAttribute"
+        :drag-attribute="selectDragAttribute" @drag="dragValue = $event">
+        <template #day-popover="{ format }">
+            <div class="text-sm">
+                {{ format(dragValue ? dragValue?.start : range?.start, 'MMM D') }}
                 -
-                {{ format(dragValue ? dragValue?.end : range.end, 'MMM D') }}
+                {{ format(dragValue ? dragValue?.end : range?.end, 'MMM D') }}
             </div>
         </template>
     </v-date-picker>

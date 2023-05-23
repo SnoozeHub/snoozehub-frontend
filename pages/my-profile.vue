@@ -36,7 +36,6 @@
             <v-card>
                 <v-card-title class="text-center" style="color:rgb(244, 67, 54)">{{ $t('delete_account_confirmation')
                 }}</v-card-title>
-                <v-cart-text></v-cart-text>
                 <v-card-text>
                     <p>{{ $t('insert_mail_to_delete', { msg: user?.mail }) }}</p>
                     <v-text-field v-model="confirmation.email" :label="$t('email')" outlined dense required

@@ -14,7 +14,7 @@
                         v-bind:hint="$t('required_field')"></v-text-field>
                     <v-text-field v-model="telegram" v-bind:label="$t('telegram_account')" required
                         v-bind:hint="$t('required_field')"></v-text-field>
-                    <v-file-input v-model="photos" v-bind:label="$t('photos')" :max-files="1"
+                    <v-file-input v-model="photos" v-bind:label="$t('photos')" :max-files="1" accept="image/png"
                         :rules="fileRules"></v-file-input>
                     <v-btn type="submit" color="primary" :disabled="!isFormValid">{{ $t('submit') }}</v-btn>
                 </v-form>
@@ -25,16 +25,11 @@
   
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { ProfilePic } from '~/composables/grpc_gen/common-messages';
 import { Errors } from '~/composables/errors';
 import { useMessageStore } from '~/composables/storeUtils/userMessageStore';
 import { Successes } from '~/composables/successes';
 const { t } = useI18n();
-const fileRules = [
-    (files: Array<File>) => {
-        return files.length !== 1 || (files[0].size <= 512000 && ['image/jpeg', 'image/png', 'image/jpg'].includes(files[0].type)) || t('file_type_size_error');
-    }
-]
+const fileRules = useCreateFileRules(0, 1);
 const emailRules = [
     (v: string) => {
         const rex = new RegExp(
@@ -72,12 +67,9 @@ async function submitForm() {
     }
 
     if (photos.value) {
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(photos.value?.[0] as File)
-        await new Promise(resolve => reader.addEventListener('load', resolve));
-        const profilePic = { photo: new Uint8Array(reader.result as ArrayBuffer) } as ProfilePic;
+        const profilePic = await useSerializeImages(photos.value);
         try {
-            await grpcStore.authOnlyServiceClient?.setProfilePic(profilePic);
+            await grpcStore.authOnlyServiceClient?.setProfilePic(profilePic[0]);
         } catch (e) {
             displayError(e, Errors.RegistrationError);
             return;

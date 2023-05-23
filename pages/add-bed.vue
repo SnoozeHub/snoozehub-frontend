@@ -8,15 +8,19 @@
                     </v-card-title>
                     <v-card-text>
                         <v-form @submit.prevent="saveBed">
-                            <v-text-field v-model="address" :label="$t('address')" required></v-text-field>
+                            <v-text-field v-model="address" :label="$t('address')" required
+                                @input="fetchCompletion"></v-text-field>
+                            <Autocompletion :autocomplete-results="autocompleteResults" :select-result="selectResult">
+                            </Autocompletion>
                             <v-textarea v-model="description" :label="$t('description')" required></v-textarea>
-                            <v-text-field v-model="minimumDaysNotice" :label="$t('minimum_days_notice')"
-                                required></v-text-field>
+                            <v-text-field v-model="minimumDaysNotice" :label="$t('minimum_days_notice')" type="number"
+                                :rules="useMinimumDaysNoticeRules()" required></v-text-field>
                             <v-checkbox v-for="(feature) in  Object.keys(Feature).filter((v) => !isNaN(Number(v))) "
                                 :key="feature" v-model="selectedFeatures[feature as unknown as number]"
                                 :label="$t(featureToi18nString(feature as unknown as number))"></v-checkbox>
-                            <!-- Add other fields and form inputs for BedMutableInfo -->
-                            <v-btn type="submit" color="primary">{{ $t('save') }}</v-btn>
+                            <v-file-input v-model="images" v-bind:label="$t('photos')" :rules="fileRules" multiple chips
+                                accept="image/png"></v-file-input>
+                            <v-btn type="submit" :disabled="inputIsInvalid" color="primary">{{ $t('save') }}</v-btn>
                         </v-form>
                     </v-card-text>
                 </v-card>
@@ -27,57 +31,70 @@
   
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Bed, Feature } from '~/composables/grpc_gen/common-messages';
+import { BedMutableInfo, Feature, ProfilePic } from '~/composables/grpc_gen/common-messages';
+import { useMessageStore } from '~/composables/storeUtils/userMessageStore';
+const images = ref<File[]>([]);
+const grpcStore = useGrpcStore();
+const place_id = ref<string>("");
 
-function featureToi18nString(featureStr: number): string {
-    const featuresMap: Record<Feature, string> = {
-        [Feature.internetConnection]: 'internet_connection',
-        [Feature.bathroom]: 'bathroom',
-        [Feature.heating]: 'heating',
-        [Feature.airConditioner]: 'air_conditioner',
-        [Feature.electricalOutlet]: 'electrical_outlet',
-        [Feature.tap]: 'tap',
-        [Feature.bedLinens]: 'bed_linens',
-        [Feature.pillows]: 'pillows'
-    };
-    const feature = featureStr as unknown as Feature; // Convert to Feature enum type
-    return featuresMap[feature];
+const { displayError, displaySuccess } = useMessageStore();
+const fileRules = useCreateFileRules(1, 5)
+
+const inputIsInvalid = computed(() => {
+    return !address.value || !description.value || !minimumDaysNotice.value || !images.value || images.value.length === 0 || fileRules.some((rule) => rule(images.value) !== true) || useMinimumDaysNoticeRules().some((rule) => rule(minimumDaysNotice.value) !== true)
+})
+async function fetchCompletion() {
+    autocompleteResults.value = await useFetchCompletion(address.value);
 }
 
+function selectResult(result: google.maps.places.AutocompletePrediction) {
+    address.value = result.description
+    autocompleteResults.value = []
+    place_id.value = result.place_id || ""
+}
 
 const address = ref('');
 const description = ref('');
-const minimumDaysNotice = ref(1); // Set default value as 1 or adjust as needed
+const minimumDaysNotice = ref<number>(1); // Set default value as 1 or adjust as needed
 const selectedFeatures = ref<boolean[]>(new Array().fill(false)); // Set default value as empty array or adjust as needed
+const autocompleteResults = ref<google.maps.places.AutocompletePrediction[]>([]);
 
-function saveBed() {
+async function saveBed() {
     const selectedFeaturesToSave: Feature[] = selectedFeatures.value.reduce((acc: Feature[], curr: boolean, index: number) => {
         if (curr) {
             acc.push(index as unknown as Feature); // Convert to Feature enum type
         }
         return acc;
     }, []);
-    const newBed: Bed = {
-        hostPublicKey: '',
-        hostTelegramUsername: '',
-        dateAvailables: [], // Set default value as empty array or adjust as needed
-        reviewCount: 0, // Set default value as 0 or adjust as needed
-        bedMutableInfo: {
-            address: address.value,
-            description: description.value,
-            minimumDaysNotice: minimumDaysNotice.value,
-            features: selectedFeaturesToSave,
-            images: [], // Set default value as empty array or adjust as needed
-            // Populate other fields of BedMutableInfo based on the form inputs
-        },
+    const serializedImages = await useSerializeImages(images.value)
+    const coordinates = await useFetchCoordinates(place_id.value);
+    const newBed: BedMutableInfo = {
+        address: address.value,
+        coordinates,
+        description: description.value,
+        minimumDaysNotice: Number(minimumDaysNotice.value),
+        features: selectedFeaturesToSave,
+        images: serializedImages.reduce((acc: Uint8Array[], curr: ProfilePic) => {
+            if (curr.image !== undefined)
+                acc.push(curr.image);
+            return acc;
+        }, [])
     };
-    console.log(newBed);
     // Perform save or API call with newBed data
-
-    // Reset form fields
+    try {
+        await grpcStore.authOnlyServiceClient?.addBed(newBed);
+    }
+    catch (err) {
+        console.log(err);
+        displayError(err, Errors.AddBedError);
+        return;
+    }
+    displaySuccess(Successes.AddBedSuccess)
+    navigateTo('/my-beds')
     address.value = '';
     description.value = '';
     minimumDaysNotice.value = 1;
+    selectedFeatures.value = new Array().fill(false);
 }
 </script>
   
