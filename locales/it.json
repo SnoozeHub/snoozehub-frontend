@@ -52,5 +52,8 @@
     "bed_linens": "Biancheria da Letto",
     "pillows": "Cuscini",
     "save": "Salva",
-    "add_bed": "Aggiungi Posto Letto"
+    "add_bed": "Aggiungi Posto Letto",
+    "address": "Indirizzo",
+    "description": "Descrizione",
+    "minimum_days_notice": "Preavviso minimo in giorni"
 }
