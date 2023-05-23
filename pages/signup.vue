@@ -27,8 +27,8 @@
 import { useI18n } from 'vue-i18n';
 import { ProfilePic } from '~/composables/grpc_gen/common-messages';
 import { Errors } from '~/composables/errors';
-import { storeToRefs } from 'pinia';
-import { useErrorsStore } from '~/composables/storeUtils/errorStore';
+import { useMessageStore } from '~/composables/storeUtils/userMessageStore';
+import { Successes } from '~/composables/successes';
 const { t } = useI18n();
 const fileRules = [
     (files: Array<File>) => {
@@ -49,8 +49,8 @@ const isFormValid = computed(() => {
     return !!name.value && !!surname.value && !!email.value && !!telegram.value && emailRules[0](email.value);
 });
 
-const { displayError } = useErrorsStore();
-
+const { displayError, displaySuccess } = useMessageStore();
+const { setUserIsAuthenticated } = useSessionStore()
 const name = ref('');
 const surname = ref('');
 const email = ref('');
@@ -71,20 +71,21 @@ async function submitForm() {
         return;
     }
 
-    if (!photos.value) {
-        return;
+    if (photos.value) {
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(photos.value?.[0] as File)
+        await new Promise(resolve => reader.addEventListener('load', resolve));
+        const profilePic = { photo: new Uint8Array(reader.result as ArrayBuffer) } as ProfilePic;
+        try {
+            await grpcStore.authOnlyServiceClient?.setProfilePic(profilePic);
+        } catch (e) {
+            displayError(e, Errors.RegistrationError);
+            return;
+        }
     }
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(photos.value?.[0] as File)
-    await new Promise(resolve => reader.addEventListener('load', resolve));
-    const profilePic = { photo: new Uint8Array(reader.result as ArrayBuffer) } as ProfilePic;
-    try {
-        const picUpload = await grpcStore.authOnlyServiceClient?.setProfilePic(profilePic);
-    } catch (e) {
-        displayError(e, Errors.RegistrationError);
-        return;
-    }
-    navigateTo('/');
+    displaySuccess(Successes.RegistrationSuccess);
+    setUserIsAuthenticated(true);
+    navigateTo('/verify-mail');
 }
 </script>
   

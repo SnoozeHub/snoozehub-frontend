@@ -1,6 +1,7 @@
-<script setup lang="ts">import { BedList_Bed } from '~~/composables/grpc_gen/common-messages';
+<script setup lang="ts">
+import { Bed } from '~~/composables/grpc_gen/common-messages';
 
-const props = defineProps<{ bed: BedList_Bed }>();
+const props = defineProps<{ bed: Bed }>();
 
 
 const cards = ref([
@@ -39,7 +40,6 @@ const cards = ref([
             <v-btn size="small" color="surface-variant" variant="text" icon="mdi-share-variant"></v-btn>
         </v-card-actions>
     </v-card>
-
 </template>
 
 <style scoped>

@@ -8,10 +8,9 @@ import { useI18n } from 'vue-i18n';
 import { useCacheStore } from '~/composables/storeUtils/cacheStore';
 import { storeToRefs } from 'pinia';
 import { Empty } from '~/composables/grpc_gen/common-messages';
-import { useErrorsStore } from '~/composables/storeUtils/errorStore';
+import { useMessageStore } from '~/composables/storeUtils/userMessageStore';
 
-const { displayError } = useErrorsStore()
-const { errorSet } = storeToRefs(useErrorsStore());
+const { displayError } = useMessageStore()
 
 const sessionStore = useSessionStore();
 const { bedsList } = storeToRefs(useCacheStore());
@@ -87,7 +86,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
 </script>
 <template>
     <div>
-        <ErrorsPrompt :errors="errorSet"></ErrorsPrompt>
+        <MessagesPrompt></MessagesPrompt>
         <v-layout class="fill-height">
             <v-app-bar prominent elevation="2">
                 <div class="default-layout">
@@ -107,9 +106,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
                                 </v-card></template><v-list v-show="autocompleteResults.length > 0">
                                 <v-list-item v-for=" result  in  autocompleteResults " :key="result.place_id"
                                     @click="selectResult(result)">
-                                    <v-list-item-content>
-                                        <v-list-item-title v-html="result.description"></v-list-item-title>
-                                    </v-list-item-content>
+                                    <v-list-item-title v-html="result.description"></v-list-item-title>
                                 </v-list-item>
                             </v-list>
                         </v-menu>
@@ -150,6 +147,9 @@ const computedWidth = computed(() => useComputedWidth(width.value))
                         @click="navigateTo('bookings')"></v-list-item>
                     <v-list-item prepend-icon="mdi-bunk-bed" v-bind:title="$t('my_beds')"
                         @click="navigateTo('beds')"></v-list-item>
+                    <v-list-item prepend-icon="mdi-account" v-bind:title="$t('my_profile')"
+                        @click="navigateTo('my-profile')"></v-list-item>
+
                     <v-list-item prepend-icon="mdi-logout" v-bind:title="$t('logout')" @click="logout"></v-list-item>
 
                 </v-list>
