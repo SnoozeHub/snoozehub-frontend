@@ -1,6 +1,9 @@
 import { defineStore } from "pinia";
 import { AuthResponse } from "../grpc_gen/public-service";
 import { Languages } from "../languageUtils";
+import { Empty } from "../grpc_gen/common-messages";
+import { useMessageStore } from "./userMessageStore";
+import { AccountInfo } from "../grpc_gen/common-messages";
 export interface Settings {
   darkTheme: boolean;
   language: Languages;
@@ -17,6 +20,7 @@ export function enumFromStringValue<T>(
 
 export const useSessionStore = defineStore("sessionStore", {
   state: () => ({
+    user: undefined as AccountInfo | undefined,
     autocompleteService: null as google.maps.places.AutocompleteService | null,
     geocoderService: null as google.maps.Geocoder | null,
     isWeb3CapableBrowser: false,
@@ -33,9 +37,13 @@ export const useSessionStore = defineStore("sessionStore", {
     getUserIsAuthenticated: (state) => state.userIsAuthenticated,
     getSettings: (state) => state.settings,
     getDarkTheme: (state) => state.settings.darkTheme,
+    getUserData: (state) => state.user,
   },
   actions: {
-    setUserIsAuthenticated(authResponse: AuthResponse): void {
+    setUserIsAuthenticated(userIsAuthenticated: boolean): void {
+      this.userIsAuthenticated = userIsAuthenticated;
+    },
+    parseAuthResponse(authResponse: AuthResponse): void {
       this.userIsAuthenticated = authResponse.accountExist;
       this.authToken = authResponse.authToken;
     },
@@ -83,6 +91,19 @@ export const useSessionStore = defineStore("sessionStore", {
         const grpcStore = useGrpcStore();
 
         grpcStore.initAuthOnlyServiceClient();
+      }
+    },
+    async fetchUserData() {
+      if (!this.getUserIsAuthenticated) return;
+      const grpcStore = useGrpcStore();
+      try {
+        this.user = (
+          await grpcStore.authOnlyServiceClient?.getAccountInfo(Empty)
+        )?.response;
+      } catch (error) {
+        const messageStore = useMessageStore();
+        messageStore.displayError(error, Errors.GrpcError);
+        console.log(error);
       }
     },
     logout() {
