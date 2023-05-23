@@ -4,4 +4,6 @@ export enum Successes {
   AccountDeletingSuccess = "AccountDeletingSuccess",
   Unknown = "unknown",
   RegistrationSuccess = "RegistrationSuccess",
+  AddBedSuccess = "AddBedSuccess",
+  BedDeletingSuccess = "BedDeletingSuccess",
 }

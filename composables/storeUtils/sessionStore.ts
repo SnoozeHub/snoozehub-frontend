@@ -77,19 +77,19 @@ export const useSessionStore = defineStore("sessionStore", {
         this.setSettings(settings);
       }
       //restores user authentication from local storage
-      this.userIsAuthenticated = new Boolean(
-        localStorage.getItem("userIsAuthenticated")
+      this.userIsAuthenticated = JSON.parse(
+        localStorage.getItem("userIsAuthenticated") as string
       ) as boolean;
-
+      const grpcStore = useGrpcStore();
+      grpcStore.initPublicServiceClient();
       if (this.getUserIsAuthenticated) {
-        this.authToken = localStorage.getItem("authtoken") as string;
+        this.authToken = localStorage.getItem("authToken") as string;
         if (this.getAuthToken == null) {
           this.userIsAuthenticated = false;
           localStorage.removeItem("userIsAuthenticated");
           return;
         }
-        const grpcStore = useGrpcStore();
-
+        this.setUserIsAuthenticated(true);
         grpcStore.initAuthOnlyServiceClient();
       }
     },

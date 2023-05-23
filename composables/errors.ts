@@ -8,4 +8,6 @@ export enum Errors {
   GrpcError = "GrpcError",
   NoBedsFound = "NoBedsFound",
   RegistrationError = "RegistrationError",
+  AddBedError = "AddBedError",
+  BedDeletingError = "BedDeletingError",
 }

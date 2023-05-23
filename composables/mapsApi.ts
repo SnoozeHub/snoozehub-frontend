@@ -1,6 +1,7 @@
 import { Loader } from "@googlemaps/js-api-loader";
 import { useI18n } from "vue-i18n";
 import { usegmapsStore } from "./storeUtils/gMapsStore";
+import { Coordinates } from "./grpc_gen/common-messages";
 
 export function useInitGoogleApis() {
   const gmapsStore = usegmapsStore();
@@ -53,15 +54,19 @@ export async function useFetchCompletion(
 
 export async function useFetchCoordinates(
   placeId: string
-): Promise<google.maps.LatLng> {
+): Promise<Coordinates> {
   const gmapsStore = usegmapsStore();
   const geocoderService = gmapsStore.getGeocoderService;
   if (!geocoderService) {
-    return Promise.resolve(new google.maps.LatLng(-34, 151));
+    return Promise.resolve({ latitude: 0, longitude: 0 });
   }
   const request = {
     placeId: placeId.toString(),
   };
   const response = await geocoderService.geocode(request);
-  return response.results[0].geometry.location;
+  const googleCoordinates = response.results[0].geometry.location;
+  return {
+    latitude: googleCoordinates.lat(),
+    longitude: googleCoordinates.lng(),
+  };
 }

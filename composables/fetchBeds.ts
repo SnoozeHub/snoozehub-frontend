@@ -1,32 +1,73 @@
-import { Feature } from "./grpc_gen/common-messages";
+import {
+  Bed,
+  BedId,
+  Coordinates,
+  Empty,
+  Feature,
+} from "./grpc_gen/common-messages";
 import { GetBedsRequest } from "./grpc_gen/public-service";
 import { useGrpcStore } from "./storeExport";
-import { Date as GrpcDate } from "./grpc_gen/common-messages";
+import { useMessageStore } from "./storeUtils/userMessageStore";
 
 export async function useFetchBeds(
   dateRangeHigh: Date,
   dateRangeLow: Date,
-  coords: google.maps.LatLng,
+  coords: Coordinates,
   featuresMandatory: Feature[],
   fromIndex: number
 ) {
   const grpcState = useGrpcStore();
+  const messageStore = useMessageStore();
   const getBedRequest: GetBedsRequest = {
     dateRangeHigh: dateToGrpcDate(dateRangeHigh),
     dateRangeLow: dateToGrpcDate(dateRangeLow),
-    coordinates: { latitude: coords.lat(), longitude: coords.lng() },
+    coordinates: coords,
     featuresMandatory,
     fromIndex,
   };
   const publicServiceClient = grpcState.getPublicServiceClient;
-  const getBedsRequest = await publicServiceClient?.getBeds(getBedRequest);
-  return getBedsRequest?.response.beds;
+  try {
+    const getBedsRequest = await publicServiceClient?.getBeds(getBedRequest);
+    if (
+      getBedsRequest?.response == undefined ||
+      getBedsRequest.response.beds.length == 0
+    )
+      throw new Error("no beds found");
+    return getBedsRequest?.response.beds;
+  } catch (e) {
+    messageStore.displayError(e, Errors.NoBedsFound);
+    return [];
+  }
 }
 
-function dateToGrpcDate(date: Date): GrpcDate {
-  return {
-    day: date.getDay(),
-    month: date.getMonth(),
-    year: date.getFullYear(),
-  };
+export async function useFetchMyBeds(): Promise<Bed[]> {
+  const messageStore = useMessageStore();
+  const grpcState = useGrpcStore();
+  const authOnlyServiceClient = grpcState.getAuthOnlyServiceClient;
+  try {
+    const getBedsRequest = await authOnlyServiceClient?.getMyBeds(Empty);
+    if (
+      getBedsRequest?.response == undefined ||
+      getBedsRequest.response.beds.length == 0
+    )
+      throw new Error("no beds found");
+    return getBedsRequest?.response.beds as Bed[];
+  } catch (e) {
+    messageStore.displayError(e, Errors.NoBedsFound);
+    return [];
+  }
+}
+
+export async function useFetchSingleBed(bedId: BedId): Promise<Bed> {
+  const messageStore = useMessageStore();
+  const grpcState = useGrpcStore();
+  const publicServiceClient = grpcState.getPublicServiceClient;
+  try {
+    const getBedRequest = await publicServiceClient?.getBed(bedId);
+    if (!getBedRequest) throw new Error("no bed found");
+    return getBedRequest?.response.bed as Bed;
+  } catch (e) {
+    messageStore.displayError(e, Errors.NoBedsFound);
+    return {} as Bed;
+  }
 }
