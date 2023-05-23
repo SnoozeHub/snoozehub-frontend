@@ -2,6 +2,10 @@
   "compilerOptions": {
     "module": "ES2022"
   },
-  "files": ["./composables/*.ts", "composables/grpc-gen/*"],
+  "files": [
+    "./composables/*.ts",
+    "composables/grpc-gen/*",
+    "pages/managebed/[id].vue"
+  ],
   "extends": "./.nuxt/tsconfig.json"
 }

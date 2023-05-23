@@ -1,10 +1,11 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 import vuetify from "vite-plugin-vuetify";
-import path, { resolve, dirname } from "node:path";
+import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "url";
 import VueI18nVitePlugin from "@intlify/unplugin-vue-i18n/vite";
 
 export default defineNuxtConfig({
+  pages: true,
   runtimeConfig: {
     // The private keys which are only available server-side
     public: {
