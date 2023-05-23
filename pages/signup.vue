@@ -28,6 +28,7 @@ import { useI18n } from 'vue-i18n';
 import { ProfilePic } from '~/composables/grpc_gen/common-messages';
 import { Errors } from '~/composables/errors';
 import { useMessageStore } from '~/composables/storeUtils/userMessageStore';
+import { Successes } from '~/composables/successes';
 const { t } = useI18n();
 const fileRules = [
     (files: Array<File>) => {
