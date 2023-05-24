@@ -46,9 +46,9 @@ function toggleLanguage() {
     sessionStore.toggleLanguage();
     locale.value = sessionStore.getLanguage;
 }
-function logout() {
+async function logout() {
     const grpcStore = useGrpcStore();
-    grpcStore.authOnlyServiceClient?.logout(Empty);
+    (await grpcStore.getAuthOnlyServiceClient()).logout(Empty);
     sessionStore.logout();
 }
 
@@ -58,7 +58,7 @@ async function searchBeds(range: Range) {
     searching.value = true;
     const coordinates = await useFetchCoordinates(place_id.value);
     try {
-        bedsList.value = await useFetchBeds(range.end, range.start, coordinates, [], 1) as Bed[];
+        bedsList.value = await useFetchBeds(range.end, range.start, coordinates, [], 0) as Bed[];
         console.log(bedsList.value);
     } catch (e: any) {
         displayError(e, Errors.NoBedsFound);

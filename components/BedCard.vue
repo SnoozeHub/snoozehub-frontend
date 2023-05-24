@@ -15,7 +15,7 @@ const isDeleted = ref(false);
 async function deleteBed() {
     console.log('delete bed');
     try {
-        await grpcStore.getAuthOnlyServiceClient?.removeMyBed(props.bed.id as BedId);
+        await (await grpcStore.getAuthOnlyServiceClient()).removeMyBed(props.bed.id as BedId);
         messageStore.displaySuccess(Successes.BedDeletingSuccess);
         isDeleted.value = true;
     } catch (e) {

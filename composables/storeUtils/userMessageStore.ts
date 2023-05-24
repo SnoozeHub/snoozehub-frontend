@@ -13,6 +13,11 @@ export const useMessageStore = defineStore("useMessageStore", {
   },
   actions: {
     displayError(error: any, errorType: Errors) {
+      if (error.message == "invalid or expired authtoken") {
+        const sessionStore = useSessionStore();
+        sessionStore.logout();
+      }
+
       const errorMessage = error?.message;
       this.errorSet.add([errorType, errorMessage]);
     },

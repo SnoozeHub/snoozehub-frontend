@@ -17,11 +17,29 @@ export const useGrpcStore = defineStore("grpcStore", {
   }),
   getters: {
     getPublicWebFetchTransport: (state) => state.publicWebFetchTransport,
-    getPublicServiceClient: (state) => state.publicServiceClient,
     getAuthOnlyWebFetchTransport: (state) => state.authOnlyWebFetchTransport,
-    getAuthOnlyServiceClient: (state) => state.authOnlyServiceClient,
   },
   actions: {
+    getPublicServiceClient() {
+      return new Promise<PublicServiceClient>(async (resolve, __) => {
+        if (this.publicServiceClientIsInitiated) {
+          resolve(this.publicServiceClient as PublicServiceClient);
+        } else {
+          this.initPublicServiceClient();
+          resolve(this.publicServiceClient as PublicServiceClient);
+        }
+      });
+    },
+    getAuthOnlyServiceClient() {
+      return new Promise<AuthOnlyServiceClient>(async (resolve, __) => {
+        if (this.authOnlyServiceClientIsInitiated) {
+          resolve(this.authOnlyServiceClient as AuthOnlyServiceClient);
+        } else {
+          this.initAuthOnlyServiceClient();
+          resolve(this.authOnlyServiceClient as AuthOnlyServiceClient);
+        }
+      });
+    },
     initGrpcWebProxyUrl() {
       if (this.grpcWebProxyURL != "") return;
       const runtimeConfig = useRuntimeConfig();

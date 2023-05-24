@@ -2,6 +2,7 @@
 import { useTheme } from 'vuetify/lib/framework.mjs';
 import { useI18n } from 'vue-i18n';
 import { Date as GrpcDate } from '~/composables/grpc_gen/common-messages';
+import { grpcDateToDate } from '~/composables/dateUtils';
 const { t } = useI18n();
 
 
@@ -24,7 +25,7 @@ const attributes = ref([
         // We also need some dates to know where to display the attribute
         // We use a single date here, but it could also be an array of dates,
         //  a date range or a complex date pattern.
-        dates: props.dateAvailables.map((date) => grpcDateToDate(date)),
+        dates: props.dateAvailables?.map((date) => grpcDateToDate(date)) || [],
         // Think of `order` like `z-index`
         order: 1
     }

@@ -80,11 +80,11 @@ const confirmation = reactive({
     email: '',
     reason: '',
 });
-const deleteAccount = (): void => {
+const deleteAccount = async () => {
     // Perform account deletion logic here
     try {
 
-        grpcStore.authOnlyServiceClient?.deleteAccount(Empty);
+        (await grpcStore.getAuthOnlyServiceClient()).deleteAccount(Empty);
     } catch (error) {
         console.log('Error deleting account:', error);
         messageStore.displayError(error, Errors.AccountDeletingError);

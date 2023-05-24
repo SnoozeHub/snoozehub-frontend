@@ -37,7 +37,7 @@ const selectDragAttribute = computed(() => ({
 </script>
 
 <template>
-    <v-date-picker :min-date="new Date()" :is-dark="darkTheme" v-model.range="range" borderless transparent
+    <v-date-picker :min-date="useTomorrowDate()" :is-dark="darkTheme" v-model.range="range" borderless transparent
         v-bind:locale="locale" expanded color="blue" :disabled-dates='disabledDates' :select-attribute="selectDragAttribute"
         :drag-attribute="selectDragAttribute" @drag="dragValue = $event">
         <template #day-popover="{ format }">

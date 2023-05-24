@@ -30,7 +30,7 @@ const { displayError, displaySuccess } = useMessageStore();
 async function confirmCode() {
     // Perform code confirmation logic here
     try {
-        const outcome = await grpcStore.authOnlyServiceClient?.verifyMail({
+        const outcome = await (await grpcStore.getAuthOnlyServiceClient()).verifyMail({
             verificationCode: verificationCode.value
         })
         if (!outcome?.response.ok) {

@@ -25,7 +25,7 @@ export async function useFetchBeds(
     featuresMandatory,
     fromIndex,
   };
-  const publicServiceClient = grpcState.getPublicServiceClient;
+  const publicServiceClient = await grpcState.getPublicServiceClient();
   try {
     const getBedsRequest = await publicServiceClient?.getBeds(getBedRequest);
     if (
@@ -43,17 +43,12 @@ export async function useFetchBeds(
 export async function useFetchMyBeds(): Promise<Bed[]> {
   const messageStore = useMessageStore();
   const grpcState = useGrpcStore();
-  const authOnlyServiceClient = grpcState.getAuthOnlyServiceClient;
+  const authOnlyServiceClient = await grpcState.getAuthOnlyServiceClient();
   try {
     const getBedsRequest = await authOnlyServiceClient?.getMyBeds(Empty);
-    if (
-      getBedsRequest?.response == undefined ||
-      getBedsRequest.response.beds.length == 0
-    )
-      throw new Error("no beds found");
     return getBedsRequest?.response.beds as Bed[];
   } catch (e) {
-    messageStore.displayError(e, Errors.NoBedsFound);
+    messageStore.displayError(e, Errors.GrpcError);
     return [];
   }
 }
@@ -61,7 +56,7 @@ export async function useFetchMyBeds(): Promise<Bed[]> {
 export async function useFetchSingleBed(bedId: BedId): Promise<Bed> {
   const messageStore = useMessageStore();
   const grpcState = useGrpcStore();
-  const publicServiceClient = grpcState.getPublicServiceClient;
+  const publicServiceClient = await grpcState.getPublicServiceClient();
   try {
     const getBedRequest = await publicServiceClient?.getBed(bedId);
     if (!getBedRequest) throw new Error("no bed found");

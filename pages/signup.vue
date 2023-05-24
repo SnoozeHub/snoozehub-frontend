@@ -56,7 +56,7 @@ async function submitForm() {
     // Submit form logic 
     const grpcStore = useGrpcStore();
     try {
-        await grpcStore.authOnlyServiceClient?.signUp({
+        await (await grpcStore.getAuthOnlyServiceClient()).signUp({
             name: name.value + ' ' + surname.value,
             mail: email.value,
             telegramUsername: telegram.value,
@@ -69,7 +69,7 @@ async function submitForm() {
     if (photos.value) {
         const profilePic = await useSerializeImages(photos.value);
         try {
-            await grpcStore.authOnlyServiceClient?.setProfilePic(profilePic[0]);
+            await (await grpcStore.getAuthOnlyServiceClient()).setProfilePic(profilePic[0]);
         } catch (e) {
             displayError(e, Errors.RegistrationError);
             return;

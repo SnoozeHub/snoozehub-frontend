@@ -82,7 +82,7 @@ async function saveBed() {
     };
     // Perform save or API call with newBed data
     try {
-        await grpcStore.authOnlyServiceClient?.addBed(newBed);
+        await (await grpcStore.getAuthOnlyServiceClient()).addBed(newBed);
     }
     catch (err) {
         console.log(err);

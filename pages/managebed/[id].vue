@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container v-if="bed !== undefined">
         <v-dialog v-model="showAddBookingAvailabilityOverlay" width="400">
             <v-card>
                 <v-card-title>{{ $t('add_booking_availability') }}</v-card-title>
@@ -55,7 +55,7 @@
                                 <v-list-item-title>{{ $t('add_booking_availability') }}</v-list-item-title>
                             </v-list-item>
                             <v-list-item
-                                @click="showRemoveBookingAvailabilityOverlay = !showRemoveBookingAvailabilityOverlay">
+                                @click="showRemoveBookingAvailabilityOverlay = !showRemoveBookingAvailabilityOverlay; populatePairs()">
                                 <v-icon>mdi-calendar-remove</v-icon>
                                 <v-list-item-title>{{ $t('remove_booking_availability') }}</v-list-item-title>
                             </v-list-item>
@@ -101,7 +101,7 @@
                 </v-list-item>
                 <v-list-item>
                     <v-list-item-title class="title">{{ $t('date_availables') }}</v-list-item-title>
-                    <AvailableDates :date-availables="bed.dateAvailables"></AvailableDates>
+                    <AvailableDates :date-availables="bed?.dateAvailables"></AvailableDates>
                 </v-list-item>
             </v-list>
         </v-card>
@@ -119,8 +119,9 @@ const { currentRoute } = useRouter();
 
 const grpcStore = useGrpcStore();
 const bedId = currentRoute.value.params.id;
-const bed = ref<Bed>();
+const bed = ref<Bed | undefined>(undefined);
 bed.value = await useFetchSingleBed({ bedId: bedId as string } as BedId)
+console.log(bed.value);
 const imgs = await useDeserializeImages(bed.value.bedMutableInfo?.images as Uint8Array[]);
 const emitDates = ref(false);
 const showAddBookingAvailabilityOverlay = ref(false);
@@ -130,7 +131,7 @@ async function addBookingAvailability(range: Range) {
     console.log(range);
     if (range !== undefined) {
         try {
-            await grpcStore.authOnlyServiceClient?.addBookingAvailability({
+            await (await grpcStore.getAuthOnlyServiceClient()).addBookingAvailability({
                 bedId: { bedId: bedId as string },
                 dateInterval: {
                     startDate: dateToGrpcDate(range.start),
@@ -157,7 +158,7 @@ function deleteBookingAvailability() {
         if (pair[1].value) {
 
             try {
-                await grpcStore.authOnlyServiceClient?.removeBookAvailability({
+                await (await grpcStore.getAuthOnlyServiceClient()).removeBookAvailability({
                     bedId: { bedId: bedId as string },
                     dateInterval: {
                         startDate: stringToGrpcDate(pair[0].split('-')[0]),
@@ -180,12 +181,14 @@ function toggleToDelete(index: number) {
 
 
 // Sort dates in ascending order
-const sortedDates = bed.value?.dateAvailables.sort();
-const formatDate = (date: GrpcDate) => `${date.day}/${date.month}/${date.year}`;
+
 
 // Split dates into pairs of start and end dates
 const pairs = ref<[string, Ref<boolean>][]>([]);
 const populatePairs = () => {
+    const sortedDates = bed.value?.dateAvailables.sort();
+    if (sortedDates === undefined) return;
+    const formatDate = (date: GrpcDate) => `${date.day}/${date.month}/${date.year}`;
     let start = sortedDates[0];
     let end = sortedDates[0];
     pairs.value = [];
@@ -208,8 +211,6 @@ const populatePairs = () => {
     if (start !== end)
         pairs.value.push([`${formatDate(start)}-${formatDate(end)}`, ref(false)]);
 }
-
-populatePairs();
 
 </script>
   

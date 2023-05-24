@@ -70,6 +70,7 @@ export const useSessionStore = defineStore("sessionStore", {
     },
     restorePreviousSession() {
       //restores user preferences from local storage
+      const grpcStore = useGrpcStore();
       const settingsJSON = localStorage.getItem("settings");
 
       if (settingsJSON != null) {
@@ -80,8 +81,7 @@ export const useSessionStore = defineStore("sessionStore", {
       this.userIsAuthenticated = JSON.parse(
         localStorage.getItem("userIsAuthenticated") as string
       ) as boolean;
-      const grpcStore = useGrpcStore();
-      grpcStore.initPublicServiceClient();
+
       if (this.getUserIsAuthenticated) {
         this.authToken = localStorage.getItem("authToken") as string;
         if (this.getAuthToken == null) {
@@ -90,7 +90,6 @@ export const useSessionStore = defineStore("sessionStore", {
           return;
         }
         this.setUserIsAuthenticated(true);
-        grpcStore.initAuthOnlyServiceClient();
       }
     },
     async fetchUserData() {
@@ -98,7 +97,9 @@ export const useSessionStore = defineStore("sessionStore", {
       const grpcStore = useGrpcStore();
       try {
         this.user = (
-          await grpcStore.authOnlyServiceClient?.getAccountInfo(Empty)
+          await (
+            await grpcStore.getAuthOnlyServiceClient()
+          ).getAccountInfo(Empty)
         )?.response;
       } catch (error) {
         const messageStore = useMessageStore();
@@ -111,6 +112,7 @@ export const useSessionStore = defineStore("sessionStore", {
       this.authToken = "";
       localStorage.removeItem("authToken");
       localStorage.removeItem("userIsAuthenticated");
+      navigateTo("/");
     },
   },
 });

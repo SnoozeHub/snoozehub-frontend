@@ -8,10 +8,9 @@ import { useGrpcStore } from "./storeExport";
 export async function useInitHandshake() {
   const grpcStore = useGrpcStore();
   const sessionStore = useSessionStore();
-  grpcStore.initPublicServiceClient();
 
   const publicServiceClient =
-    grpcStore.getPublicServiceClient as PublicServiceClient;
+    (await grpcStore.getPublicServiceClient()) as PublicServiceClient;
 
   const nonceRequest = await publicServiceClient.getNonce(Empty);
   const nonce = nonceRequest?.response.nonce;
@@ -36,6 +35,5 @@ export async function useInitHandshake() {
   // console.log("authOutcome", authOutcome);
   const authenticationOutcome = authOutcome?.response;
   sessionStore.parseAuthResponse(authenticationOutcome);
-  grpcStore.initAuthOnlyServiceClient();
   return authenticationOutcome;
 }

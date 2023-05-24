@@ -4,7 +4,8 @@ import { useI18n } from "vue-i18n";
 export async function useSerializeImages(
   photos: File[]
 ): Promise<ProfilePic[]> {
-  const profilePics = photos.map(async (photo: File) => {
+  if (photos == undefined) return [];
+  const profilePics = photos?.map(async (photo: File) => {
     const reader = new FileReader();
     reader.readAsArrayBuffer(photo);
     await new Promise((resolve) => reader.addEventListener("load", resolve));
@@ -22,7 +23,8 @@ export const getImageUrl = (img: File) => {
 export async function useDeserializeImages(
   profilePics: Uint8Array[]
 ): Promise<File[]> {
-  const photos = profilePics.map(async (profilePic: Uint8Array, index) => {
+  if (profilePics == undefined) return [];
+  const photos = profilePics?.map(async (profilePic: Uint8Array, index) => {
     const blob = new Blob([profilePic]);
     return new File([blob], `profilePic${index}.png`);
   });
