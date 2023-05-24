@@ -21,3 +21,9 @@ export function useMinimumDaysNoticeRules() {
     (val: any) => val <= 30 || t("maximum_days_notice_error"),
   ];
 }
+
+export function useTomorrowDate() {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return tomorrow;
+}
