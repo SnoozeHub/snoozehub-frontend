@@ -13,7 +13,6 @@ async function acceptTerms() {
         loading.value = true
         const authenticationOutcome = await useInitHandshake();
         loading.value = false;
-
         if (authenticationOutcome.accountExist) {
             navigateTo("/");
         }

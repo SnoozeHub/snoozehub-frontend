@@ -2,7 +2,7 @@ export enum Errors {
   // General
   EmailConfirmationError = "EmailConfirmationError",
   AccountDeletingError = "AccountDeletingError",
-  Unknown = "unknown",
+  UnknownError = "unknownError",
   Web3CapableBrowserError = "Web3CapableBrowserError",
   EthereumRequestError = "EthereumRequestError",
   GrpcError = "GrpcError",
@@ -10,4 +10,6 @@ export enum Errors {
   RegistrationError = "RegistrationError",
   AddBedError = "AddBedError",
   BedDeletingError = "BedDeletingError",
+  BookingAvailabilityAddingError = "BookingAvailabilityAddingError",
+  BookingAvailabilityDeletingError = "BookingAvailabilityDeletingError",
 }

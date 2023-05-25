@@ -6,4 +6,6 @@ export enum Successes {
   RegistrationSuccess = "RegistrationSuccess",
   AddBedSuccess = "AddBedSuccess",
   BedDeletingSuccess = "BedDeletingSuccess",
+  BookingAvailabilityAddingSuccess = "BookingAvailabilityAddingSuccess",
+  BookingAvailabilityDeletingSuccess = "BookingAvailabilityDeletingSuccess",
 }

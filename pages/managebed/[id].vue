@@ -86,10 +86,6 @@
                     <v-list-item-subtitle>{{ bed.bedMutableInfo?.address }}</v-list-item-subtitle>
                 </v-list-item>
                 <v-list-item>
-                    <v-list-item-title class="title">{{ $t('coordinates') }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ bed.bedMutableInfo?.coordinates }}</v-list-item-subtitle>
-                </v-list-item>
-                <v-list-item>
                     <v-list-item-title class="title">{{ $t('features') }}</v-list-item-title>
                     <v-list-item-subtitle>
                         {{ bed.bedMutableInfo?.features.map(feature => $t(featureToi18nString(feature))).join(', ') }}
@@ -115,7 +111,9 @@
 import { Bed, BedId } from "composables/grpc_gen/common-messages";
 import { Range } from '~~/components/DateIntervalPicker.vue';
 import { Date as GrpcDate } from "composables/grpc_gen/common-messages";
+import { useMessageStore } from "~/composables/storeUtils/userMessageStore";
 const { currentRoute } = useRouter();
+const { displayError, displaySuccess } = useMessageStore();
 
 const grpcStore = useGrpcStore();
 const bedId = currentRoute.value.params.id;
@@ -139,8 +137,11 @@ async function addBookingAvailability(range: Range) {
                 }
             });
         } catch (e) {
+            displayError(e, Errors.BookingAvailabilityAddingError);
             console.log(e);
+            return;
         }
+        displaySuccess(Successes.BookingAvailabilityAddingSuccess);
         emitDates.value = false;
         showAddBookingAvailabilityOverlay.value = false;
         bed.value = await useFetchSingleBed({ bedId: bedId as string } as BedId)
@@ -167,7 +168,10 @@ function deleteBookingAvailability() {
                 });
             } catch (e) {
                 console.log(e);
+                displayError(e, Errors.BookingAvailabilityDeletingError);
+                return;
             }
+            displaySuccess(Successes.BookingAvailabilityDeletingSuccess);
             bed.value = await useFetchSingleBed({ bedId: bedId as string } as BedId)
             populatePairs();
             showRemoveBookingAvailabilityOverlay.value = false;

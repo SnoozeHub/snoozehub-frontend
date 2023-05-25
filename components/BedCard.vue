@@ -37,6 +37,16 @@ async function deleteBed() {
                 {{ $t('bed_description') }}: {{ bed.bedMutableInfo?.description }}
             </v-list-item>
             <v-list-item>
+                {{ $t('address') }}: {{ bed.bedMutableInfo?.address }}
+            </v-list-item>
+            <v-list-item>
+                {{ $t('features') }}: {{ bed.bedMutableInfo?.features.map(feature =>
+                    $t(featureToi18nString(feature))).join(', ') }}
+            </v-list-item>
+            <v-list-item>
+                {{ $t('minimum_days_notice') }}: {{ bed.bedMutableInfo?.minimumDaysNotice }}
+            </v-list-item>
+            <v-list-item>
                 {{ $t('average_evaluation') }}: {{ bed.averageEvaluation }}
             </v-list-item>
             <v-list-item>

@@ -60,6 +60,7 @@ export async function useFetchSingleBed(bedId: BedId): Promise<Bed> {
   try {
     const getBedRequest = await publicServiceClient?.getBed(bedId);
     if (!getBedRequest) throw new Error("no bed found");
+    console.log("getBedRequest", getBedRequest.response.bed);
     return getBedRequest?.response.bed as Bed;
   } catch (e) {
     messageStore.displayError(e, Errors.NoBedsFound);

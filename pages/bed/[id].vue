@@ -1,5 +1,5 @@
 <template>
-    <v-card class="card">
+    <v-card class="card" v-if="bed !== undefined && imgs !== undefined">
         <v-carousel class="mx-auto">
             <v-carousel-item v-for="img in imgs" :key="img.name" :src="getImageUrl(img)" style="width: 100px;"
                 cover></v-carousel-item>
@@ -24,15 +24,14 @@
             </v-list-item>
             <v-list-item>
                 <v-list-item-title class="title">{{ $t('coordinates') }}</v-list-item-title>
-                <v-list-item-subtitle>{{ bed.bedMutableInfo?.coordinates }}</v-list-item-subtitle>
+                <v-list-item-subtitle> lat: {{ bed.bedMutableInfo?.coordinates?.latitude }}, long: {{
+                    bed.bedMutableInfo?.coordinates?.longitude }} </v-list-item-subtitle>
             </v-list-item>
             <v-list-item>
                 <v-list-item-title class="title">{{ $t('features') }}</v-list-item-title>
                 <v-list-item-subtitle>
-                    <ul>
-                        <li v-for="feature in bed.bedMutableInfo?.features" :key="feature">{{
-                            $t(featureToi18nString(feature)) }}</li>
-                    </ul>
+                    {{ bed.bedMutableInfo?.features.map(feature => $t(featureToi18nString(feature))).join(', ') }}
+
                 </v-list-item-subtitle>
             </v-list-item>
             <v-list-item>
@@ -52,8 +51,10 @@ import { Bed, BedId } from "composables/grpc_gen/common-messages"
 
 const { currentRoute } = useRouter();
 const bedId = currentRoute.value.params.id;
-const bed = ref<Bed>(await useFetchSingleBed({ bedId: bedId as string } as BedId));
-const imgs = await useDeserializeImages(bed.value.bedMutableInfo?.images as Uint8Array[]);
+const bed = ref<Bed | undefined>(undefined);
+bed.value = await useFetchSingleBed({ bedId: bedId as string } as BedId)
+console.log(bed.value);
+const imgs = await useDeserializeImages(bed.value?.bedMutableInfo?.images as Uint8Array[]);
 
 
 
@@ -62,6 +63,7 @@ const imgs = await useDeserializeImages(bed.value.bedMutableInfo?.images as Uint
 <style scoped>
 .card {
     /* Original card styles */
+    margin: 2% 3%;
 }
 
 .title {

@@ -153,11 +153,12 @@ const computedWidth = computed(() => useComputedWidth(width.value))
 
                 <v-divider></v-divider>
                 <v-list density="compact" nav>
-                    <v-list-item prepend-icon="mdi-chat-question-outline" v-bind:title="$t('get_help')"></v-list-item>
+                    <v-list-item prepend-icon="mdi-chat-question-outline" v-bind:title="$t('get_help')"
+                        @click="navigateTo('/help')"></v-list-item>
                 </v-list>
             </v-navigation-drawer>
 
-            <v-main style="padding-top: 0;">
+            <v-main style=" padding-top: 0;">
                 <div class="main-container">
                     <slot />
                 </div>
