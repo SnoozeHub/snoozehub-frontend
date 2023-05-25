@@ -47,6 +47,9 @@ async function deleteBed() {
                 {{ $t('minimum_days_notice') }}: {{ bed.bedMutableInfo?.minimumDaysNotice }}
             </v-list-item>
             <v-list-item>
+                {{ $t('host_telegram_account') }}: {{ bed.hostTelegramUsername }}
+            </v-list-item>
+            <v-list-item>
                 {{ $t('average_evaluation') }}: {{ bed.averageEvaluation }}
             </v-list-item>
             <v-list-item>

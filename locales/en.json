@@ -16,8 +16,8 @@
     "grpc_error_body": "We are currently experiencing some issues connecting to our servers. Please try again in a second.",
     "ethereum_request_error_title": "ETH blockchain error: {err}",
     "ethereum_request_error_body": "We are currently experiencing some issues processing ETH requests on the blockchain. Please try again in a second.",
-    "web3capable_browser_error_title": "No web3 capable browser detected!",
-    "web3capable_browser_error_body": "It doesn't look like your browser supports web3. Please use a web3 capable browser or install the Metamask extension on your current browser.",
+    "web3_capable_browser_error_title": "No web3 capable browser detected!",
+    "web3_capable_browser_error_body": "It doesn't look like your browser supports web3. Please use a web3 capable browser or install the Metamask extension on your current browser.",
     "information_request": "Enter Your Information Below",
     "name": "Name",
     "email": "Email",
@@ -82,10 +82,11 @@
     "dates_disabled_message": "Note: some dates are disabled as they already belong to a different availability.",
     "not_implemented": "Not implemented",
     "go_back": "Go Back",
-    "booking_availability_adding_error_title": "Error adding booking availability: {msg}",
+    "booking_availability_adding_error_title": "Error adding booking availability: {err}",
     "booking_availability_adding_error_body": "We are currently unable to process your request for adding booking availability.",
-    "booking_availability_deleting_error_title": "Error deleting booking availability: {msg}",
+    "booking_availability_deleting_error_title": "Error deleting booking availability: {err}",
     "booking_availability_deleting_error_body": "We are currently unable to process your request for deleting booking availability.",
     "booking_availability_adding_success": "Booking availability successfully added",
-    "booking_availability_deleting_success": "Booking availability successfully deleted"
+    "booking_availability_deleting_success": "Booking availability successfully deleted",
+    "host_telegram_account": "Host Telegram Account"
 }

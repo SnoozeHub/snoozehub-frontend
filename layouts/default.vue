@@ -97,7 +97,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
                         <h1 id="title" @click="navigateTo('/')">SnoozeHub
                         </h1>
                         <v-menu>
-                            <template v-slot:activator="{ props }"> <v-card class="mx" min-width="300px" elevation="0">
+                            <template v-slot:activator="{ props }"> <v-card class="mx" min-width="335px" elevation="0">
                                     <v-card-text> <v-text-field :loading="searching" clearable v-model="query"
                                             v-bind="props" v-bind:label="$t('search_bar_placeholder')" variant="underlined"
                                             density="compact" append-inner-icon="mdi-magnify" single-line hide-details

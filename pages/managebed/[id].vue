@@ -128,6 +128,8 @@ async function addBookingAvailability(range: Range) {
     emitDates.value = false;
     console.log(range);
     if (range !== undefined) {
+        emitDates.value = false;
+        showAddBookingAvailabilityOverlay.value = false;
         try {
             await (await grpcStore.getAuthOnlyServiceClient()).addBookingAvailability({
                 bedId: { bedId: bedId as string },
@@ -142,8 +144,6 @@ async function addBookingAvailability(range: Range) {
             return;
         }
         displaySuccess(Successes.BookingAvailabilityAddingSuccess);
-        emitDates.value = false;
-        showAddBookingAvailabilityOverlay.value = false;
         bed.value = await useFetchSingleBed({ bedId: bedId as string } as BedId)
         populatePairs();
         console.log(bed.value.dateAvailables);

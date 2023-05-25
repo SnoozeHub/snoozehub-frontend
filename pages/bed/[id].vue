@@ -38,6 +38,11 @@
                 <v-list-item-title class="title">{{ $t('minimum_days_notice') }}</v-list-item-title>
                 <v-list-item-subtitle>{{ bed.bedMutableInfo?.minimumDaysNotice }}</v-list-item-subtitle>
             </v-list-item>
+
+            <v-list-item>
+                <v-list-item-title class="title">{{ $t('host_telegram_account') }}</v-list-item-title>
+                <v-list-item-subtitle>{{ bed.hostTelegramUsername }}</v-list-item-subtitle>
+            </v-list-item>
             <v-list-item>
                 <v-list-item-title class="title">{{ $t('date_availables') }}</v-list-item-title>
                 <AvailableDates :date-availables="bed.dateAvailables"></AvailableDates>
@@ -64,14 +69,6 @@ const imgs = await useDeserializeImages(bed.value?.bedMutableInfo?.images as Uin
 .card {
     /* Original card styles */
     margin: 2% 3%;
-}
-
-.title {
-    /* Original title styles */
-}
-
-.subtitle {
-    /* Original subtitle styles */
 }
 </style>
   

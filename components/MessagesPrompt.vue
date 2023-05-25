@@ -6,11 +6,11 @@ const { errorSet, successSet } = storeToRefs(useMessageStore());
 
 <template>
     <v-alert prominent v-bind:title="$t(errorToi18nString(error[0]), { err: error[1] })" type="error" variant="tonal"
-        v-for="error in errorSet" :key="error[0]" closable class="alert">
+        v-for="error in errorSet" :key="error[0]" closable class="alert" @click:close="errorSet.delete(error)">
         {{ $t(errorToi18nString(error[0], false)) }}
     </v-alert>
     <v-alert prominent type="success" variant="tonal" v-for="success in successSet" :key="success[0]" closable
-        class="alert">
+        @click:close="successSet.delete(success)" class="alert">
         {{ $t(successToi18nString(success)) }}
     </v-alert>
 </template>

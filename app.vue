@@ -19,10 +19,8 @@ cacheStore.retrieveDefaultBedsList();
 vuetifyTheme.global.name.value = sessionStore.getTheme;
 locale.value = sessionStore.getLanguage;
 
-onMounted(async () => {
-    useInitGoogleApis();
+useInitGoogleApis();
 
-});
 
 window.addEventListener('beforeunload',
     sessionStore.saveSession)
