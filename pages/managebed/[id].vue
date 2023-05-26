@@ -1,5 +1,5 @@
 <template>
-    <v-container v-if="bed !== undefined">
+    <v-container v-if="bed !== undefined && imgs !== undefined">
         <v-dialog v-model="showAddBookingAvailabilityOverlay" width="400">
             <v-card>
                 <v-card-title>{{ $t('add_booking_availability') }}</v-card-title>
@@ -105,6 +105,7 @@
             <v-progress-circular indeterminate size="64"></v-progress-circular>
         </v-card>
     </v-container>
+    <NoBedsFound v-else></NoBedsFound>
 </template>
   
 <script setup lang="ts">
@@ -120,7 +121,7 @@ const bedId = currentRoute.value.params.id;
 const bed = ref<Bed | undefined>(undefined);
 bed.value = await useFetchSingleBed({ bedId: bedId as string } as BedId)
 console.log(bed.value);
-const imgs = await useDeserializeImages(bed.value.bedMutableInfo?.images as Uint8Array[]);
+const imgs = await useDeserializeImages(bed.value?.bedMutableInfo?.images as Uint8Array[]);
 const emitDates = ref(false);
 const showAddBookingAvailabilityOverlay = ref(false);
 const showRemoveBookingAvailabilityOverlay = ref(false);

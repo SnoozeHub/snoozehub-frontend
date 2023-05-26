@@ -49,6 +49,7 @@
             </v-list-item>
         </v-list>
     </v-card>
+    <NoBedsFound v-else></NoBedsFound>
 </template>
   
 <script setup lang="ts">
