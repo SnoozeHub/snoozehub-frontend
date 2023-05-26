@@ -74,6 +74,7 @@ async function deleteBed() {
 .card {
     min-width: 300px;
     margin: auto;
+    min-height: 100%
 }
 
 .overlay-style {

@@ -1,4 +1,3 @@
-
 <template>
     <v-container fluid fill-height class="text-center">
         <v-layout align-center justify-center>
@@ -7,8 +6,9 @@
                     <v-card-text>
                         <div class="d-flex flex-row align-center">
                             <v-icon large color="error" style="margin-right: 4px;">mdi-alert-circle</v-icon>
-                            <h1> The current page has not been implemented yet</h1>
+                            <h1 style="min-height: fit-content;"> {{ $t('no_bed') }}</h1>
                         </div>
+                        <h1 style="margin-top: 12px;"> {{ $route.params.id }}</h1>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn color="primary" @click="$router.back">{{ $t('go_back') }}</v-btn>
