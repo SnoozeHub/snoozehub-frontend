@@ -27,7 +27,7 @@
     "required_field": "This field is required",
     "submit": "Submit",
     "email_must_be_valid": "Email must be valid",
-    "file_type_size_error": "File type/size not supported (max 512kb, JPG/PNG only)",
+    "file_type_size_error": "File type/size not supported (max 512kb, PNG only, from {start} to {end} photos)",
     "registration_error_title": "Registration error: {err}",
     "registration_error_body": "We are unable to process your registration request at the moment. Please try again later.",
     "no_beds_found_error_title": "Bed query error: {err}",
@@ -81,12 +81,13 @@
     "confirm": "Confirm",
     "dates_disabled_message": "Note: some dates are disabled as they already belong to a different availability.",
     "not_implemented": "Not implemented",
-    "go_back": "Go Back",
     "booking_availability_adding_error_title": "Error adding booking availability: {err}",
     "booking_availability_adding_error_body": "We are currently unable to process your request for adding booking availability.",
     "booking_availability_deleting_error_title": "Error deleting booking availability: {err}",
     "booking_availability_deleting_error_body": "We are currently unable to process your request for deleting booking availability.",
     "booking_availability_adding_success": "Booking availability successfully added",
     "booking_availability_deleting_success": "Booking availability successfully deleted",
-    "host_telegram_account": "Host Telegram Account"
+    "host_telegram_account": "Host Telegram Account",
+    "no_bed": "Uh oh, no bed found with the given ID: {id}",
+    "go_back": "Go back"
 }

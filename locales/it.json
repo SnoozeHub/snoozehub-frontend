@@ -30,7 +30,7 @@
     "required_field": "Questo campo è obbligatorio",
     "submit": "Invia",
     "email_must_be_valid": "L'email deve essere valida",
-    "file_type_size_error": "Il file deve essere in formato .jpg o .png e non deve superare i 512KB",
+    "file_type_size_error": "Tipo di file non supportato (max 512kb, solo file PNG, da {start} a {end} foto)",
     "registration_error_title": "Errore in fase di registrazione: {err} ",
     "registration_error_body": "Al momento non siamo in grado di elaborare la tua richiesta di registrazione. ",
     "no_beds_found_error_title": "Errore in fase di ricerca letto: {err}",
@@ -88,5 +88,6 @@
     "booking_availability_deleting_error_title": "Errore in fase di eliminazione intervallo disponibilità: {err}",
     "booking_availability_deleting_error_body": "Al momento non siamo in grado di elaborare la tua richiesta di eliminazione intervallo disponibilità.",
     "booking_availability_adding_success": "Intervallo disponibilità aggiunto con successo",
-    "booking_availability_deleting_success": "Intervallo disponibilità eliminato con successo"
+    "booking_availability_deleting_success": "Intervallo disponibilità eliminato con successo",
+    "no_bed": "Uh oh, nessun letto trovato con il seguente ID: {id}"
 }
