@@ -13,9 +13,11 @@ export const useMessageStore = defineStore("useMessageStore", {
   },
   actions: {
     displayError(error: any, errorType: Errors) {
-      if (error.message == "invalid or expired authtoken") {
+      //if we encountered an authentication error, we need to log the user out an redirect them to the login page
+      if (authenticationErrors.includes(error.message)) {
         const sessionStore = useSessionStore();
         sessionStore.logout();
+        navigateTo("/eth-authentication");
       }
 
       const errorMessage = error?.message;

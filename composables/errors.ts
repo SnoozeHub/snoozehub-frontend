@@ -13,3 +13,10 @@ export enum Errors {
   BookingAvailabilityAddingError = "BookingAvailabilityAddingError",
   BookingAvailabilityDeletingError = "BookingAvailabilityDeletingError",
 }
+
+export const authenticationErrors = [
+  "can't get metadata",
+  "invalid authtoken metadata",
+  "invalid or expired authtoken",
+  "account doesn't exist or not verified",
+];
