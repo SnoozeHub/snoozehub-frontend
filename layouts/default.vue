@@ -158,7 +158,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
                 </v-list>
             </v-navigation-drawer>
 
-            <v-main style=" padding-top: 0;">
+            <v-main style=" padding-top: 0; padding-bottom: 3%;">
                 <div class="main-container">
                     <slot />
                 </div>
@@ -181,6 +181,7 @@ const computedWidth = computed(() => useComputedWidth(width.value))
     min-width: v-bind(computedWidth);
     padding-top: 0px;
     margin: auto;
+    padding-bottom: 3%;
 }
 
 .inner-layout {

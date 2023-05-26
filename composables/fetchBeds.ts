@@ -59,8 +59,7 @@ export async function useFetchSingleBed(bedId: BedId): Promise<Bed> {
   const publicServiceClient = await grpcState.getPublicServiceClient();
   try {
     const getBedRequest = await publicServiceClient?.getBed(bedId);
-    if (!getBedRequest) throw new Error("no bed found");
-    console.log("getBedRequest", getBedRequest.response.bed);
+    if (!getBedRequest) throw new Error("we couldn't find that bed");
     return getBedRequest?.response.bed as Bed;
   } catch (e) {
     messageStore.displayError(e, Errors.NoBedsFound);

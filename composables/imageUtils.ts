@@ -48,7 +48,7 @@ export function useCreateFileRules(minLength: number, maxLength: number) {
       );
       return (
         (lengthRequirement && sizeRequirement && typeRequirement) ||
-        t("file_type_size_error")
+        t("file_type_size_error", { start: minLength, end: maxLength })
       );
     },
   ];
