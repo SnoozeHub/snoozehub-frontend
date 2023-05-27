@@ -17,7 +17,8 @@
                                 :rules="useMinimumDaysNoticeRules()" required></v-text-field>
                             <v-checkbox v-for="(feature) in  Object.keys(Feature).filter((v) => !isNaN(Number(v))) "
                                 :key="feature" v-model="selectedFeatures[feature as unknown as number]"
-                                :label="$t(featureToi18nString(feature as unknown as number))"></v-checkbox>
+                                :label="$t(featureToi18nString(feature as unknown as number))"
+                                density="compact"></v-checkbox>
                             <v-file-input v-model="images" v-bind:label="$t('photos')" :rules="fileRules" multiple chips
                                 accept="image/png"></v-file-input>
                             <v-btn type="submit" :disabled="inputIsInvalid" color="primary">{{ $t('save') }}</v-btn>
