@@ -13,13 +13,11 @@ const showOverlay = computed(() => props.allowDelete);
 const isDeleted = ref(false);
 
 async function deleteBed() {
-    console.log('delete bed');
     try {
         await (await grpcStore.getAuthOnlyServiceClient()).removeMyBed(props.bed.id as BedId);
         messageStore.displaySuccess(Successes.BedDeletingSuccess);
         isDeleted.value = true;
     } catch (e) {
-        console.log(e);
         messageStore.displayError(e, Errors.BedDeletingError);
     }
 }

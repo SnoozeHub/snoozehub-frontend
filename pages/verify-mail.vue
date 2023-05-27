@@ -37,7 +37,6 @@ async function confirmCode() {
             throw outcome?.status;
         }
     } catch (e) {
-        console.log(e);
         displayError(e, Errors.EmailConfirmationError);
         return;
     };

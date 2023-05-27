@@ -59,9 +59,8 @@ async function searchBeds(range: Range) {
     const coordinates = await useFetchCoordinates(place_id.value);
     try {
         bedsList.value = await useFetchBeds(range.end, range.start, coordinates, [], 0) as Bed[];
-        console.log(bedsList.value);
     } catch (e: any) {
-        displayError(e, Errors.NoBedsFound);
+        displayError(e, Errors.NoBedsFoundError);
         showBookingOverlay.value = false;
         searching.value = false;
         return;

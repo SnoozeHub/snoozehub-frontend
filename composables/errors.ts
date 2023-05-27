@@ -6,7 +6,7 @@ export enum Errors {
   Web3CapableBrowserError = "Web3CapableBrowserError",
   EthereumRequestError = "EthereumRequestError",
   GrpcError = "GrpcError",
-  NoBedsFound = "NoBedsFound",
+  NoBedsFoundError = "NoBedsFoundError",
   RegistrationError = "RegistrationError",
   AddBedError = "AddBedError",
   BedDeletingError = "BedDeletingError",

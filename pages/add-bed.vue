@@ -86,7 +86,6 @@ async function saveBed() {
         await (await grpcStore.getAuthOnlyServiceClient()).addBed(newBed);
     }
     catch (err) {
-        console.log(err);
         displayError(err, Errors.AddBedError);
         return;
     }

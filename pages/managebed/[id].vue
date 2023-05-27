@@ -8,7 +8,7 @@
                 </v-card-text>
                 <v-card-text>
                     <DateIntervalPicker :emit-dates="emitDates" @dates-chosen="addBookingAvailability"
-                        :disabled-dates="(bed?.dateAvailables.map(dt => grpcDateToDate(dt)))">
+                        :disabled-dates="availableDatesToBook">
                     </DateIntervalPicker>
                 </v-card-text>
                 <v-card-actions>
@@ -97,7 +97,7 @@
                 </v-list-item>
                 <v-list-item>
                     <v-list-item-title class="title">{{ $t('date_availables') }}</v-list-item-title>
-                    <AvailableDates :date-availables="bed?.dateAvailables"></AvailableDates>
+                    <AvailableDates :date-availables="availableDatesToBook"></AvailableDates>
                 </v-list-item>
             </v-list>
         </v-card>
@@ -116,18 +116,21 @@ import { useMessageStore } from "~/composables/storeUtils/userMessageStore";
 const { currentRoute } = useRouter();
 const { displayError, displaySuccess } = useMessageStore();
 
+
 const grpcStore = useGrpcStore();
 const bedId = currentRoute.value.params.id;
 const bed = ref<Bed | undefined>(undefined);
 bed.value = await useFetchSingleBed({ bedId: bedId as string } as BedId)
-console.log(bed.value);
 const imgs = await useDeserializeImages(bed.value?.bedMutableInfo?.images as Uint8Array[]);
 const emitDates = ref(false);
 const showAddBookingAvailabilityOverlay = ref(false);
 const showRemoveBookingAvailabilityOverlay = ref(false);
+
+const availableDatesToBook = computed(() =>
+    (bed.value?.dateAvailables.map(dt => grpcDateToDate(dt))))
+
 async function addBookingAvailability(range: Range) {
     emitDates.value = false;
-    console.log(range);
     if (range !== undefined) {
         emitDates.value = false;
         showAddBookingAvailabilityOverlay.value = false;
@@ -141,13 +144,14 @@ async function addBookingAvailability(range: Range) {
             });
         } catch (e) {
             displayError(e, Errors.BookingAvailabilityAddingError);
-            console.log(e);
             return;
         }
-        displaySuccess(Successes.BookingAvailabilityAddingSuccess);
-        bed.value = await useFetchSingleBed({ bedId: bedId as string } as BedId)
+        const new_bed = await useFetchSingleBed({ bedId: bedId as string } as BedId)
+        if (bed.value === undefined)
+            return;
+        bed.value.dateAvailables = new_bed.dateAvailables;
         populatePairs();
-        console.log(bed.value.dateAvailables);
+        displaySuccess(Successes.BookingAvailabilityAddingSuccess);
     }
 }
 
@@ -158,7 +162,7 @@ function deleteBookingAvailability() {
             return { day: parseInt(day), month: parseInt(month), year: parseInt(year) };
         }
         if (pair[1].value) {
-
+            showRemoveBookingAvailabilityOverlay.value = false;
             try {
                 await (await grpcStore.getAuthOnlyServiceClient()).removeBookAvailability({
                     bedId: { bedId: bedId as string },
@@ -168,14 +172,12 @@ function deleteBookingAvailability() {
                     }
                 });
             } catch (e) {
-                console.log(e);
                 displayError(e, Errors.BookingAvailabilityDeletingError);
                 return;
             }
-            displaySuccess(Successes.BookingAvailabilityDeletingSuccess);
             bed.value = await useFetchSingleBed({ bedId: bedId as string } as BedId)
             populatePairs();
-            showRemoveBookingAvailabilityOverlay.value = false;
+            displaySuccess(Successes.BookingAvailabilityDeletingSuccess);
         }
     });
 }
@@ -191,7 +193,8 @@ function toggleToDelete(index: number) {
 // Split dates into pairs of start and end dates
 const pairs = ref<[string, Ref<boolean>][]>([]);
 const populatePairs = () => {
-    const sortedDates = bed.value?.dateAvailables.sort();
+    const sortedDates = bed.value?.dateAvailables.slice(0);
+    sortedDates?.sort();
     if (sortedDates === undefined) return;
     const formatDate = (date: GrpcDate) => `${date.day}/${date.month}/${date.year}`;
     let start = sortedDates[0];

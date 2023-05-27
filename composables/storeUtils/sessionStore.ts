@@ -104,7 +104,6 @@ export const useSessionStore = defineStore("sessionStore", {
       } catch (error) {
         const messageStore = useMessageStore();
         messageStore.displayError(error, Errors.GrpcError);
-        console.log(error);
       }
     },
     logout() {

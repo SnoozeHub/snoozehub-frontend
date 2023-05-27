@@ -10,17 +10,18 @@ export interface Range {
 const vuetifyTheme = useTheme();
 const { locale } = useI18n();
 
+const showComponent = ref(true);
+
 
 const range = ref<Range>();
-const props = defineProps<{ emitDates: boolean, disabledDates?: Date[] }>();
+const props = defineProps<{ emitDates: boolean, disabledDates?: Date[] | undefined }>();
 const emit = defineEmits<{ 'dates-chosen': [value: Range] }>()
 
+const computedDisabledDates = computed(() => props.disabledDates);
 watch(() => props.emitDates, (newVal, _) => {
     if (newVal)
         emit('dates-chosen', range.value as Range);
 })
-
-
 
 const darkTheme = computed(() => {
     return vuetifyTheme.current.value.dark;
@@ -37,9 +38,9 @@ const selectDragAttribute = computed(() => ({
 </script>
 
 <template>
-    <v-date-picker :min-date="useTomorrowDate()" :is-dark="darkTheme" v-model.range="range" borderless transparent
-        v-bind:locale="locale" expanded color="blue" :disabled-dates='disabledDates' :select-attribute="selectDragAttribute"
-        :drag-attribute="selectDragAttribute" @drag="dragValue = $event">
+    <v-date-picker v-if="showComponent" :min-date="useTomorrowDate()" :is-dark="darkTheme" v-model.range="range" borderless
+        transparent v-bind:locale="locale" expanded color="blue" :disabled-dates='computedDisabledDates'
+        :select-attribute="selectDragAttribute" :drag-attribute="selectDragAttribute" @drag="dragValue = $event">
         <template #day-popover="{ format }">
             <div class="text-sm">
                 {{ format(dragValue ? dragValue?.start : range?.start, 'MMM D') }}

@@ -12,11 +12,10 @@ export function featureToi18nString(featureStr: number): string {
 }
 
 export function errorToi18nString(error: Errors, isTitle = true) {
-  const i18nstring = error.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
-  console.log(i18nstring);
+  const i18nstring =
+    error?.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase() || "unknown_error";
   return isTitle ? `${i18nstring}_title` : `${i18nstring}_body`;
 }
 export function successToi18nString(success: Successes) {
-  console.log(success.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase());
   return success.replace(/([a-z])([A-Z])/g, "$1_$2").toLowerCase();
 }

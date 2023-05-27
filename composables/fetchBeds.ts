@@ -35,7 +35,7 @@ export async function useFetchBeds(
       throw new Error("no beds found");
     return getBedsRequest?.response.beds;
   } catch (e) {
-    messageStore.displayError(e, Errors.NoBedsFound);
+    messageStore.displayError(e, Errors.NoBedsFoundError);
     return [];
   }
 }
@@ -62,7 +62,7 @@ export async function useFetchSingleBed(bedId: BedId): Promise<Bed> {
     if (!getBedRequest) throw new Error("we couldn't find that bed");
     return getBedRequest?.response.bed as Bed;
   } catch (e) {
-    messageStore.displayError(e, Errors.NoBedsFound);
+    messageStore.displayError(e, Errors.NoBedsFoundError);
     return {} as Bed;
   }
 }

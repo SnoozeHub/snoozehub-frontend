@@ -86,7 +86,6 @@ const deleteAccount = async () => {
 
         (await grpcStore.getAuthOnlyServiceClient()).deleteAccount(Empty);
     } catch (error) {
-        console.log('Error deleting account:', error);
         messageStore.displayError(error, Errors.AccountDeletingError);
     }
     messageStore.displaySuccess(Successes.AccountDeletingSuccess);

@@ -20,7 +20,6 @@ async function acceptTerms() {
             navigateTo("/signup");
 
     } catch (err: any) {
-        console.log(err);
         if (err instanceof RpcError)
             displayError(err, Errors.GrpcError);
         else

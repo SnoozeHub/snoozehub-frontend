@@ -45,7 +45,7 @@
             </v-list-item>
             <v-list-item>
                 <v-list-item-title class="title">{{ $t('date_availables') }}</v-list-item-title>
-                <AvailableDates :date-availables="bed.dateAvailables"></AvailableDates>
+                <AvailableDates :date-availables="availableDatesToBook"></AvailableDates>
             </v-list-item>
         </v-list>
     </v-card>
@@ -55,11 +55,13 @@
 <script setup lang="ts">
 import { Bed, BedId } from "composables/grpc_gen/common-messages"
 
+const availableDatesToBook = computed(() =>
+    (bed.value?.dateAvailables.map(dt => grpcDateToDate(dt)))) ?? [];
+
 const { currentRoute } = useRouter();
 const bedId = currentRoute.value.params.id;
 const bed = ref<Bed | undefined>(undefined);
 bed.value = await useFetchSingleBed({ bedId: bedId as string } as BedId)
-console.log(bed.value);
 const imgs = await useDeserializeImages(bed.value?.bedMutableInfo?.images as Uint8Array[]);
 
 
