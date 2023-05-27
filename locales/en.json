@@ -73,7 +73,7 @@
     "minimum_days_notice_error": "Minimum days notice should be at least 1.",
     "maximum_days_notice_error": "Maximum days notice should be 30 or less.",
     "notice_days_not_number": "Notice days should be a valid number.",
-    "date_availables": "Date Availables",
+    "date_availables": "Available dates",
     "coordinates": "Coordinates",
     "features": "Features",
     "available": "Available",
