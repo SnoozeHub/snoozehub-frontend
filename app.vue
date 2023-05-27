@@ -7,7 +7,7 @@ const vuetifyTheme = useTheme();
 const { locale } = useI18n();
 import { useI18n } from 'vue-i18n';
 import { useCacheStore } from './composables/storeUtils/cacheStore';
-
+import { UseHeadInput } from '@unhead/vue';
 const provider = await detectEthereumProvider();
 
 const sessionStore = useSessionStore();
@@ -21,6 +21,15 @@ locale.value = sessionStore.getLanguage;
 
 useInitGoogleApis();
 
+const meta: UseHeadInput = {
+    link: [{ rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
+    { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
+    { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
+    { rel: "manifest", href: "/site.webmanifest" },
+    { rel: "mask-icon", href: "/safari-pinned-tab.svg", color: "#8cd6eb" }]
+}
+
+useHead(meta);
 
 window.addEventListener('beforeunload',
     sessionStore.saveSession)
@@ -41,3 +50,11 @@ onBeforeUnmount(() => {
         </v-app>
     </div>
 </template>
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#8cd6eb">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
