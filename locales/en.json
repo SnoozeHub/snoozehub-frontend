@@ -89,5 +89,7 @@
     "booking_availability_deleting_success": "Booking availability successfully deleted",
     "host_telegram_account": "Host Telegram Account",
     "no_bed": "Uh oh, no bed found with the given ID: {id}",
-    "go_back": "Go back"
+    "go_back": "Go back",
+    "unknown_error_title": "Unknown error: {err}",
+    "unknown_error_body": "An unknown error occurred. Please try again later."
 }

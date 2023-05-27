@@ -89,5 +89,7 @@
     "booking_availability_deleting_error_body": "Al momento non siamo in grado di elaborare la tua richiesta di eliminazione intervallo disponibilità.",
     "booking_availability_adding_success": "Intervallo disponibilità aggiunto con successo",
     "booking_availability_deleting_success": "Intervallo disponibilità eliminato con successo",
-    "no_bed": "Uh oh, nessun letto trovato con il seguente ID: {id}"
+    "no_bed": "Uh oh, nessun letto trovato con il seguente ID: {id}",
+    "unknown_error_title": "Errore sconosciuto: {err}",
+    "unknown_error_body": "Si è verificato un errore sconosciuto. Riprova più tardi."
 }
