@@ -109,8 +109,7 @@ export const useSessionStore = defineStore("sessionStore", {
     logout() {
       this.userIsAuthenticated = false;
       this.authToken = "";
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("userIsAuthenticated");
+      this.saveSession();
       navigateTo("/");
     },
   },

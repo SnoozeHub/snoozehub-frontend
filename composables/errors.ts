@@ -19,4 +19,5 @@ export const authenticationErrors = [
   "invalid authtoken metadata",
   "invalid or expired authtoken",
   "account doesn't exist or not verified",
+  "account doesn't exist",
 ];
