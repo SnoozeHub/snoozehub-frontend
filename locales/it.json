@@ -13,7 +13,7 @@
     "tos": "Ora ti verrà chiesto di permettere a SnoozeHub di leggere e processare il tuo indirizzo ETH pubblico. \nSe non vuoi condividere queste informazioni con noi NON cliccare sul pulsante qui sotto",
     "search_bar_placeholder": "Verso la tua prossima avventura!",
     "grpc_error_title": "Errore di connessione ai nostri server: {err}",
-    "grpc_error_body": "Al momento stiamo riscontrando alcuni problemi di connessione ai nostri server. Riprova tra qualche secondo.",
+    "grpc_error_body": "Al momento stiamo riscontrando alcuni problemi di connessione ai nostri server. Riprova tra qualche secondo. Se l'errore persiste, prova a uscire dall'account e rimuovere i cookies",
     "ethereum_request_error_title": "Errore blockchain ETH: {err}",
     "ethereum_request_error_body": "Al momento stiamo riscontrando alcuni problemi di elaborazione delle richieste ETH sulla blockchain. Riprova tra qualche secondo.",
     "web3_capable_browser_error_title": "Nessun browser web3 rilevato!",
