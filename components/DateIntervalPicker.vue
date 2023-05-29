@@ -14,12 +14,12 @@ const showComponent = ref(true);
 
 
 const range = ref<Range>();
-const props = defineProps<{ emitDates: boolean, disabledDates?: Date[] | undefined }>();
+const props = defineProps<{ disabledDates?: Date[] | undefined }>();
 const emit = defineEmits<{ 'dates-chosen': [value: Range] }>()
 
 const computedDisabledDates = computed(() => props.disabledDates);
-watch(() => props.emitDates, (newVal, _) => {
-    if (newVal)
+watch(() => range.value, (newVal, _) => {
+    if (newVal?.start && newVal?.end)
         emit('dates-chosen', range.value as Range);
 })
 

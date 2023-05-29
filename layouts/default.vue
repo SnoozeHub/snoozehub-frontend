@@ -17,10 +17,7 @@ const { bedsList } = storeToRefs(useCacheStore());
 const vuetifyTheme = useTheme();
 const { locale } = useI18n();
 
-const range = ref<Range>({
-    start: new Date(),
-    end: new Date(new Date().setDate(new Date().getDate() + 7)),
-})
+const range = ref<Range | undefined>(undefined);
 let showDrawer = ref<boolean>(false);
 let showBookingOverlay = ref<boolean>(false);
 const searching = ref<boolean>(false);
@@ -53,12 +50,13 @@ async function logout() {
 }
 
 
-async function searchBeds(range: Range) {
-    if (!query.value) return;
+async function searchBeds() {
+    if (!query.value || !range.value) return;
     searching.value = true;
+    console.log(range.value);
     const coordinates = await useFetchCoordinates(place_id.value);
     try {
-        bedsList.value = await useFetchBeds(range.end, range.start, coordinates, [], 0) as Bed[];
+        bedsList.value = await useFetchBeds(range.value.end, range.value.start, coordinates, [], 0) as Bed[];
     } catch (e: any) {
         displayError(e, Errors.NoBedsFoundError);
         showBookingOverlay.value = false;
@@ -122,13 +120,14 @@ const computedWidth = computed(() => useComputedWidth(width.value))
                     <v-card-title>{{ $t('when_to_go') }}</v-card-title>
                     <v-card-text>
                         <v-text-field class="inner-search" readonly v-model="query" :loading="searching"></v-text-field>
-                        <DateIntervalPicker :emit-dates="searching" @dates-chosen="searchBeds">
+                        <DateIntervalPicker @dates-chosen="(newRange: Range) => range = newRange">
                         </DateIntervalPicker>
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn @click="showBookingOverlay = false; searching = false">{{ $t('cancel') }}</v-btn>
-                        <v-btn color="rgb(59, 130, 246)" @click="searching = true">{{ $t('search') }}</v-btn>
+                        <v-btn color="rgb(59, 130, 246)" @click="searchBeds" :disabled="range == undefined">{{ $t('search')
+                        }}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
