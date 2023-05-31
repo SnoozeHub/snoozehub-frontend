@@ -7,14 +7,14 @@
                     {{ $t('dates_disabled_message') }}
                 </v-card-text>
                 <v-card-text>
-                    <DateIntervalPicker :emit-dates="emitDates" @dates-chosen="addBookingAvailability"
+                    <DateIntervalPicker @dates-chosen="(newRange: Range) => range = newRange"
                         :disabled-dates="availableDatesToBook">
                     </DateIntervalPicker>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn @click="showAddBookingAvailabilityOverlay = false">{{ $t('cancel') }}</v-btn>
-                    <v-btn color="rgb(59, 130, 246)" @click="emitDates = true">{{ $t('confirm') }}</v-btn>
+                    <v-btn color="rgb(59, 130, 246)" @click="addBookingAvailability">{{ $t('confirm') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -125,21 +125,22 @@ const imgs = await useDeserializeImages(bed.value?.bedMutableInfo?.images as Uin
 const emitDates = ref(false);
 const showAddBookingAvailabilityOverlay = ref(false);
 const showRemoveBookingAvailabilityOverlay = ref(false);
+const range = ref<Range | undefined>(undefined);
 
 const availableDatesToBook = computed(() =>
     (bed.value?.dateAvailables.map(dt => grpcDateToDate(dt))))
 
-async function addBookingAvailability(range: Range) {
+async function addBookingAvailability() {
     emitDates.value = false;
-    if (range !== undefined) {
+    if (range.value !== undefined) {
         emitDates.value = false;
         showAddBookingAvailabilityOverlay.value = false;
         try {
             await (await grpcStore.getAuthOnlyServiceClient()).addBookingAvailability({
                 bedId: { bedId: bedId as string },
                 dateInterval: {
-                    startDate: dateToGrpcDate(range.start),
-                    endDate: dateToGrpcDate(range.end)
+                    startDate: dateToGrpcDate(range.value.start),
+                    endDate: dateToGrpcDate(range.value.end)
                 }
             });
         } catch (e) {
