@@ -91,5 +91,6 @@
     "no_bed": "Uh oh, no bed found with the given ID: {id}",
     "go_back": "Go back",
     "unknown_error_title": "Unknown error: {err}",
-    "unknown_error_body": "An unknown error occurred. Please try again later."
+    "unknown_error_body": "An unknown error occurred. Please try again later.",
+    "enter_verification_code": "Enter verification code"
 }

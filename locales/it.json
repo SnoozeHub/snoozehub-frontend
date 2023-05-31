@@ -91,5 +91,6 @@
     "booking_availability_deleting_success": "Intervallo disponibilità eliminato con successo",
     "no_bed": "Uh oh, nessun letto trovato con il seguente ID: {id}",
     "unknown_error_title": "Errore sconosciuto: {err}",
-    "unknown_error_body": "Si è verificato un errore sconosciuto. Riprova più tardi."
+    "unknown_error_body": "Si è verificato un errore sconosciuto. Riprova più tardi.",
+    "enter_verification_code": "Inserisci il codice di verifica"
 }

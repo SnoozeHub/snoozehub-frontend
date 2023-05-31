@@ -7,7 +7,7 @@
                         {{ $t('verification_code') }}
                     </v-card-title>
                     <v-card-text>
-                        <v-text-field v-model="verificationCode" label="Enter Verification Code" outlined dense
+                        <v-text-field v-model="verificationCode" :label="$t('enter_verification_code')" outlined dense
                             required></v-text-field>
                     </v-card-text>
                     <v-card-actions class="justify-center">
