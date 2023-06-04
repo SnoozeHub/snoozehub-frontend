@@ -7,8 +7,8 @@
                         {{ $t('add_bed') }}
                     </v-card-title>
                     <v-card-text>
-                        <v-form @submit.prevent="saveBed">
-                            <v-text-field v-model="address" :label="$t('address')" required
+                        <v-form @submit.prevent="saveBed" validate-on="submit">
+                            <v-text-field v-model="address" :label="$t('address')" :rules="requiredRule" required
                                 @input="fetchCompletion"></v-text-field>
                             <Autocompletion :autocomplete-results="autocompleteResults" :select-result="selectResult">
                             </Autocompletion>
@@ -21,7 +21,7 @@
                                 density="compact"></v-checkbox>
                             <v-file-input v-model="images" v-bind:label="$t('photos')" :rules="fileRules" multiple chips
                                 accept="image/png"></v-file-input>
-                            <v-btn type="submit" :disabled="inputIsInvalid" color="primary">{{ $t('save') }}</v-btn>
+                            <v-btn type="submit" color="primary">{{ $t('save') }}</v-btn>
                         </v-form>
                     </v-card-text>
                 </v-card>
@@ -34,6 +34,8 @@
 import { ref } from 'vue';
 import { BedMutableInfo, Feature, ProfilePic } from '~/composables/grpc_gen/common-messages';
 import { useMessageStore } from '~/composables/storeUtils/userMessageStore';
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const images = ref<File[]>([]);
 const grpcStore = useGrpcStore();
 const place_id = ref<string>("");
@@ -54,6 +56,8 @@ function selectResult(result: google.maps.places.AutocompletePrediction) {
     place_id.value = result.place_id || ""
 }
 
+const requiredRule = [(v: any) => !!v || t('required_field')];
+
 const address = ref('');
 const description = ref('');
 const minimumDaysNotice = ref<number>(1); // Set default value as 1 or adjust as needed
@@ -61,6 +65,9 @@ const selectedFeatures = ref<boolean[]>(new Array().fill(false)); // Set default
 const autocompleteResults = ref<google.maps.places.AutocompletePrediction[]>([]);
 
 async function saveBed() {
+    if (inputIsInvalid.value)
+        return;
+
     const selectedFeaturesToSave: Feature[] = selectedFeatures.value.reduce((acc: Feature[], curr: boolean, index: number) => {
         if (curr) {
             acc.push(index as unknown as Feature); // Convert to Feature enum type
