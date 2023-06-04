@@ -12,7 +12,7 @@
                                 @input="fetchCompletion"></v-text-field>
                             <Autocompletion :autocomplete-results="autocompleteResults" :select-result="selectResult">
                             </Autocompletion>
-                            <v-textarea v-model="description" :label="$t('description')" required></v-textarea>
+                            <v-textarea v-model="description" :label="$t('description')"></v-textarea>
                             <v-text-field v-model="minimumDaysNotice" :label="$t('minimum_days_notice')" type="number"
                                 :rules="useMinimumDaysNoticeRules()" required></v-text-field>
                             <v-checkbox v-for="(feature) in  Object.keys(Feature).filter((v) => !isNaN(Number(v))) "
@@ -42,7 +42,7 @@ const { displayError, displaySuccess } = useMessageStore();
 const fileRules = useCreateFileRules(1, 5)
 
 const inputIsInvalid = computed(() => {
-    return !address.value || !description.value || !minimumDaysNotice.value || !images.value || images.value.length === 0 || fileRules.some((rule) => rule(images.value) !== true) || useMinimumDaysNoticeRules().some((rule) => rule(minimumDaysNotice.value) !== true)
+    return !address.value || !minimumDaysNotice.value || !images.value || images.value.length === 0 || fileRules.some((rule) => rule(images.value) !== true) || useMinimumDaysNoticeRules().some((rule) => rule(minimumDaysNotice.value) !== true)
 })
 async function fetchCompletion() {
     autocompleteResults.value = await useFetchCompletion(address.value);
