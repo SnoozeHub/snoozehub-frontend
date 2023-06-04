@@ -63,7 +63,7 @@
     "add_booking_availability": "Aggiungi Disponibilità Prenotazione",
     "remove_booking_availability": "Rimuovi Disponibilità Prenotazione",
     "delete_bed": "Elimina Posti letto",
-    "delete_bed_confirmation": "Sei sicuro di voler eliminare questo letto? Tutte le prenotazioni associate a questo letto verranno cancellate",
+    "delete_bed_confirmation": "Sei sicuro di voler eliminare questo letto? Tutte gli intervalli disponibilità associati a questo letto verranno cancellate",
     "stop_deletion": "Esci dalla modalità eliminazione",
     "bed_description": "Descrizione del Letto",
     "average_evaluation": "Valutazione Media",

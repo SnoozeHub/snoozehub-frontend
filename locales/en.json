@@ -62,7 +62,7 @@
     "add_booking_availability": "Add Booking Availability",
     "remove_booking_availability": "Remove Booking Availability",
     "delete_bed": "Delete Beds",
-    "delete_bed_confirmation": "Are you sure you want to delete this bed? All bookings will be cancelled.",
+    "delete_bed_confirmation": "Are you sure you want to delete this bed? All its bookings availability will be cancelled.",
     "stop_deletion": "Leave deletion view",
     "bed_description": "Bed Description",
     "average_evaluation": "Average Evaluation",
