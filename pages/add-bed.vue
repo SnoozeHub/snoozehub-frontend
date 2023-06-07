@@ -8,19 +8,20 @@
                     </v-card-title>
                     <v-card-text>
                         <v-form @submit.prevent="saveBed" validate-on="submit">
-                            <v-text-field v-model="address" :label="$t('address')" :rules="requiredRule" required
-                                @input="fetchCompletion"></v-text-field>
+                            <v-text-field v-model="address" :label="$t('address')" required
+                                v-bind:hint="$t('required_field')" @input="fetchCompletion"></v-text-field>
                             <Autocompletion :autocomplete-results="autocompleteResults" :select-result="selectResult">
                             </Autocompletion>
                             <v-textarea v-model="description" :label="$t('description')"></v-textarea>
                             <v-text-field v-model="minimumDaysNotice" :label="$t('minimum_days_notice')" type="number"
-                                :rules="useMinimumDaysNoticeRules()" required></v-text-field>
+                                :rules="useMinimumDaysNoticeRules()" required
+                                v-bind:hint="$t('required_field')"></v-text-field>
                             <v-checkbox v-for="(feature) in  Object.keys(Feature).filter((v) => !isNaN(Number(v))) "
                                 :key="feature" v-model="selectedFeatures[feature as unknown as number]"
                                 :label="$t(featureToi18nString(feature as unknown as number))"
                                 density="compact"></v-checkbox>
                             <v-file-input v-model="images" v-bind:label="$t('photos')" :rules="fileRules" multiple chips
-                                accept="image/png"></v-file-input>
+                                required v-bind:hint="$t('required_field')" accept="image/png"></v-file-input>
                             <v-btn type="submit" color="primary">{{ $t('save') }}</v-btn>
                         </v-form>
                     </v-card-text>
@@ -43,8 +44,9 @@ const place_id = ref<string>("");
 const { displayError, displaySuccess } = useMessageStore();
 const fileRules = useCreateFileRules(1, 5)
 
+const minimumDaysNoticeRules = useMinimumDaysNoticeRules();
 const inputIsInvalid = computed(() => {
-    return !address.value || !minimumDaysNotice.value || !images.value || images.value.length === 0 || fileRules.some((rule) => rule(images.value) !== true) || useMinimumDaysNoticeRules().some((rule) => rule(minimumDaysNotice.value) !== true)
+    return !address.value || !minimumDaysNotice.value || !images.value || images.value.length === 0 || fileRules.some((rule) => !rule(images.value)) || minimumDaysNoticeRules.some((rule) => !rule(minimumDaysNotice.value))
 })
 async function fetchCompletion() {
     autocompleteResults.value = await useFetchCompletion(address.value);
@@ -55,8 +57,6 @@ function selectResult(result: google.maps.places.AutocompletePrediction) {
     autocompleteResults.value = []
     place_id.value = result.place_id || ""
 }
-
-const requiredRule = [(v: any) => !!v || t('required_field')];
 
 const address = ref('');
 const description = ref('');
