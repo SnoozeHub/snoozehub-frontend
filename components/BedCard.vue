@@ -10,13 +10,13 @@ const messageStore = useMessageStore();
 const imgs = await useDeserializeImages(props.bed.bedMutableInfo?.images as Uint8Array[]);
 
 const showOverlay = computed(() => props.allowDelete);
-const isDeleted = ref(false);
+const cardRef = ref<null | { $el: HTMLDivElement }>(null);
 
 async function deleteBed() {
     try {
         await (await grpcStore.getAuthOnlyServiceClient()).removeMyBed(props.bed.id as BedId);
         messageStore.displaySuccess(Successes.BedDeletingSuccess);
-        isDeleted.value = true;
+        cardRef.value?.$el.parentElement?.remove();
     } catch (e) {
         messageStore.displayError(e, Errors.BedDeletingError);
     }
@@ -25,7 +25,7 @@ async function deleteBed() {
 </script>
 
 <template>
-    <v-card class="card" v-show="!isDeleted" style="cursor:pointer">
+    <v-card class="card" style="cursor:pointer" ref="cardRef">
         <v-carousel class="mx-auto">
             <v-carousel-item @click="onClickCallback(bed.id?.bedId as string)" v-for="img in imgs" :key="img.name"
                 :src="getImageUrl(img)" style="width: 100px; cursor:pointer" cover>
